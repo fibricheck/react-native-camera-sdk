@@ -1,3 +1,3 @@
-import App from './src/index'
+import FibriRootView from './src/FibriRootView'
 
-export {App};
+export { FibriRootView };

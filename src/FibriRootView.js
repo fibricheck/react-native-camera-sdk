@@ -17,7 +17,7 @@ export const managerEmitter =
         ? new NativeEventEmitter(fibEmitter)
         : new NativeEventEmitter(fibModule);
 
-export default class App extends React.Component {
+export default class FibriRootView extends React.Component {
     fibriRef;
     FibriEmitter =
         Platform.OS === 'ios'
@@ -41,7 +41,7 @@ export default class App extends React.Component {
     }
 }
 
-App.propTypes = {
+FibriRootView.propTypes = {
     reference: PropTypes.any,
     style: PropTypes.any,
     sampleTime: PropTypes.number,

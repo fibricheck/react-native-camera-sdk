@@ -11,7 +11,7 @@
 #import "React/RCTBridge.h"
 #import "FibriEventEmitter.h"
 #import "SimpleChart.h"
-@import FibriCheckerComponent;
+#import "FibriCheckerComponent.h"
 
 @interface FibriBridge ()
 @property (nonatomic, strong) SimpleChart *simpleChart;
@@ -79,7 +79,7 @@ RCT_CUSTOM_VIEW_PROPERTY(waitForStartRecordingSignal, NSInteger, SimpleChart) {
 - (UIView *)view {
   self.fibrichecker = [FibriChecker new];
   [self addListeners];
-  
+
   _simpleChart = [[SimpleChart alloc] init];
   [_simpleChart setBackgroundColor:[UIColor clearColor]];
   [_fibrichecker startMeasurement];
@@ -101,78 +101,78 @@ RCT_EXPORT_METHOD(startRecording) {
 - (void)addListeners {
   RCTLogInfo(@"addListeners");
   __unsafe_unretained typeof(self) weakSelf = self;
-  
+
   self.fibrichecker.onMeasurementStart = ^{
     //NSLog(@"onMeasurementStart");
     RCTLogInfo(@"Measurement start");
     [FibriEventEmitter emitEventWithName:@"measurementStart" andPayload:nil];
   };
-  
+
   self.fibrichecker.onMeasurementFinished = ^{
     //NSLog(@"onMeasurementFinished");
     RCTLogInfo(@"Measurement Finished");
     [FibriEventEmitter emitEventWithName:@"measurementFinished" andPayload:nil];
   };
-  
+
   self.fibrichecker.onMeasurementProcessed = ^(Measurement* measurement){
     //NSLog(@"onMeasurementProcessed:");
     RCTLogInfo(@"Measurement processed");
     [FibriEventEmitter emitEventWithName:@"measurementProcessed" andPayload:@{ @"measurement": [measurement mapToJson] }];
   };
-  
+
   self.fibrichecker.onSampleReady = ^(double ppg, double raw) {
     // [FibriEventEmitter emitEventWithName:@"sampleReady" andPayload:@{ @"ppg": @(ppg) }];
     [weakSelf drawGraphPoint:ppg];
   };
-  
+
   self.fibrichecker.onCalibrationReady = ^{
     //NSLog(@"onCalibrationReady");
     RCTLogInfo(@"Calibration Ready");
     [FibriEventEmitter emitEventWithName:@"calibrationReady" andPayload:nil];
   };
-  
+
   self.fibrichecker.onFingerRemoved = ^{
     //NSLog(@"onFingerRemoved");
     RCTLogInfo(@"Finger Removed");
     [FibriEventEmitter emitEventWithName:@"fingerRemoved" andPayload:nil];
   };
-  
+
   self.fibrichecker.onFingerDetected = ^{
     //NSLog(@"onFingerDetected");
     RCTLogInfo(@"Finger Detected");
     [FibriEventEmitter emitEventWithName:@"fingerDetected" andPayload:nil];
   };
-  
+
   self.fibrichecker.onMovementDetected = ^{
     //NSLog(@"onMovement");
     RCTLogInfo(@"Movement Detected");
     [FibriEventEmitter emitEventWithName:@"movementDetected" andPayload:nil];
   };
-  
+
   self.fibrichecker.onPulseDetected = ^{
     //NSLog(@"onPulseDetected");
     RCTLogInfo(@"Pulse Detected");
     [FibriEventEmitter emitEventWithName:@"pulseDetected" andPayload:nil];
   };
-  
+
   self.fibrichecker.onPulseDetectionTimeExpired = ^{
     //NSLog(@"onPulseDetectionTimeExpired");
     RCTLogInfo(@"Pulse Detection Time Expired");
     [FibriEventEmitter emitEventWithName:@"pulseDetectionTimeExpired" andPayload:nil];
   };
-  
+
   self.fibrichecker.onFingerDetectionTimeExpired = ^{
     //NSLog(@"onFingerDetectionTimeExpired");
     RCTLogInfo(@"Finger Detection Time Expired");
     [FibriEventEmitter emitEventWithName:@"fingerDetectionTimeExpired" andPayload:nil];
   };
-  
+
   self.fibrichecker.onHeartBeat = ^(NSUInteger value) {
     //NSLog(@"onHeartBeart: %lu", value);
     RCTLogInfo(@"Heart Beat Detected: %lu", value);
     [FibriEventEmitter emitEventWithName:@"heartBeat" andPayload:@{ @"heartRate": @(value) }];
   };
-  
+
   self.fibrichecker.onTimeRemaining = ^(NSUInteger seconds) {
     //NSLog(@"onTimeRemaining: %lu", seconds);
     RCTLogInfo(@"Time Remaining: %lu", seconds);

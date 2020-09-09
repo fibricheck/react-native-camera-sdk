@@ -10,28 +10,18 @@
 
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
-import ReactNativeFibricheck from 'react-native-react-native-fibricheck';
 
-export default class App extends Component<{}> {
+export default class App extends Component {
   state = {
-    status: 'starting',
-    message: '--'
+    //
   };
   componentDidMount() {
-    ReactNativeFibricheck.sampleMethod('Testing', 123, (message) => {
-      this.setState({
-        status: 'native callback received',
-        message
-      });
-    });
+
   }
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>☆ReactNativeFibricheck example☆</Text>
-        <Text style={styles.instructions}>STATUS: {this.state.status}</Text>
-        <Text style={styles.welcome}>☆NATIVE CALLBACK MESSAGE☆</Text>
-        <Text style={styles.instructions}>{this.state.message}</Text>
+
       </View>
     );
   }

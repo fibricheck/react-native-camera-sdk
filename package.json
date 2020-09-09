@@ -1,6 +1,6 @@
 {
-  "name": "react-native-react-native-fibricheck",
-  "title": "React Native React Native Fibricheck",
+  "name": "react-native-fibricheck",
+  "title": "React Native Fibricheck",
   "version": "1.0.0",
   "description": "TODO",
   "main": "index.js",
@@ -9,8 +9,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/github_account/react-native-react-native-fibricheck.git",
-    "baseUrl": "https://github.com/github_account/react-native-react-native-fibricheck"
+    "url": "git+https://github.com/github_account/react-native-fibricheck.git",
+    "baseUrl": "https://github.com/github_account/react-native-fibricheck"
   },
   "keywords": [
     "react-native"
