@@ -10,7 +10,7 @@
 
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
-import { FibriCheckModule, FibriRootView } from 'react-native-fibricheck';
+import FibriView from 'react-native-fibricheck';
 
 export default class App extends Component {
   state = {
@@ -22,7 +22,7 @@ export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <FibriRootView />
+        <FibriView sampleTime={10} />
       </View>
     );
   }
