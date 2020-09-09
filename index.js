@@ -1,3 +1,6 @@
+import {NativeModules} from 'react-native'
 import FibriRootView from './src/FibriRootView'
 
-export { FibriRootView };
+const FibriCheckModule = NativeModules.FibriCheckModule;
+
+export { FibriCheckModule, FibriRootView };

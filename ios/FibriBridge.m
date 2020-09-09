@@ -23,7 +23,7 @@
 //@synthesize bridge = _bridge;
 
 // This RCT (React) "macro" exposes the current module to JavaScript
-RCT_EXPORT_MODULE();
+RCT_EXPORT_MODULE(FibriCheckModule);
 
 //RCT_EXPORT_VIEW_PROPERTY(sampleTime, NSInteger)
 RCT_CUSTOM_VIEW_PROPERTY(sampleTime, NSInteger, SimpleChart) {
