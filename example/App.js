@@ -10,7 +10,7 @@
 
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
-import FibriView from './bridges/FibriBridgeNativeView';
+import { FibriBridge } from 'react-native-fibricheck';
 
 export default class App extends Component {
   state = {
@@ -22,7 +22,7 @@ export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <FibriView sampleTime={10} />
+        <FibriBridge />
       </View>
     );
   }
