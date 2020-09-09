@@ -1,3 +1,3 @@
-import FibriBridge from './src/index'
+import FibriBridge from './src/FibriView'
 
 export { FibriBridge };

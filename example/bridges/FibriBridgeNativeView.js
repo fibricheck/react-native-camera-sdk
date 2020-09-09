@@ -1,7 +1,8 @@
 //  Created by react-native-create-bridge
 
 import * as React from 'react';
-import { findNodeHandle, NativeEventEmitter, NativeModules, Platform, requireNativeComponent, UIManager } from 'react-native';
+import { findNodeHandle, NativeEventEmitter, NativeModules, Platform, UIManager } from 'react-native';
+import { FibriBridge } from 'react-native-fibricheck'
 
 export const fibEmitter = NativeModules.FibriEventEmitter;
 export const fibModule = NativeModules.FibriBridge;
@@ -26,7 +27,5 @@ export default class FibriBridgeView extends React.Component {
     return <FibriBridge ref={this.setRef} {...this.props} />;
   }
 }
-
-const FibriBridge = requireNativeComponent('FibriBridge');
 
 FibriBridgeView.propTypes = {};

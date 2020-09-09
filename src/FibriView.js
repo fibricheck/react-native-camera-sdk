@@ -1,12 +1,12 @@
 import * as React from 'react';
+import { requireNativeComponent } from 'react-native'
+import PropTypes from 'prop-types';
 import {
     StyleSheet,
     Platform,
     NativeModules,
     NativeEventEmitter,
 } from 'react-native';
-import FibriView from './FibriBridgeNativeView';
-import PropTypes from 'prop-types';
 
 const fibEmitter = NativeModules.FibriEventEmitter;
 const fibModule = NativeModules.FibriBridge;
@@ -17,31 +17,19 @@ export const managerEmitter =
         ? new NativeEventEmitter(fibEmitter)
         : new NativeEventEmitter(fibModule);
 
-export default class App extends React.Component {
-    fibriRef;
-    FibriEmitter =
-        Platform.OS === 'ios'
-            ? new NativeEventEmitter(fibEmitter)
-            : new NativeEventEmitter(fibModule);
-
+export default class FibriView extends React.Component {
     constructor(props) {
         super(props);
     }
 
-    render() {
+    render () {
         return (
-            <FibriView
-                reference={e => {
-                    this.fibriRef = e;
-                }}
-                style={styles.container}
-                {...this.props}
-            />
+            <FibriBridge style={styles.container} ref="fibriBridge" {...this.props}/>
         );
     }
 }
 
-App.propTypes = {
+FibriBridgeView.propTypes = {
     reference: PropTypes.any,
     style: PropTypes.any,
     sampleTime: PropTypes.number,
@@ -62,6 +50,23 @@ App.propTypes = {
     minVValue: PropTypes.number,
     maxStdDevYValue: PropTypes.number,
 };
+
+const FibriBridge = requireNativeComponent(
+    'FibriBridge',
+    FibriView,
+    {
+        nativeOnly: {
+            testID: true,
+            accessibilityComponentType: true,
+            renderToHardwareTextureAndroid: true,
+            accessibilityLabel: true,
+            accessibilityLiveRegion: true,
+            importantForAccessibility: true,
+            onLayout: true,
+            nativeID: true
+        },
+    },
+);
 
 const styles = StyleSheet.create({
     container: {
