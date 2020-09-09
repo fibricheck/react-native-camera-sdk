@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { requireNativeComponent } from 'react-native'
+import { requireNativeComponent} from 'react-native'
 import PropTypes from 'prop-types';
 import {
     StyleSheet,
@@ -33,12 +33,12 @@ FibriBridgeView.propTypes = {
     reference: PropTypes.any,
     style: PropTypes.any,
     sampleTime: PropTypes.number,
-    flashEnabled : PropTypes.boolean,
-    gyroEnabled: PropTypes.boolean,
-    accEnabled: PropTypes.boolean,
-    gravEnabled: PropTypes.boolean,
-    rotationEnabled: PropTypes.boolean,
-    movementDetectionEnabled: PropTypes.boolean,
+    flashEnabled : PropTypes.bool,
+    gyroEnabled: PropTypes.bool,
+    accEnabled: PropTypes.bool,
+    gravEnabled: PropTypes.bool,
+    rotationEnabled: PropTypes.bool,
+    movementDetectionEnabled: PropTypes.bool,
     quadrantRows: PropTypes.number,
     quadrantCols: PropTypes.number,
     pulseDetectionExpiryTime: PropTypes.number,

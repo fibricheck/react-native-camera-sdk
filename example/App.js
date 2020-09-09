@@ -10,19 +10,91 @@
 
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
-import { FibriBridge } from 'react-native-fibricheck';
+import FibriView, { managerEmitter } from './bridges/FibriBridgeNativeView';
+import {request, PERMISSIONS} from 'react-native-permissions';
 
 export default class App extends Component {
-  state = {
-    //
-  };
-  componentDidMount() {
-
+  constructor (props) {
+    super(props)
+    this.state = {
+      camera: false,
+    }
   }
+
+  componentDidMount() {
+    this.addDeviceListeners();
+    request(PERMISSIONS.IOS.CAMERA).then((result) => {
+      this.setState({camera: result === 'granted'});
+    });
+  }
+
+  componentWillUnmount() {
+    this.removeDeviceListeners();
+
+    FibriView.stop();
+  }
+
+  addDeviceListeners() {
+    managerEmitter.addListener('measurementStart', this.onMeasurementStart);
+    managerEmitter.addListener('fingerDetected', this.onFingerDetected);
+    managerEmitter.addListener(
+      'measurementProcessed',
+      this.onMeasurementProcessed,
+    );
+    managerEmitter.addListener('fingerRemoved', this.onFingerRemoved);
+    managerEmitter.addListener('heartBeat', this.onHeartBeat);
+    managerEmitter.addListener('pulseDetected', this.onPulseDetected);
+  }
+
+  removeDeviceListeners() {
+    managerEmitter.removeListener('measurementStart', this.onMeasurementStart);
+    managerEmitter.removeListener('fingerDetected', this.onFingerDetected);
+    managerEmitter.removeListener(
+      'measurementProcessed',
+      this.onMeasurementProcessed,
+    );
+    managerEmitter.removeListener('fingerRemoved', this.onFingerRemoved);
+    managerEmitter.removeListener('heartBeat', this.onHeartBeat);
+    managerEmitter.removeListener('pulseDetected', this.onPulseDetected);
+  }
+
+  onPulseDetected = () => {
+    this.setState({
+      isPulseDetected: true,
+    });
+  };
+
+  onMovementDetected = () => {
+    console.log('detected');
+  };
+
+  onHeartBeat = (heartRate) => {
+    console.log(heartRate);
+  };
+
+  onFingerDetected = () => {
+    console.log('finger detected');
+  };
+
+  onFingerRemoved = () => {
+    console.log('finger removed');
+  };
+
+  onMeasurementStart = () => {
+    console.log('measurement start');
+  };
+
+  onMeasurementProcessed = (measurement) => {
+    console.log(measurement);
+  };
+
   render() {
+    const { camera } = this.state;
     return (
       <View style={styles.container}>
-        <FibriBridge />
+        {camera &&
+        <FibriView/>
+        }
       </View>
     );
   }
