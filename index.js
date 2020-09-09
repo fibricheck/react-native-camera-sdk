@@ -1,3 +1,3 @@
 import { AppRegistry } from 'react-native';
-import App from 'src/index';
+import App from './src/index';
 AppRegistry.registerComponent('FibriCheckReactNativeSDK', () => App);
