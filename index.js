@@ -1,6 +1,3 @@
-import {NativeModules} from 'react-native'
-import FibriRootView from './src/FibriRootView'
-
-const FibriCheckModule = NativeModules.FibriCheckModule;
-
-export { FibriCheckModule, FibriRootView };
+import { AppRegistry } from 'react-native';
+import App from 'src/index';
+AppRegistry.registerComponent('FibriCheckReactNativeSDK', () => App);
