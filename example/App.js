@@ -10,7 +10,7 @@
 
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
-import FibriView from 'react-native-fibricheck';
+import FibriView from './bridges/FibriBridgeNativeView';
 
 export default class App extends Component {
   state = {
