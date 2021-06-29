@@ -54,14 +54,14 @@
                           @-0.243979118421053,
                           @-0.229033460526316,
                           @-0.206577592105263, nil];
-    
+
     self.signalValues = [[NSMutableArray alloc] initWithObjects:@0,@0,@0,@0,@0,@0,@0,@0,@0,@0,@0,@0,@0,@0,@0,@0,@0,@0,@0,@0,@0, nil];
-    
+
     self.denominator = 0;
     for (int i = 0; i < self.patternValues.count; i++) {
         self.denominator += powf([self.patternValues[i] floatValue],2);
     }
-    
+
     self.lastCorrelation = 0;
     self.lastTime = 0;
     self.pulseCount = 0;
@@ -77,37 +77,37 @@
         self.signalValues[i] = self.signalValues[i+1];
     }
     self.signalValues[20] = [NSNumber numberWithFloat:value];
-    
+
     float nominator = 0;
     for (int i = 0; i < self.patternValues.count; i++) {
         nominator += [self.patternValues[i] floatValue] * [self.signalValues[i] floatValue];
     }
-    
+
     float denominator2 = 0;
     for (int i = 0; i < self.signalValues.count; i++) {
         denominator2 += powf([self.signalValues[i] floatValue],2);
     }
-    
+
     self.lastCorrelation = nominator/sqrt(self.denominator * denominator2);
     [self.correlationValues addObject:[NSNumber numberWithFloat:self.lastCorrelation]];
     [self.correlationValues removeObjectAtIndex:0];
-    
+
     if ([self isPeakDetected]) {
         if (timestamp > 0) {
             self.lastTime = timestamp;
         } else {
             self.lastTime = [[NSDate date] timeIntervalSince1970]*1000;
         }
-        
+
         [self.timeValues addObject:[NSNumber numberWithDouble:self.timeSinceLastPulse]];
         [self.timeValues removeObjectAtIndex:0];
-        
+
         if ([self isValidPulse]) {
             [self countPulse];
             [self.heartRateValues addObject:[NSNumber numberWithInt:60000/ [[self.timeValues valueForKeyPath:@"@avg.doubleValue"] doubleValue]]];
         }
     }
-    
+
     if (timestamp > 0) {
         self.timeSinceLastPulseInt = timestamp - self.lastTime;
     } else {
@@ -123,7 +123,7 @@
     float cor1 = [self.correlationValues[0] floatValue];
     float cor2 = [self.correlationValues[1] floatValue];
     float cor3 = [self.correlationValues[2] floatValue];
-    
+
     if(cor1 < cor2 && cor2 > cor3 && cor2 > 0.6) {
         return YES;
     }
@@ -148,7 +148,7 @@
     double timeMax = [[self.timeValues valueForKeyPath:@"@max.doubleValue"] doubleValue];
     double timeMin = [[self.timeValues valueForKeyPath:@"@min.doubleValue"] doubleValue];
     double timeAvg = [[self.timeValues valueForKeyPath:@"@avg.doubleValue"] doubleValue];
-    
+
     if (timeMax < 2000 &&
         timeMin > 400 &&
         timeMax < timeAvg * 1.20 &&

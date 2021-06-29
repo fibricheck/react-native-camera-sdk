@@ -5,7 +5,13 @@
   "description": "TODO",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "react-native start",
+    "android": "tsc && react-native run-android",
+    "clear": "rm -rf $TMPDIR/react-native-packager-cache-* && rm -rf $TMPDIR/metro-bundler-cache-*",
+    "fresh-start": "watchman watch-del-all && rm -rf $TMPDIR/react-native-packager-cache-* && rm -rf $TMPDIR/metro-bundler-cache-* && rm -rf node_modules/ && npm cache clean --force && npm install && npm run start-clear-cache",
+    "start-clear-cache": "react-native start --reset-cache",
+    "ios": "tsc && react-native run-ios",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -27,7 +33,12 @@
     "react-native": ">=0.60.0-rc.0 <1.0.x"
   },
   "devDependencies": {
+    "@types/react": "^16.4.6",
+    "@types/react-native": "^0.56.4",
+    "babel-preset-react-native": "^5.0.0",
     "react": "^16.9.0",
-    "react-native": "^0.61.5"
+    "react-native": "^0.61.5",
+    "react-native-typescript-transformer": "^1.2.10",
+    "typescript": "^2.9.2"
   }
 }

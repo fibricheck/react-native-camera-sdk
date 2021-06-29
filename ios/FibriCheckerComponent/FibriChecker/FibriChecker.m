@@ -26,7 +26,7 @@
     if (self) {
         self.measurementController = [MeasurementController new];
         self.measurementController.delegate = self;
-        
+
         // Set Defaults
         self.flashEnabled = true;
         self.gyroEnabled = false;
@@ -99,7 +99,7 @@
         if (self.onMeasurementFinished != nil) {
             self.onMeasurementFinished();
         }
-        
+
         Measurement *measurement = self.measurementController.measurement;
         [measurement processData];
         if (self.onMeasurementProcessed != nil) {

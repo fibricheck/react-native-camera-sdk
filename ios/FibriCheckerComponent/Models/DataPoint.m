@@ -25,9 +25,9 @@
         _v = 0;
         _filterValue = 0;
         _accx = _accy = _accz = _gyrx = _gyry = _gyrz = _gravx = _gravy = _gravz = _orix = _oriy = _oriz = 0;
-        
+
         _quadrantConfig = config;
-        
+
         int quadrantArraySize = (int)config.rowSize * (int)config.colSize * 3;
         _quadrants = (float *)malloc(sizeof(float) * quadrantArraySize);
         for (int i = 0; i < quadrantArraySize; i++) {
@@ -38,7 +38,7 @@
 }
 
 - (void)dealloc {
-    
+
     free(_quadrants);
 }
 

@@ -60,4 +60,3 @@
 -(void)updateConfiguration;
 
 @end
-

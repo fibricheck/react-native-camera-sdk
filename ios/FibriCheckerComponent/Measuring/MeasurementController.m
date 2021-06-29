@@ -69,19 +69,19 @@
 - (void)startMeasurement {
     // Reset Values
     [self resetState];
-    
+
     // Init Helpers
     ImageProcessorConfig * config = [self configImageProcessor];
     self.measurement = [[Measurement alloc] initWithConfig:config];
     self.imageProcessor = [[ImageProcessor alloc] initWithConfig:config];
     self.beatListener = [BeatListener new];
-    
+
     //Motion
     [self startMovementDetection];
     [self registerForNotifications];
-    
+
     self.dispatchQueue = dispatch_queue_create("MeasureControllerDispatchQueue", DISPATCH_QUEUE_SERIAL);
-    
+
     [self startCamera];
 }
 
@@ -91,12 +91,12 @@
 
 - (void)unloadAll {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
+
     self.motionManager = nil;
     self.measurement = nil;
     self.imageProcessor = nil;
     self.beatListener = nil;
-    
+
     [self stopCamera];
 }
 
@@ -121,7 +121,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(resetState)
                                                  name:UIApplicationWillResignActiveNotification object:nil];
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(startCamera)
                                                  name:UIApplicationDidBecomeActiveNotification object:nil];
@@ -145,7 +145,7 @@
 - (void)startCamera {
     self.session = [AVCaptureSession new];
     self.camera = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-    
+
     NSError * error = nil;
     AVCaptureInput * cameraInput = [[AVCaptureDeviceInput alloc] initWithDevice:_camera error:&error];
     if (cameraInput) {
@@ -156,23 +156,23 @@
             [self.delegate measurementControllerDidReceiveError];
         }
     }
-    
+
     if ([self.camera lockForConfiguration:NULL]) {
         [self.camera setActiveVideoMinFrameDuration:CMTimeMake(10,300)];
         [self.camera setActiveVideoMaxFrameDuration:CMTimeMake(10,300)];
         [self.camera setExposureMode:AVCaptureExposureModeContinuousAutoExposure];
         [self.camera unlockForConfiguration];
     }
-    
+
     AVCaptureVideoDataOutput * videoOutput = [AVCaptureVideoDataOutput new];
     [videoOutput setSampleBufferDelegate:self queue:self.dispatchQueue];
     videoOutput.videoSettings = @{(id)kCVPixelBufferPixelFormatTypeKey:
                                       @(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)};
     videoOutput.alwaysDiscardsLateVideoFrames=NO;
-    
+
     [self.session addOutput:videoOutput];
     [self.session startRunning];
-    
+
     if (self.flashEnabled && [self.camera isTorchModeSupported:AVCaptureTorchModeOn]) {
         [self.camera lockForConfiguration:nil];
         self.camera.torchMode = AVCaptureTorchModeOn;
@@ -184,7 +184,7 @@
     if (self.session) {
         [self.session stopRunning];
     }
-    
+
     AVCaptureDevice * camera = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     if (camera) {
         if (self.flashEnabled && [camera isTorchModeSupported:AVCaptureTorchModeOff]){
@@ -214,12 +214,12 @@
             if (_previousState != MeasurementControllerStateDetectingFinger) {
                 [self resetState];
                 _fingerDetectionStartTime = currentTime;
-                
+
                 [self notifyDelegateDidChangeState:MeasurementControllerStateDetectingFinger];
                 _previousState = MeasurementControllerStateDetectingFinger;
             }
             [self checkFingerDetectionTimer];
-            
+
             break;
         case MeasurementControllerStateDetectingPulse:
             if (_pulseDetectionExpiryTime == 0 || _event == MeasurementControllerEventPulseDetected || _event == MeasurementControllerEventPulseDetectionTimeExpired) {
@@ -229,30 +229,30 @@
             if (_previousState != MeasurementControllerStateDetectingPulse) {
                 [self.beatListener clear];
                 _pulseDetectionStartTime = currentTime;
-                
+
                 [self notifyDelegateDidChangeState:MeasurementControllerStateDetectingPulse];
                 _previousState = MeasurementControllerStateDetectingPulse;
             }
-            
+
             [self.beatListener correlateWithValue:dp.filterValue];
             [self notifyDelegateDidReceiveSample:dp];
             [self detectPulse];
             [self checkPulseDetectionTimer];
-            
+
             break;
         case MeasurementControllerStateCalibrating:
             if (_previousState != MeasurementControllerStateCalibrating) {
                 [self setCameraExposureMode:AVCaptureExposureModeLocked];
                 _calibrationStartTime = [[NSDate date] timeIntervalSince1970];
-                
+
                 [self notifyDelegateDidChangeState: MeasurementControllerStateCalibrating];
                 _previousState = MeasurementControllerStateCalibrating;
             }
-            
+
             [self.beatListener correlateWithValue:dp.filterValue];
             [self notifyDelegateDidReceiveSample:dp];
             [self checkCalibrationTimer];
-            
+
             break;
         case MeasurementControllerStateRecording:
             if (_event == MeasurementControllerEventTimerAboveSampleTime) {
@@ -264,24 +264,24 @@
                 [self notifyDelegateDidChangeState: MeasurementControllerStateRecording];
                 _previousState = MeasurementControllerStateRecording;
             }
-            
+
             [self collectMotionData:dp];
             dp.tms = (currentTime - self.recordingStartTime) * 1000;
             [self.beatListener correlateWithValue:dp.filterValue];
             [self notifyDelegateDidReceiveSample:dp];
             [self.measurement addDataPoint:dp];
-            
+
             if (_beatListener.isPeakDetected && _beatListener.isValidPulse) {
                 [self notifyDelegateHeartRateUpdated:self.beatListener.heartRate];
             }
             [self checkMeasurementCompletion];
-            
+
             break;
         case MeasurementControllerStateFinished:
             if (_previousState != MeasurementControllerStateFinished) {
                 self.measurement.startTime = self.recordingStartTime;
                 self.measurement.heartRate = self.beatListener.heartRate;
-                
+
                 [self notifyDelegateDidChangeState:MeasurementControllerStateFinished];
                 _previousState = MeasurementControllerStateFinished;
             }
@@ -295,7 +295,7 @@
     if (_fingerDetectionExpiryTime == 0) {
         return;
     }
-    
+
     if ([self.imageProcessor fingerOnCamera:dp]) {
         self.fingerGoodCount++;
         self.fingerBadCount = 0;
@@ -303,14 +303,14 @@
         self.fingerBadCount++;
         self.fingerGoodCount = 0;
     }
-    
+
     if (self.fingerDetected && self.fingerBadCount >= FINGER_BAD_COUNT) {
         self.fingerDetected = NO;
         self.state = MeasurementControllerStateDetectingFinger;
         self.event = MeasurementControllerEventFingerRemoved;
         [self notifyDelegateDidReceiveFingerRemoved];
     }
-    
+
     if (!self.fingerDetected && self.fingerGoodCount > FINGER_GOOD_COUNT) {
         self.fingerDetected = YES;
         self.event = MeasurementControllerEventFingerDetected;
@@ -339,7 +339,7 @@
     float accx = self.motionManager.accelerometerData.acceleration.x * self.accelerationFactor;
     float accy = self.motionManager.accelerometerData.acceleration.y * self.accelerationFactor;
     float accz = self.motionManager.accelerometerData.acceleration.z * self.accelerationFactor;
-    
+
     if (self.accEnabled) {
         dp.hasAcc = YES;
         dp.accx = accx;
@@ -364,7 +364,7 @@
         dp.oriy = RADIANS_TO_DEGREES(self.motionManager.deviceMotion.attitude.roll) ;
         dp.oriz = RADIANS_TO_DEGREES(self.motionManager.deviceMotion.attitude.yaw);
     }
-    
+
     [self detectMovementWithAccX:accx accY:accy accZ:accz];
 }
 
@@ -373,7 +373,7 @@
         [self notifyDelegateCalibrationReady];
         self.calibrationReadyDispatched = YES;
     }
-    
+
     if (self.calibrationReadyDispatched && !self.waitForStartRecordingSignal) {
         self.state = MeasurementControllerStateRecording;
     }
@@ -396,12 +396,12 @@
 - (void) checkMeasurementCompletion {
     int elapsedTime = ([[NSDate date] timeIntervalSince1970] - self.recordingStartTime);
     long timeRemaining = self.sampleTime - elapsedTime;
-    
+
     if (timeRemaining != self.previousTime) {
         self.previousTime = timeRemaining;
         [self notifyDelegateProgressUpdated:timeRemaining];
     }
-    
+
     if (elapsedTime > self.sampleTime) {
         self.event = MeasurementControllerEventTimerAboveSampleTime;
     }

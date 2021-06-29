@@ -8,17 +8,22 @@
  * https://github.com/facebook/react-native
  */
 
-import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
-import FibriView, { managerEmitter } from './bridges/FibriBridgeNativeView';
+import React, {Component} from 'react';
+import {Platform, StyleSheet, Text, View} from 'react-native';
+import FibriView, {managerEmitter} from './bridges/FibriBridgeNativeView';
 import {request, PERMISSIONS} from 'react-native-permissions';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 export default class App extends Component {
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
       camera: false,
-    }
+      fingerPresent: false,
+      measurementStarted: false,
+      heartRate: 0,
+      isPulseDetected: false,
+    };
   }
 
   componentDidMount() {
@@ -64,24 +69,20 @@ export default class App extends Component {
     });
   };
 
-  onMovementDetected = () => {
-    console.log('detected');
-  };
-
-  onHeartBeat = (heartRate) => {
-    console.log(heartRate);
+  onHeartBeat = ({heartRate}) => {
+    this.setState({heartRate: heartRate});
   };
 
   onFingerDetected = () => {
-    console.log('finger detected');
+    this.setState({fingerPresent: true});
   };
 
   onFingerRemoved = () => {
-    console.log('finger removed');
+    this.setState({fingerPresent: false});
   };
 
   onMeasurementStart = () => {
-    console.log('measurement start');
+    this.setState({measurementStarted: true});
   };
 
   onMeasurementProcessed = (measurement) => {
@@ -89,13 +90,16 @@ export default class App extends Component {
   };
 
   render() {
-    const { camera } = this.state;
+    const {camera, heartRate, fingerPresent, measurementStarted} = this.state;
     return (
-      <View style={styles.container}>
-        {camera &&
-        <FibriView/>
-        }
-      </View>
+      <SafeAreaProvider>
+        {camera && <FibriView />}
+        <View style={styles.container}>
+          <Text>{`Heartrate : ${heartRate}`}</Text>
+          <Text>{`Vinger aanwezig : ${fingerPresent ? 'Ja' : 'Nee'}`}</Text>
+          <Text>{`Meting gestart : ${measurementStarted ? 'Ja' : 'Nee'}`}</Text>
+        </View>
+      </SafeAreaProvider>
     );
   }
 }

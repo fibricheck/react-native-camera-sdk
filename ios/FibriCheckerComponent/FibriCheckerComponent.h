@@ -15,4 +15,4 @@ FOUNDATION_EXPORT const unsigned char FibriCheckerComponentVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <FibriCheckerComponent/PublicHeader.h>
 
-#import "PublicHeader.h"
+#import "FibriCheckerComponent/PublicHeader.h"

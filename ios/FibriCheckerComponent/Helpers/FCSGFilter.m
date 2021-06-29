@@ -19,11 +19,11 @@
 
 - (float)calculateValue:(float)input {
     [self.shiftRegister removeLastObject];
-    
+
     NSMutableArray * tMutableArray = [[[[NSMutableArray alloc] initWithObjects:[NSNumber numberWithFloat:input], nil] arrayByAddingObjectsFromArray:self.shiftRegister] mutableCopy];
-    
+
     self.shiftRegister = tMutableArray;
-    
+
     float tempResult = (((-2) * [self.shiftRegister[0] floatValue])
                         + (3 * [self.shiftRegister[1] floatValue])
                         + (6 * [self.shiftRegister[2] floatValue])

@@ -17,22 +17,22 @@
         a[1] = -0.900404044297840f;
         a[2] = 0.0000f;
         a[3] = 0.0000f;
-        
+
         b = (float*)malloc(4*sizeof(float));
         b[0] = 0.950202022148920f;
         b[1] = -0.950202022148920f;
         b[2] = 0.0000f;
         b[3] = 0.0000f;
-        
+
         x = (float*)malloc(4*sizeof(float));
         y = (float*)malloc(4*sizeof(float));
-        
+
         output = 0;
-        count = 0;        
+        count = 0;
     }
     return self;
 }
- 
+
 - (id)initLowPass {
     self = [super init];
     if (self) {
@@ -44,18 +44,18 @@
         a[1] = 0.0000f;
         a[2] = 0.0000f;
         a[3] = 0.0000f;
-		
+
         b[0] = 1.0f;
         b[1] = 1.0f;
         b[2] = 1.0f;
         b[3] = 1.0f;
-		
+
         x = (float*)malloc(4*sizeof(float));
         y = (float*)malloc(4*sizeof(float));
-        
+
         output = 0;
         count = 0;
-        
+
     }
     return self;
 }

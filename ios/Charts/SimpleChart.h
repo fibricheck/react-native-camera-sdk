@@ -16,15 +16,15 @@
 
 @property (nonatomic) NSInteger sampleTime;
 
+@property (nonatomic) NSInteger stepIncrement;
+
+@property (nonatomic) NSInteger verticalOffset;
+
 @property (weak, nonatomic) UIColor *lineColor;
 /*!
  *  Contains all the points currently displayed on the chart
  */
 @property (nonatomic, retain) NSMutableArray *points;
-/*!
- *  Set to YES for stems
- */
-@property  bool peaks;
 
 -(void) addPoint:(NSNumber *) newPoint;
 

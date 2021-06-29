@@ -29,7 +29,7 @@
         self.dataPoints = [NSMutableArray<DataPoint *> new];
         self.time = [NSMutableArray new];
         self.ppg = [NSMutableArray new];
-        
+
         self.quadrants = [[NSMutableArray alloc] initWithCapacity:_imageProcessorConfig.rowSize];
         for(int row = 0; row < _imageProcessorConfig.rowSize; row++) {
             NSMutableArray *quadrantCols = [[NSMutableArray alloc] initWithCapacity:_imageProcessorConfig.colSize];
@@ -60,7 +60,7 @@
                 [self.quadrants[row][col] addValueY:yuvData[0] U:yuvData[1] V:yuvData[2]];
             }
         }
-        
+
         if (dataPoint.hasAcc) {
             if (self.acc == nil) {
                 self.acc = [MotionData new];
@@ -93,7 +93,7 @@
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject: [self mapToDictionary]
                                                        options: 0//NSJSONWritingPrettyPrinted // Pass 0 if you don't care about the readability of the generated string
                                                          error:&error];
-    
+
     if (!jsonData) {
         return @"{}";
     } else {
@@ -104,35 +104,35 @@
 - (NSDictionary *) mapToDictionary {
     NSNumber * frequency = [[NSNumber alloc] initWithInt:30];
     NSMutableDictionary * meaModel = [[NSMutableDictionary alloc] init];
-    
+
     if (_acc != nil) {
         meaModel[@"acc"] = @{@"frequency":frequency,
                              @"x":_acc.x,
                              @"y":_acc.y,
                              @"z":_acc.z};
     }
-    
+
     if (_grav != nil) {
         meaModel[@"grav"] = @{@"frequency":frequency,
                               @"x":_grav.x,
                               @"y":_grav.y,
                               @"z":_grav.z};
     }
-    
+
     if (_gyro != nil) {
         meaModel[@"gyro"] = @{@"frequency":frequency,
                               @"x":_gyro.x,
                               @"y":_gyro.y,
                               @"z":_gyro.z};
     }
-    
+
     if (_rotation != nil) {
         meaModel[@"rotation"] = @{@"frequency":frequency,
                                   @"x":_rotation.x,
                                   @"y":_rotation.y,
                                   @"z":_rotation.z};
     }
-    
+
     NSMutableArray * quadrants = [[NSMutableArray alloc] initWithCapacity:_imageProcessorConfig.rowSize];
     for (int row = 0; row < _imageProcessorConfig.rowSize; row++) {
         NSMutableArray *quadrantCols = [[NSMutableArray alloc] initWithCapacity:_imageProcessorConfig.colSize];
@@ -141,18 +141,18 @@
         }
         [quadrants addObject:quadrantCols];
     }
-    
+
     meaModel[@"quadrants"] = quadrants;
-    
+
     // ppg
     meaModel[@"ppg"] = @{@"frequency":frequency, @"signal":_ppg};
-    
+
     // time
     meaModel[@"time"] = _time;
-    
+
     // heart rate
     meaModel[@"heartRate"] = @(_heartRate);
-    
+
     return [meaModel copy];
 }
 

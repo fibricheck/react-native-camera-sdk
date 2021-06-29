@@ -1,0 +1,44 @@
+{
+  "compilerOptions": {
+    //"jsx": "react",
+    "target": "es6",
+    "module": "commonjs",
+    "allowSyntheticDefaultImports": true,
+    //"declaration": false,
+    "noImplicitAny": false,
+    "outDir": "build",
+    "skipLibCheck": true,
+    "rootDir": "src",
+    "moduleResolution": "node",
+    //"allowJs": true,
+    //"removeComments": true,
+    "sourceMap": true,
+    //"suppressImplicitAnyIndexErrors": true,
+    "jsx": "react-native",
+    /*"typeRoots": [
+      "node_modules/@types"
+    ]*/
+  },
+  "include": [
+    "./src/**/*",
+    "./src/ts/**/*",
+  ],
+  /*"files": [
+    "./src/App.tsx"
+  ],*/
+  "filesGlob": [
+    "./src/**/*.ts",
+    "./src/**/*.tsx",
+    "!node_modules/**/*",
+    "./test/**/*.ts",
+    "./test/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "index.js",
+    "tests",
+    "build",
+    "rn-cli.config.js",
+    "__tests__"
+  ],
+}

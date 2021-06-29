@@ -13,11 +13,11 @@
 
 - (id)init {
     self = [super init];
-    
+
     _y = [NSMutableArray array];
     _u = [NSMutableArray array];
     _v = [NSMutableArray array];
-    
+
     return self;
 }
 
@@ -29,11 +29,11 @@
 
 - (NSDictionary *) mapToDictionary {
     NSMutableDictionary * yuvModel = [[NSMutableDictionary alloc] initWithCapacity:3];
-    
+
     yuvModel[@"y"] = _y;
     yuvModel[@"u"] = _u;
     yuvModel[@"v"] = _v;
-    
+
     return yuvModel;
 }
 
