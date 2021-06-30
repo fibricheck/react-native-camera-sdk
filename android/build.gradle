@@ -38,15 +38,11 @@ repositories {
     jcenter()
 
     maven { url 'https://jitpack.io' }
-
-    flatDir {
-        dirs "./src/main/libs", "$rootDir/../node_modules/react-native-fibricheck/android/src/main/libs"
-    }
 }
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'com.facebook.react:react-native:+'
     implementation 'com.google.code.gson:gson:+'
-    implementation(name:'fibrichecker', ext:'aar')
+    compile files('src/main/libs/fibrichecker.aar')
 }
