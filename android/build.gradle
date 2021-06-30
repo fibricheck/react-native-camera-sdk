@@ -40,7 +40,7 @@ repositories {
     maven { url 'https://jitpack.io' }
 
     flatDir {
-        dirs "src/main/libs", "$rootDir/../node_modules/react-native-fibricheck/android/src/main/libs"
+        dirs "./src/main/libs", "$rootDir/../node_modules/react-native-fibricheck/android/src/main/libs"
     }
 }
 
@@ -48,5 +48,5 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'com.facebook.react:react-native:+'
     implementation 'com.google.code.gson:gson:+'
-    implementation(name:'fibricheck-sdk', ext:'aar')
+    implementation(name:'fibrichecker', ext:'aar')
 }
