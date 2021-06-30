@@ -48,5 +48,5 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'com.facebook.react:react-native:+'
     implementation 'com.google.code.gson:gson:+'
-    implementation(name:'fibrichecker-release', ext:'aar')
+    implementation(name:'fibricheck-sdk', ext:'aar')
 }
