@@ -36,6 +36,10 @@ repositories {
     mavenCentral()
     google()
     jcenter()
+
+    flatDir {
+        dirs "./src/main/libs", "$rootDir/../node_modules/react-native-fibricheck/android/src/main/libs"
+    }
 }
 
 dependencies {
