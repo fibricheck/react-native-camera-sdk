@@ -28,9 +28,15 @@ export default class App extends Component {
 
   componentDidMount() {
     this.addDeviceListeners();
-    request(PERMISSIONS.IOS.CAMERA).then((result) => {
-      this.setState({camera: result === 'granted'});
-    });
+    if(Platform.os === 'ios') {
+      request(PERMISSIONS.IOS.CAMERA).then((result) => {
+        this.setState({camera: result === 'granted'});
+      });
+    } else {
+      request(PERMISSIONS.ANDROID.CAMERA).then((result) => {
+        this.setState({camera: result === 'granted'});
+      });
+    }
   }
 
   componentWillUnmount() {
