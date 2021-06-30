@@ -93,7 +93,7 @@ export default class App extends Component {
     const {camera, heartRate, fingerPresent, measurementStarted} = this.state;
     return (
       <SafeAreaProvider>
-        {camera && <FibriView />}
+        {camera && <FibriView style={styles.container} />}
         <View style={styles.container}>
           <Text>{`Heartrate : ${heartRate}`}</Text>
           <Text>{`Vinger aanwezig : ${fingerPresent ? 'Ja' : 'Nee'}`}</Text>
