@@ -121,8 +121,8 @@ RCT_EXPORT_METHOD(startRecording) {
   };
 
   self.fibrichecker.onSampleReady = ^(double ppg, double raw) {
-    // [FibriEventEmitter emitEventWithName:@"sampleReady" andPayload:@{ @"ppg": @(ppg) }];
-    [weakSelf drawGraphPoint:ppg];
+    [FibriEventEmitter emitEventWithName:@"sampleReady" andPayload:@{ @"ppg": @(ppg) }];
+    // [weakSelf drawGraphPoint:ppg];
   };
 
   self.fibrichecker.onCalibrationReady = ^{

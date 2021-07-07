@@ -8,107 +8,161 @@
  * https://github.com/facebook/react-native
  */
 
-import React, {Component} from 'react';
+import React, {Component, useEffect, useRef, useState} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import FibriView, {managerEmitter} from './bridges/FibriBridgeNativeView';
 import {request, PERMISSIONS} from 'react-native-permissions';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {
+  VictoryLine,
+  VictoryChart,
+  VictoryTheme,
+  VictoryBrushContainer,
+  VictoryAxis,
+} from 'victory-native';
 
-export default class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      camera: false,
-      fingerPresent: false,
-      measurementStarted: false,
-      heartRate: 0,
-      isPulseDetected: false,
-    };
-  }
+const App = () => {
+  const [camera, setCamera] = useState(false);
+  const [fingerPresent, setFingerPresent] = useState(false);
+  const [measurementStarted, setMeasurementStarted] = useState(false);
+  const [heartRate, setHeartRate] = useState(0);
+  const [isPulseDetected, setIsPulseDetected] = useState(false);
+  const [graphData, setGraphData] = useState([]);
+  const [domain, setDomain] = useState({minDomain: 0, maxDomain: 50});
 
-  componentDidMount() {
-    this.addDeviceListeners();
-    if(Platform.os === 'ios') {
+  useEffect(() => {
+    addDeviceListeners();
+    if (Platform.OS === 'ios') {
       request(PERMISSIONS.IOS.CAMERA).then((result) => {
-        this.setState({camera: result === 'granted'});
+        setCamera(result === 'granted');
       });
     } else {
       request(PERMISSIONS.ANDROID.CAMERA).then((result) => {
-        this.setState({camera: result === 'granted'});
+        setCamera(result === 'granted');
       });
     }
+
+    return () => {
+      removeDeviceListeners();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (graphData.length > 0 ? graphData.slice(-1).pop().x >= 50 : false) {
+      setDomain(({minDomain, maxDomain}) => {
+        return {minDomain: minDomain + 1, maxDomain: maxDomain + 1};
+      });
+    }
+  }, [graphData]);
+
+  function addDeviceListeners() {
+    managerEmitter.addListener('measurementStart', onMeasurementStart);
+    managerEmitter.addListener('fingerDetected', onFingerDetected);
+    managerEmitter.addListener('measurementProcessed', onMeasurementProcessed);
+    managerEmitter.addListener('fingerRemoved', onFingerRemoved);
+    managerEmitter.addListener('heartBeat', onHeartBeat);
+    managerEmitter.addListener('pulseDetected', onPulseDetected);
+    managerEmitter.addListener('sampleReady', ({ppg}) => onSampleReady(ppg));
   }
 
-  componentWillUnmount() {
-    this.removeDeviceListeners();
-
-    FibriView.stop();
-  }
-
-  addDeviceListeners() {
-    managerEmitter.addListener('measurementStart', this.onMeasurementStart);
-    managerEmitter.addListener('fingerDetected', this.onFingerDetected);
-    managerEmitter.addListener(
-      'measurementProcessed',
-      this.onMeasurementProcessed,
-    );
-    managerEmitter.addListener('fingerRemoved', this.onFingerRemoved);
-    managerEmitter.addListener('heartBeat', this.onHeartBeat);
-    managerEmitter.addListener('pulseDetected', this.onPulseDetected);
-  }
-
-  removeDeviceListeners() {
-    managerEmitter.removeListener('measurementStart', this.onMeasurementStart);
-    managerEmitter.removeListener('fingerDetected', this.onFingerDetected);
+  function removeDeviceListeners() {
+    managerEmitter.removeListener('measurementStart', onMeasurementStart);
+    managerEmitter.removeListener('fingerDetected', onFingerDetected);
     managerEmitter.removeListener(
       'measurementProcessed',
-      this.onMeasurementProcessed,
+      onMeasurementProcessed,
     );
-    managerEmitter.removeListener('fingerRemoved', this.onFingerRemoved);
-    managerEmitter.removeListener('heartBeat', this.onHeartBeat);
-    managerEmitter.removeListener('pulseDetected', this.onPulseDetected);
+    managerEmitter.removeListener('fingerRemoved', onFingerRemoved);
+    managerEmitter.removeListener('heartBeat', onHeartBeat);
+    managerEmitter.removeListener('pulseDetected', onPulseDetected);
   }
 
-  onPulseDetected = () => {
-    this.setState({
-      isPulseDetected: true,
+  function onPulseDetected() {
+    setIsPulseDetected(true);
+  }
+
+  function onHeartBeat({heartRate}) {
+    setHeartRate(heartRate);
+  }
+
+  function onSampleReady(ppg) {
+    setGraphData((oldArray) => {
+      const bufferArray = [...oldArray];
+      bufferArray.length > 200 ? bufferArray.splice(0, 99) : bufferArray;
+      return [
+        ...bufferArray,
+        {
+          x:
+            bufferArray.length > 0
+              ? bufferArray[bufferArray.length - 1].x + 1
+              : bufferArray.length + 1,
+          y: ppg,
+        },
+      ];
     });
-  };
-
-  onHeartBeat = ({heartRate}) => {
-    this.setState({heartRate: heartRate});
-  };
-
-  onFingerDetected = () => {
-    this.setState({fingerPresent: true});
-  };
-
-  onFingerRemoved = () => {
-    this.setState({fingerPresent: false});
-  };
-
-  onMeasurementStart = () => {
-    this.setState({measurementStarted: true});
-  };
-
-  onMeasurementProcessed = (measurement) => {
-    console.log(measurement);
-  };
-
-  render() {
-    const {camera, heartRate, fingerPresent, measurementStarted} = this.state;
-    return (
-      <SafeAreaProvider>
-        {camera && <FibriView style={styles.container} />}
-        <View style={styles.container}>
-          <Text>{`Heartrate : ${heartRate}`}</Text>
-          <Text>{`Vinger aanwezig : ${fingerPresent ? 'Ja' : 'Nee'}`}</Text>
-          <Text>{`Meting gestart : ${measurementStarted ? 'Ja' : 'Nee'}`}</Text>
-        </View>
-      </SafeAreaProvider>
-    );
   }
-}
+
+  function onFingerDetected() {
+    setFingerPresent(true);
+  }
+
+  function onFingerRemoved() {
+    setFingerPresent(true);
+  }
+
+  function onMeasurementStart() {
+    setMeasurementStarted(true);
+  }
+
+  function onMeasurementProcessed(measurement) {
+    console.log(measurement);
+  }
+
+  return (
+    <SafeAreaProvider>
+      {camera && <FibriView style={styles.container} />}
+      <VictoryChart
+        width={350}
+        maxDomain={{x: domain.maxDomain, y: 100}}
+        minDomain={{x: domain.minDomain, y: -100}}>
+        <VictoryLine
+          interpolation="natural"
+          samples={10}
+          containerComponent={
+            <VictoryBrushContainer
+              brushDomain={{x: [1, 7], y: [-3, 3]}}
+              brushDimension="x"
+              brushStyle={{fill: 'teal', opacity: 0.2}}
+            />
+          }
+          style={{
+            data: {stroke: 'teal'},
+          }}
+          data={graphData}
+          x="x"
+          y="y"
+        />
+        <VictoryAxis
+          style={{
+            axis: {stroke: 'transparent'},
+            ticks: {stroke: 'transparent'},
+            tickLabels: {fill: 'transparent'},
+          }}
+        />
+      </VictoryChart>
+      <View style={styles.container}>
+        <Text>{`Heartrate : ${heartRate}`}</Text>
+        <Text>{`Vinger aanwezig : ${fingerPresent ? 'Ja' : 'Nee'}`}</Text>
+        <Text>{`Hartslag gedetecteerd : ${
+          isPulseDetected ? 'Ja' : 'Nee'
+        }`}</Text>
+        <Text>{`Meting gestart : ${measurementStarted ? 'Ja' : 'Nee'}`}</Text>
+      </View>
+    </SafeAreaProvider>
+  );
+};
+
+export default App;
 
 const styles = StyleSheet.create({
   container: {
