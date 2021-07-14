@@ -7,25 +7,36 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B3E7B58A1CC2AC0600A0062D /* ReactNativeFibricheck.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* ReactNativeFibricheck.m */; };
+		C7B11BD52698723900A3BD77 /* RCTFibriCheckEventEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B11BD12698723900A3BD77 /* RCTFibriCheckEventEmitter.m */; };
+		C7B11BD62698723900A3BD77 /* RCTFibriCheck.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B11BD22698723900A3BD77 /* RCTFibriCheck.m */; };
+		C7B11BD72698723900A3BD77 /* RCTFibriCheckEventEmitter.h in Headers */ = {isa = PBXBuildFile; fileRef = C7B11BD32698723900A3BD77 /* RCTFibriCheckEventEmitter.h */; };
+		C7B11BD82698723900A3BD77 /* RCTFibriCheck.h in Headers */ = {isa = PBXBuildFile; fileRef = C7B11BD42698723900A3BD77 /* RCTFibriCheck.h */; };
+		C7B11BDA269873AC00A3BD77 /* UIApplication+RCTFibricheck.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B11BD9269873AC00A3BD77 /* UIApplication+RCTFibricheck.m */; };
+		C7B11BDF2698763D00A3BD77 /* RCTFibriCheck.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = C7B11BD42698723900A3BD77 /* RCTFibriCheck.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		58B511D91A9E6C8500147676 /* CopyFiles */ = {
+		C7B11BDE2698762100A3BD77 /* Copy Headers */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				C7B11BDF2698763D00A3BD77 /* RCTFibriCheck.h in Copy Headers */,
 			);
+			name = "Copy Headers";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		134814201AA4EA6300B7C361 /* libReactNativeFibricheck.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libReactNativeFibricheck.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		B3E7B5881CC2AC0600A0062D /* ReactNativeFibricheck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReactNativeFibricheck.h; sourceTree = "<group>"; };
-		B3E7B5891CC2AC0600A0062D /* ReactNativeFibricheck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReactNativeFibricheck.m; sourceTree = "<group>"; };
+		C7B11BCD2698719800A3BD77 /* libRCTFibriCheck.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRCTFibriCheck.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C7B11BD12698723900A3BD77 /* RCTFibriCheckEventEmitter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTFibriCheckEventEmitter.m; sourceTree = "<group>"; };
+		C7B11BD22698723900A3BD77 /* RCTFibriCheck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTFibriCheck.m; sourceTree = "<group>"; };
+		C7B11BD32698723900A3BD77 /* RCTFibriCheckEventEmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTFibriCheckEventEmitter.h; sourceTree = "<group>"; };
+		C7B11BD42698723900A3BD77 /* RCTFibriCheck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTFibriCheck.h; sourceTree = "<group>"; };
+		C7B11BD9269873AC00A3BD77 /* UIApplication+RCTFibricheck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+RCTFibricheck.m"; sourceTree = "<group>"; };
+		C7B11BE12698769B00A3BD77 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,41 +50,68 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		134814211AA4EA7D00B7C361 /* Products */ = {
+		C7B11BCB2698719800A3BD77 /* /Users/janvandertaelen/Documents/git/react-native-fibricheck/ios/RCTFibriCheck.xcodeproj */ = {
 			isa = PBXGroup;
 			children = (
-				134814201AA4EA6300B7C361 /* libReactNativeFibricheck.a */,
+				C7B11BE12698769B00A3BD77 /* SystemConfiguration.framework */,
+				C7B11BD02698723900A3BD77 /* RCTFibriCheck */,
+				C7B11BCE2698719800A3BD77 /* Products */,
+			);
+			path = "/Users/janvandertaelen/Documents/git/react-native-fibricheck/ios/RCTFibriCheck.xcodeproj";
+			sourceTree = "<absolute>";
+		};
+		C7B11BCE2698719800A3BD77 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C7B11BCD2698719800A3BD77 /* libRCTFibriCheck.a */,
 			);
 			name = Products;
-			sourceTree = "<group>";
+			path = RCTFibriCheck.xcodeproj/Frameworks/RCTFibriCheck.xcodeproj;
+			sourceTree = SOURCE_ROOT;
 		};
-		58B511D21A9E6C8500147676 = {
+		C7B11BD02698723900A3BD77 /* RCTFibriCheck */ = {
 			isa = PBXGroup;
 			children = (
-				B3E7B5881CC2AC0600A0062D /* ReactNativeFibricheck.h */,
-				B3E7B5891CC2AC0600A0062D /* ReactNativeFibricheck.m */,
-				134814211AA4EA7D00B7C361 /* Products */,
+				C7B11BD9269873AC00A3BD77 /* UIApplication+RCTFibricheck.m */,
+				C7B11BD12698723900A3BD77 /* RCTFibriCheckEventEmitter.m */,
+				C7B11BD22698723900A3BD77 /* RCTFibriCheck.m */,
+				C7B11BD32698723900A3BD77 /* RCTFibriCheckEventEmitter.h */,
+				C7B11BD42698723900A3BD77 /* RCTFibriCheck.h */,
 			);
-			sourceTree = "<group>";
+			path = RCTFibriCheck;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		CA3D8B572076D824006F3572 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7B11BD72698723900A3BD77 /* RCTFibriCheckEventEmitter.h in Headers */,
+				C7B11BD82698723900A3BD77 /* RCTFibriCheck.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
-		58B511DA1A9E6C8500147676 /* ReactNativeFibricheck */ = {
+		58B511DA1A9E6C8500147676 /* RCTFibriCheck */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "ReactNativeFibricheck" */;
+			buildConfigurationList = 58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "RCTFibriCheck" */;
 			buildPhases = (
 				58B511D71A9E6C8500147676 /* Sources */,
 				58B511D81A9E6C8500147676 /* Frameworks */,
-				58B511D91A9E6C8500147676 /* CopyFiles */,
+				C7B11BDE2698762100A3BD77 /* Copy Headers */,
+				CA3D8B572076D824006F3572 /* Headers */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = ReactNativeFibricheck;
-			productName = RCTDataManager;
-			productReference = 134814201AA4EA6300B7C361 /* libReactNativeFibricheck.a */;
+			name = RCTFibriCheck;
+			productName = RCTFibriCheck;
+			productReference = C7B11BCD2698719800A3BD77 /* libRCTFibriCheck.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -90,19 +128,20 @@
 					};
 				};
 			};
-			buildConfigurationList = 58B511D61A9E6C8500147676 /* Build configuration list for PBXProject "ReactNativeFibricheck" */;
+			buildConfigurationList = 58B511D61A9E6C8500147676 /* Build configuration list for PBXProject "RCTFibriCheck" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
-			mainGroup = 58B511D21A9E6C8500147676;
-			productRefGroup = 58B511D21A9E6C8500147676;
+			mainGroup = C7B11BCB2698719800A3BD77 /* /Users/janvandertaelen/Documents/git/react-native-fibricheck/ios/RCTFibriCheck.xcodeproj */;
+			productRefGroup = C7B11BCE2698719800A3BD77 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				58B511DA1A9E6C8500147676 /* ReactNativeFibricheck */,
+				58B511DA1A9E6C8500147676 /* RCTFibriCheck */,
 			);
 		};
 /* End PBXProject section */
@@ -112,7 +151,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B3E7B58A1CC2AC0600A0062D /* ReactNativeFibricheck.m in Sources */,
+				C7B11BD52698723900A3BD77 /* RCTFibriCheckEventEmitter.m in Sources */,
+				C7B11BDA269873AC00A3BD77 /* UIApplication+RCTFibricheck.m in Sources */,
+				C7B11BD62698723900A3BD77 /* RCTFibriCheck.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -122,7 +163,7 @@
 		58B511ED1A9E6C8500147676 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -172,7 +213,7 @@
 		58B511EE1A9E6C8500147676 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -216,14 +257,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
-				"$(inherited)",
+					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../../../React/**",
 					"$(SRCROOT)/../../react-native/React/**",
 				);
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/**",
+					"$(PROJECT_DIR)/RCTFibriCheck",
+					"$(PROJECT_DIR)",
+				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = ReactNativeFibricheck;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -237,9 +283,14 @@
 					"$(SRCROOT)/../../../React/**",
 					"$(SRCROOT)/../../react-native/React/**",
 				);
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/**",
+					"$(PROJECT_DIR)/RCTOneSignal",
+					"$(PROJECT_DIR)",
+				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = ReactNativeFibricheck;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -247,7 +298,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		58B511D61A9E6C8500147676 /* Build configuration list for PBXProject "ReactNativeFibricheck" */ = {
+		58B511D61A9E6C8500147676 /* Build configuration list for PBXProject "RCTFibriCheck" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				58B511ED1A9E6C8500147676 /* Debug */,
@@ -256,7 +307,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "ReactNativeFibricheck" */ = {
+		58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "RCTFibriCheck" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				58B511F01A9E6C8500147676 /* Debug */,

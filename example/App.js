@@ -10,7 +10,6 @@
 
 import React, {Component, useEffect, useRef, useState} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
-import FibriView, {managerEmitter} from './bridges/FibriBridgeNativeView';
 import {request, PERMISSIONS} from 'react-native-permissions';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {
@@ -20,6 +19,7 @@ import {
   VictoryBrushContainer,
   VictoryAxis,
 } from 'victory-native';
+import { RNFibriCheckView } from 'react-native-fibricheck';
 
 const App = () => {
   const [camera, setCamera] = useState(false);
@@ -34,17 +34,40 @@ const App = () => {
     addDeviceListeners();
     if (Platform.OS === 'ios') {
       request(PERMISSIONS.IOS.CAMERA).then((result) => {
+        //FibriCheck.startMeasurement();
         setCamera(result === 'granted');
+        //FibriCheck.startMeasurement();
       });
     } else {
       request(PERMISSIONS.ANDROID.CAMERA).then((result) => {
         setCamera(result === 'granted');
+        //FibriCheck.startMeasurement();
       });
     }
 
     return () => {
       removeDeviceListeners();
     };
+  }, []);
+
+  useEffect(() => {
+    /*FibriCheck.setCalibrationReadyHandler(() =>
+      console.log('Calibration ready'),
+    );
+    FibriCheck.setSampleReceivedHandler((data) => onSampleReady(data.ppg));
+    FibriCheck.setHeartBeatReceivedHandler((data) =>
+      setHeartRate(data.heartBeat),
+    );
+    FibriCheck.setMeasurementStartHandler(() => setMeasurementStarted(true));
+    FibriCheck.setFingerDetectedHandler(() => setFingerPresent(true));
+    FibriCheck.setFingerRemovedHandler(() => setFingerPresent(false));
+    FibriCheck.setPulseDetectedHandler(() => console.log('Pulse detected'));
+    FibriCheck.setMeasurementProcessedHandler((data) => console.log(data));
+    FibriCheck.setTimeRemainingHandler((data) => console.log(data));
+    FibriCheck.setMeasurementFinishedHandler(() =>
+      console.log('Measurement finished'),
+    );
+    FibriCheck.setMovementDetectedHandler(() => console.log('Movement detected'));*/
   }, []);
 
   useEffect(() => {
@@ -56,17 +79,17 @@ const App = () => {
   }, [graphData]);
 
   function addDeviceListeners() {
-    managerEmitter.addListener('measurementStart', onMeasurementStart);
+    /*managerEmitter.addListener('measurementStart', onMeasurementStart);
     managerEmitter.addListener('fingerDetected', onFingerDetected);
     managerEmitter.addListener('measurementProcessed', onMeasurementProcessed);
     managerEmitter.addListener('fingerRemoved', onFingerRemoved);
     managerEmitter.addListener('heartBeat', onHeartBeat);
     managerEmitter.addListener('pulseDetected', onPulseDetected);
-    managerEmitter.addListener('sampleReady', ({ppg}) => onSampleReady(ppg));
+    managerEmitter.addListener('sampleReady', ({ppg}) => onSampleReady(ppg));*/
   }
 
   function removeDeviceListeners() {
-    managerEmitter.removeListener('measurementStart', onMeasurementStart);
+    /*managerEmitter.removeListener('measurementStart', onMeasurementStart);
     managerEmitter.removeListener('fingerDetected', onFingerDetected);
     managerEmitter.removeListener(
       'measurementProcessed',
@@ -74,7 +97,7 @@ const App = () => {
     );
     managerEmitter.removeListener('fingerRemoved', onFingerRemoved);
     managerEmitter.removeListener('heartBeat', onHeartBeat);
-    managerEmitter.removeListener('pulseDetected', onPulseDetected);
+    managerEmitter.removeListener('pulseDetected', onPulseDetected);*/
   }
 
   function onPulseDetected() {
@@ -120,7 +143,7 @@ const App = () => {
 
   return (
     <SafeAreaProvider>
-      {camera && <FibriView style={styles.container} />}
+      <RNFibriCheckView style={styles.container} />
       <VictoryChart
         width={350}
         maxDomain={{x: domain.maxDomain, y: 100}}

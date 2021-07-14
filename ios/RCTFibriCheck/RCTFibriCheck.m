@@ -1,3 +1,4 @@
+/*
 //
 //  FibriBridge.m
 //  FibriCheck
@@ -185,6 +186,59 @@ RCT_EXPORT_METHOD(startRecording) {
   dispatch_async(dispatch_get_main_queue(), ^{
     [_simpleChart setNeedsDisplay];
   });
+}
+
+@end
+ */
+
+
+#if __has_include(<React/RCTConvert.h>)
+#import <React/RCTConvert.h>
+#import <React/RCTBridge.h>
+#import <React/RCTEventDispatcher.h>
+#import <React/RCTUtils.h>
+#else
+#import "RCTConvert.h"
+#import "RCTBridge.h"
+#import "RCTEventDispatcher.h"
+#import "RCTUtils.h"
+#endif
+
+#import "RCTFibriCheck.h"
+#import "RCTFibriCheckEventEmitter.h"
+#import "FibriCheckerComponent.h"
+
+@interface RCTFibriCheck ()
+@property (nonatomic, strong) FibriChecker *fibrichecker;
+@end
+
+@implementation RCTFibriCheck {
+    BOOL didInitialize;
+}
+
++ (RCTFibriCheck *) sharedInstance {
+    static dispatch_once_t token = 0;
+    static id _sharedInstance = nil;
+    dispatch_once(&token, ^{
+        _sharedInstance = [[RCTFibriCheck alloc] init];
+    });
+    return _sharedInstance;
+}
+
+- (void)initFibriCheck:(NSDictionary *)launchOptions {
+    if (didInitialize)
+        return;
+    didInitialize = true;
+    NSLog(@"FibriCheck initialized");
+
+}
+
+- (void)sendEvent:(NSString *)eventName withBody:(NSDictionary *)body {
+    [RCTFibriCheckEventEmitter sendEventWithName:eventName withBody:body];
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end
