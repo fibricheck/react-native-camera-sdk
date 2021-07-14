@@ -9,3 +9,6 @@ export const MEASUREMENT_FINISHED = 'measurementFinished';
 export const MEASUREMENT_PROCESSED = 'measurementProcessed';
 export const FINGER_REMOVED = 'fingerRemoved';
 export const TIME_REMAINING = 'timeRemaining';
+export const MOVEMENT_DETECTED = 'movementDetected';
+export const PULSE_DETECTION_TIME_EXPIRED = 'pulseDetectionTimeExpired';
+export const FINGER_DETECTION_TIME_EXPIRED = 'fingerDetectionTimeExpired';
