@@ -8,18 +8,17 @@
  * https://github.com/facebook/react-native
  */
 
-import React, {Component, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import {request, PERMISSIONS} from 'react-native-permissions';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {
   VictoryLine,
   VictoryChart,
-  VictoryTheme,
   VictoryBrushContainer,
   VictoryAxis,
 } from 'victory-native';
-import { RNFibriCheckView } from 'react-native-fibricheck';
+import {RNFibriCheckView} from 'react-native-fibricheck';
 
 const App = () => {
   const [camera, setCamera] = useState(false);
@@ -31,43 +30,15 @@ const App = () => {
   const [domain, setDomain] = useState({minDomain: 0, maxDomain: 50});
 
   useEffect(() => {
-    addDeviceListeners();
     if (Platform.OS === 'ios') {
       request(PERMISSIONS.IOS.CAMERA).then((result) => {
-        //FibriCheck.startMeasurement();
         setCamera(result === 'granted');
-        //FibriCheck.startMeasurement();
       });
     } else {
       request(PERMISSIONS.ANDROID.CAMERA).then((result) => {
         setCamera(result === 'granted');
-        //FibriCheck.startMeasurement();
       });
     }
-
-    return () => {
-      removeDeviceListeners();
-    };
-  }, []);
-
-  useEffect(() => {
-    /*FibriCheck.setCalibrationReadyHandler(() =>
-      console.log('Calibration ready'),
-    );
-    FibriCheck.setSampleReceivedHandler((data) => onSampleReady(data.ppg));
-    FibriCheck.setHeartBeatReceivedHandler((data) =>
-      setHeartRate(data.heartBeat),
-    );
-    FibriCheck.setMeasurementStartHandler(() => setMeasurementStarted(true));
-    FibriCheck.setFingerDetectedHandler(() => setFingerPresent(true));
-    FibriCheck.setFingerRemovedHandler(() => setFingerPresent(false));
-    FibriCheck.setPulseDetectedHandler(() => console.log('Pulse detected'));
-    FibriCheck.setMeasurementProcessedHandler((data) => console.log(data));
-    FibriCheck.setTimeRemainingHandler((data) => console.log(data));
-    FibriCheck.setMeasurementFinishedHandler(() =>
-      console.log('Measurement finished'),
-    );
-    FibriCheck.setMovementDetectedHandler(() => console.log('Movement detected'));*/
   }, []);
 
   useEffect(() => {
@@ -77,36 +48,6 @@ const App = () => {
       });
     }
   }, [graphData]);
-
-  function addDeviceListeners() {
-    /*managerEmitter.addListener('measurementStart', onMeasurementStart);
-    managerEmitter.addListener('fingerDetected', onFingerDetected);
-    managerEmitter.addListener('measurementProcessed', onMeasurementProcessed);
-    managerEmitter.addListener('fingerRemoved', onFingerRemoved);
-    managerEmitter.addListener('heartBeat', onHeartBeat);
-    managerEmitter.addListener('pulseDetected', onPulseDetected);
-    managerEmitter.addListener('sampleReady', ({ppg}) => onSampleReady(ppg));*/
-  }
-
-  function removeDeviceListeners() {
-    /*managerEmitter.removeListener('measurementStart', onMeasurementStart);
-    managerEmitter.removeListener('fingerDetected', onFingerDetected);
-    managerEmitter.removeListener(
-      'measurementProcessed',
-      onMeasurementProcessed,
-    );
-    managerEmitter.removeListener('fingerRemoved', onFingerRemoved);
-    managerEmitter.removeListener('heartBeat', onHeartBeat);
-    managerEmitter.removeListener('pulseDetected', onPulseDetected);*/
-  }
-
-  function onPulseDetected() {
-    setIsPulseDetected(true);
-  }
-
-  function onHeartBeat({heartRate}) {
-    setHeartRate(heartRate);
-  }
 
   function onSampleReady(ppg) {
     setGraphData((oldArray) => {
@@ -125,25 +66,32 @@ const App = () => {
     });
   }
 
-  function onFingerDetected() {
-    setFingerPresent(true);
-  }
-
-  function onFingerRemoved() {
-    setFingerPresent(true);
-  }
-
-  function onMeasurementStart() {
-    setMeasurementStarted(true);
-  }
-
-  function onMeasurementProcessed(measurement) {
-    console.log(measurement);
-  }
-
   return (
     <SafeAreaProvider>
-      <RNFibriCheckView style={styles.container} />
+      {camera && (
+        <RNFibriCheckView
+          style={styles.container}
+          onFingerDetected={() => setFingerPresent(true)}
+          onFingerRemoved={() => setFingerPresent(false)}
+          onCalibrationReady={() => console.log('calibration ready')}
+          onMeasurementFinished={() => console.log('measurement finished')}
+          onMeasurementStart={() => setMeasurementStarted(true)}
+          onFingerDetectionTimeExpired={() =>
+            console.log('finger detection time expired')
+          }
+          onPulseDetected={() => setIsPulseDetected(true)}
+          onPulseDetectionTimeExpired={() =>
+            console.log('pulse detection time is expired')
+          }
+          onMovementDetected={() => console.log('movement detected')}
+          onHeartBeat={(event) => setHeartRate(event.nativeEvent.heartRate)}
+          onTimeRemaining={(event) => console.log(event.nativeEvent)}
+          onMeasurementProcessed={(event) =>
+            console.log(event.nativeEvent)
+          }
+          onSampleReady={(event) => onSampleReady(event.nativeEvent.ppg)}
+        />
+      )}
       <VictoryChart
         width={350}
         maxDomain={{x: domain.maxDomain, y: 100}}
