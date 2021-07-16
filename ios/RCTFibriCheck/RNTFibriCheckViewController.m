@@ -69,6 +69,13 @@
     self.view = customView;
 }
 
+- (void)drawGraphPoint:(double)value {
+  [((RNTFibriCheckView*)self.view) addPoint:[NSNumber numberWithDouble:value]];
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [((RNTFibriCheckView*)self.view) setNeedsDisplay];
+  });
+}
+
 - (void)addListeners {
   RCTLogInfo(@"addListeners");
   __unsafe_unretained typeof(self) weakSelf = self;
@@ -96,6 +103,7 @@
   };
 
   self.fibrichecker.onSampleReady = ^(double ppg, double raw) {
+    [weakSelf drawGraphPoint:ppg];
     NSDictionary *data = @{@"ppg":[NSNumber numberWithFloat:ppg], @"raw":[NSNumber numberWithFloat:raw]};
     dispatch_async(dispatch_get_main_queue(), ^{
         if(((RNTFibriCheckView*)weakSelf.view).onSampleReady != nil) ((RNTFibriCheckView*)weakSelf.view).onSampleReady(data);

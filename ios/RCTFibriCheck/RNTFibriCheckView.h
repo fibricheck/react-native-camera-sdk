@@ -11,9 +11,16 @@
 - (void) fibriCheckViewDidSetMovementDetection;
 - (void) fibriCheckViewDidSetFingerDetectionExpiryTime;
 - (void) fibriCheckViewDidSetWaitForStartRecordingSignal;
+- (void) drawGraphPoint;
+- (void) addPoint;
 @end
 
-@interface RNTFibriCheckView : UIView
+@interface RNTFibriCheckView : UIView {
+  float min;
+  float max;
+  float delta;
+  int index;
+}
 
 @property (nonatomic, weak) id<FibriCheckViewDelegate> delegate;
 
@@ -26,6 +33,10 @@
 @property (nonatomic) BOOL movementDetectionEnabled;
 @property (nonatomic) NSInteger *fingerDetectionExpiryTime;
 @property (nonatomic) NSInteger *waitForStartRecordingSignal;
+
+@property (nonatomic) NSInteger stepIncrement;
+@property (nonatomic) NSInteger verticalOffset;
+@property (weak, nonatomic) UIColor *lineColor;
 
 @property (nonatomic, copy) RCTBubblingEventBlock onFingerDetected;
 @property (nonatomic, copy) RCTBubblingEventBlock onFingerRemoved;
@@ -40,5 +51,12 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onFingerDetectionTimeExpired;
 @property (nonatomic, copy) RCTBubblingEventBlock onHeartBeat;
 @property (nonatomic, copy) RCTBubblingEventBlock onTimeRemaining;
+
+/*!
+ *  Contains all the points currently displayed on the chart
+ */
+@property (nonatomic, retain) NSMutableArray *points;
+
+-(void) addPoint:(NSNumber *) newPoint;
 
 @end

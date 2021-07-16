@@ -1,6 +1,6 @@
 //  Created by react-native-create-bridge
 
-package com.fibricheckreactnativesdk.fibribridge;
+package com.fibricheck.rnfibricheckandroid;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -34,11 +34,12 @@ import java.util.Collections;
 import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
+import com.facebook.react.uimanager.events.RCTEventEmitter;
 
-public class FibriBridgeManager extends SimpleViewManager<LinearLayout> {
-  public static final String REACT_CLASS = "FibriBridge";
+public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
+  public static final String REACT_CLASS = "FibriCheck";
 
-  private static final String TAG = "FibriBridgeManager";
+  private static final String TAG = "RNFibriCheck";
 
   public static final int COMMAND_START_MEASUREMENT = 1;
 
@@ -52,13 +53,27 @@ public class FibriBridgeManager extends SimpleViewManager<LinearLayout> {
 
   private ArrayList<Double> valueSR;
 
-  private LinearLayout linearLayout;
-
   private int xValue = 0;
 
   private GraphView graphView;
 
+  private LinearLayout linearLayout;
+
   private FibriChecker fibriChecker;
+
+  private static final String EVENT_SAMPLE_READY = "onSampleReady";
+  private static final String EVENT_FINGER_DETECTED = "onFingerDetected";
+  private static final String EVENT_FINGER_REMOVED = "onFingerRemoved";
+  private static final String EVENT_CALIBRATION_READY = "onCalibrationReady";
+  private static final String EVENT_HEARTBEAT = "onHeartBeat";
+  private static final String EVENT_TIME_REMAINING = "onTimeRemaining";
+  private static final String EVENT_MEASUREMENT_FINISHED = "onMeasurementFinished";
+  private static final String EVENT_MEASUREMENT_START = "onMeasurementStart";
+  private static final String EVENT_FINGER_DETECTION_TIME_EXPIRED = "onFingerDetectionTimeExpired";
+  private static final String EVENT_PULSE_DETECTED = "onPulseDetected";
+  private static final String EVENT_PULSE_DETECTION_TIME_EXPIRED = "onPulseDetectionTimeExpired";
+  private static final String EVENT_MOVEMENT_DETECTED = "onMovementDetected";
+  private static final String EVENT_MEASUREMENT_PROCESSED = "onMeasurementProcessed";
 
   @Override
   public String getName() {
@@ -69,8 +84,6 @@ public class FibriBridgeManager extends SimpleViewManager<LinearLayout> {
 
   @Override
   public LinearLayout createViewInstance(ThemedReactContext context) {
-    // Create a view here
-    // https://facebook.github.io/react-native/docs/native-components-android.html#2-implement-method-createviewinstance
     Log.i(TAG, "Creating View instance");
 
     linearLayout = new LinearLayout(context);
@@ -88,105 +101,93 @@ public class FibriBridgeManager extends SimpleViewManager<LinearLayout> {
     fibriChecker.setFibriListener(new FibriListener() {
 
       @Override public void onSampleReady(final double ppg, double raw) {
-
-        handler.post(new Runnable() {
-          @Override
-          public void run() {
-            addGraphData(ppg);
-          }
-        });
+        addGraphData(ppg);
+        WritableMap event = Arguments.createMap();
+        event.putDouble("ppg", ppg);
+        event.putDouble("raw", raw);
+        ReactContext reactContext = (ReactContext) linearLayout.getContext();
+        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_SAMPLE_READY, event);
       }
 
       @Override public void onFingerDetected() {
-
-        reactContext.getJSModule(RCTNativeAppEventEmitter.class)
-            .emit("fingerDetected", null);
+        WritableMap event = Arguments.createMap();
+        ReactContext reactContext = (ReactContext) linearLayout.getContext();
+        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_FINGER_DETECTED, event);
       }
 
       @Override public void onFingerRemoved() {
-
-        reactContext.getJSModule(RCTNativeAppEventEmitter.class)
-            .emit("fingerRemoved", null);
+        WritableMap event = Arguments.createMap();
+        ReactContext reactContext = (ReactContext) linearLayout.getContext();
+        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_FINGER_REMOVED, event);
       }
 
       @Override public void onCalibrationReady() {
-
-        reactContext.getJSModule(RCTNativeAppEventEmitter.class)
-            .emit("calibrationReady", null);
+        WritableMap event = Arguments.createMap();
+        ReactContext reactContext = (ReactContext) linearLayout.getContext();
+        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_CALIBRATION_READY, event);
       }
 
       @Override public void onHeartBeat(int value) {
-
         WritableMap event = Arguments.createMap();
         event.putInt("heartRate", value);
-        //reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(fv.getId(), "onHeartBeat", event);
-        reactContext.getJSModule(RCTNativeAppEventEmitter.class)
-            .emit("heartBeat", event);
+        ReactContext reactContext = (ReactContext) linearLayout.getContext();
+        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_HEARTBEAT, event);
       }
 
       @Override public void timeRemaining(int seconds) {
-
-        //Log.e(TAG, "Time Remaining");
-        WritableMap event = Arguments.createMap();
-        event.putInt("seconds", seconds);
-        reactContext.getJSModule(RCTNativeAppEventEmitter.class)
-            .emit("timeRemaining", event);
+          WritableMap event = Arguments.createMap();
+          event.putInt("seconds", seconds);
+          ReactContext reactContext = (ReactContext) linearLayout.getContext();
+          reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_TIME_REMAINING, event);
       }
 
       @Override public void onMeasurementFinished() {
-
-        Log.i(TAG, "Measurement Finished");
-        reactContext.getJSModule(RCTNativeAppEventEmitter.class)
-            .emit("measurementFinished", null);
+        WritableMap event = Arguments.createMap();
+        ReactContext reactContext = (ReactContext) linearLayout.getContext();
+        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_MEASUREMENT_FINISHED, event);
       }
 
       @Override public void onMeasurementStart() {
-
-        Log.i(TAG, "Measurement started");
-        reactContext.getJSModule(RCTNativeAppEventEmitter.class)
-            .emit("measurementStart", null);
+        WritableMap event = Arguments.createMap();
+        ReactContext reactContext = (ReactContext) linearLayout.getContext();
+        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_MEASUREMENT_START, event);
       }
 
       @Override public void onFingerDetectionTimeExpired() {
-
-        Log.i(TAG, "Finger Detection Time Expired");
-        reactContext.getJSModule(RCTNativeAppEventEmitter.class)
-            .emit("fingerDetectionTimeExpired", null);
+        WritableMap event = Arguments.createMap();
+        ReactContext reactContext = (ReactContext) linearLayout.getContext();
+        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_FINGER_DETECTION_TIME_EXPIRED, event);
       }
 
       @Override public void onPulseDetected() {
-
-        Log.i(TAG, "Pulse detected");
-        reactContext.getJSModule(RCTNativeAppEventEmitter.class)
-            .emit("pulseDetected", null);
+        WritableMap event = Arguments.createMap();
+        ReactContext reactContext = (ReactContext) linearLayout.getContext();
+        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_PULSE_DETECTED, event);
       }
 
       @Override public void onPulseDetectionTimeExpired() {
-
-        Log.i(TAG, "Pulse Detection Time Expired");
-        reactContext.getJSModule(RCTNativeAppEventEmitter.class)
-            .emit("pulseDetectionTimeExpired", null);
+        WritableMap event = Arguments.createMap();
+        ReactContext reactContext = (ReactContext) linearLayout.getContext();
+        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_PULSE_DETECTION_TIME_EXPIRED, event);
       }
 
       @Override public void onMovementDetected() {
-
-        Log.i(TAG, "Movement Detected");
-        reactContext.getJSModule(RCTNativeAppEventEmitter.class)
-            .emit("movementDetected", null);
+        WritableMap event = Arguments.createMap();
+        ReactContext reactContext = (ReactContext) linearLayout.getContext();
+        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_MOVEMENT_DETECTED, event);
       }
 
       @Override public void onMeasurementProcessed(MeasurementData measurementData) {
 
         Log.i(TAG, "Measurement processed with Heartbeat: " + measurementData.heartrate);
         WritableMap event = Arguments.createMap();
-
+        ReactContext reactContext = (ReactContext) linearLayout.getContext();
         try {
           Gson gson = new Gson();
           JSONObject jsonObject = new JSONObject(gson.toJson(measurementData));
           String measurementJson = jsonObject.toString();
           event.putString("measurement", measurementJson);
-          reactContext.getJSModule(RCTNativeAppEventEmitter.class)
-              .emit("measurementProcessed", event);
+          reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_MEASUREMENT_PROCESSED, event);
         } catch (JSONException | NullPointerException ex) {
           Log.e(TAG, ex.toString());
         }
@@ -276,36 +277,6 @@ public class FibriBridgeManager extends SimpleViewManager<LinearLayout> {
     fibriChecker.gyroEnabled = gyroEnabled;
   }
 
-  @ReactProp(name = "lowerMovementLimit")
-  public void setLowerMovementLimit(View view, int lowerMovementLimit) {
-    fibriChecker.lowerMovementLimit = lowerMovementLimit;
-  }
-
-  @ReactProp(name = "upperMovementLimit")
-  public void setUpperMovementLimit(View view, int upperMovementLimit) {
-    fibriChecker.upperMovementLimit = upperMovementLimit;
-  }
-
-  @ReactProp(name = "maxStdDevYValue")
-  public void setMaxStdDevYValue(View view, int maxStdDevYValue) {
-    fibriChecker.maxStdDevYValue = maxStdDevYValue;
-  }
-
-  @ReactProp(name = "maxYValue")
-  public void setMaxYValue(View view, int maxYValue) {
-    fibriChecker.maxYValue = maxYValue;
-  }
-
-  @ReactProp(name = "minYValue")
-  public void setMinYValue(View view, int minYValue) {
-    fibriChecker.minYValue = minYValue;
-  }
-
-  @ReactProp(name = "minVValue")
-  public void setMinVValue(View view, int minVValue) {
-    fibriChecker.minVValue = minVValue;
-  }
-
   @ReactProp(name = "movementDetectionEnabled")
   public void setMovementDetectionEnabled(View view, boolean movementDetectionEnabled) {
     fibriChecker.movementDetectionEnabled = movementDetectionEnabled;
@@ -314,16 +285,6 @@ public class FibriBridgeManager extends SimpleViewManager<LinearLayout> {
   @ReactProp(name = "rotationEnabled")
   public void setRotationEnabled(View view, boolean rotationEnabled) {
     fibriChecker.rotationEnabled = rotationEnabled;
-  }
-
-  @ReactProp(name = "quadrantCols")
-  public void setQuadrantCols(View view, int quadrantCols) {
-    fibriChecker.quadrantCols = quadrantCols;
-  }
-
-  @ReactProp(name = "quadrantRows")
-  public void setQuadrantRows(View view, int quadrantRows) {
-    fibriChecker.quadrantRows = quadrantRows;
   }
 
   @ReactProp(name = "waitForStartRecordingSignal")
@@ -341,9 +302,7 @@ public class FibriBridgeManager extends SimpleViewManager<LinearLayout> {
   }
 
   private void invalidateGraphView(GraphView graphView, Context context) {
-
-    LinearLayout.LayoutParams params =
-        new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
     graphView.setBackgroundColor(Color.TRANSPARENT);
     params.gravity = Gravity.CENTER_HORIZONTAL;
     graphView.setLayoutParams(params);
@@ -353,7 +312,6 @@ public class FibriBridgeManager extends SimpleViewManager<LinearLayout> {
   }
 
   private void setViewPortOptions(GraphView graphView) {
-
     graphView.getViewport().setScalable(false);
     graphView.getViewport().setScrollable(false);
     graphView.getViewport().setXAxisBoundsManual(true);
@@ -379,7 +337,7 @@ public class FibriBridgeManager extends SimpleViewManager<LinearLayout> {
     this.series = new LineGraphSeries(data);
 
     series = new LineGraphSeries<>(dataPoints.toArray(new DataPoint[dataPoints.size()]));
-    //series.setColor(Color.BLACK);
+    series.setColor(Color.BLUE);
     series.setThickness(8);
     series.setColor(Color.WHITE);
     series.setBackgroundColor(Color.parseColor("#1e8d95"));
@@ -390,13 +348,11 @@ public class FibriBridgeManager extends SimpleViewManager<LinearLayout> {
   }
 
   private void addGraphData(double value) {
-
     calculateYaxisBoundaries(value);
     series.appendData(new DataPoint(++xValue, value), true, SAMPLE_COUNT);
   }
 
   private void calculateYaxisBoundaries(double value) {
-
     addValueToSR(value);
     graphView.getViewport().setMaxY(Collections.max(valueSR) + 0.2);
     graphView.getViewport().setMinY(Collections.min(valueSR) - 0.2);
@@ -408,5 +364,23 @@ public class FibriBridgeManager extends SimpleViewManager<LinearLayout> {
     if (valueSR.size() > SAMPLE_COUNT) {
       valueSR.remove(0);
     }
+  }
+
+  @Override
+  public Map getExportedCustomBubblingEventTypeConstants() {
+      return MapBuilder.builder()
+          .put(EVENT_SAMPLE_READY, MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", EVENT_SAMPLE_READY)))
+          .put(EVENT_FINGER_DETECTED, MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", EVENT_FINGER_DETECTED)))
+          .put(EVENT_FINGER_REMOVED, MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", EVENT_FINGER_REMOVED)))
+          .put(EVENT_CALIBRATION_READY, MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", EVENT_CALIBRATION_READY)))
+          .put(EVENT_TIME_REMAINING, MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", EVENT_TIME_REMAINING)))
+          .put(EVENT_MEASUREMENT_FINISHED, MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", EVENT_MEASUREMENT_FINISHED)))
+          .put(EVENT_MEASUREMENT_START, MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", EVENT_MEASUREMENT_START)))
+          .put(EVENT_FINGER_DETECTION_TIME_EXPIRED, MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", EVENT_FINGER_DETECTION_TIME_EXPIRED)))
+          .put(EVENT_PULSE_DETECTED, MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", EVENT_PULSE_DETECTED)))
+          .put(EVENT_PULSE_DETECTION_TIME_EXPIRED, MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", EVENT_PULSE_DETECTION_TIME_EXPIRED)))
+          .put(EVENT_MOVEMENT_DETECTED, MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", EVENT_MOVEMENT_DETECTED)))
+          .put(EVENT_MEASUREMENT_PROCESSED, MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", EVENT_MEASUREMENT_PROCESSED)))
+          .build();
   }
 }
