@@ -1,6 +1,5 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { NativeModules } from 'react-native';
 import { requireNativeComponent, View} from 'react-native'
 
 export default class FibriCheckView extends React.Component {
@@ -20,22 +19,14 @@ FibriCheckView.propTypes = {
     ...View.propTypes,
     style: PropTypes.any,
     sampleTime: PropTypes.number,
-    flashEnabled: PropTypes.func,
-    gyroEnabled: PropTypes.func,
-    accEnabled: PropTypes.func,
-    gravEnabled: PropTypes.func,
-    rotationEnabled: PropTypes.func,
-    movementDetectionEnabled: PropTypes.func,
-    quadrantRows: PropTypes.number,
-    quadrantCols: PropTypes.number,
-    pulseDetectionExpiryTime: PropTypes.number,
-    upperMovementLimit: PropTypes.number,
-    lowerMovementLimit: PropTypes.number,
+    flashEnabled: PropTypes.bool,
+    gravEnabled: PropTypes.bool,
+    gyroEnabled: PropTypes.bool,
+    accEnabled: PropTypes.bool,
+    rotationEnabled: PropTypes.bool,
+    movementDetectionEnabled: PropTypes.bool,
     fingerDetectionExpiryTime: PropTypes.number,
-    minYValue: PropTypes.number,
-    maxYValue: PropTypes.number,
-    minVValue: PropTypes.number,
-    maxStdDevYValue: PropTypes.number,
+    waitForStartRecordingSignal: PropTypes.number,
     onSampleReady: PropTypes.func,
     onFingerDetected: PropTypes.func,
     onFingerRemoved: PropTypes.func,

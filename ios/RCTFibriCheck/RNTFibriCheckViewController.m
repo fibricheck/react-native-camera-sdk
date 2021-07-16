@@ -9,6 +9,52 @@
 
 @implementation RNTFibriCheckViewController
 
+- (void)fibriCheckViewDidSetSampleTime {
+    NSInteger sampleTime = ((RNTFibriCheckView*)self.view).sampleTime;
+    _fibrichecker.sampleTime = sampleTime;
+}
+
+- (void)fibriCheckViewDidSetFlash {
+    BOOL flashEnabled = ((RNTFibriCheckView*)self.view).flashEnabled;
+    _fibrichecker.flashEnabled = flashEnabled;
+}
+
+- (void)fibriCheckViewDidSetGrav {
+    BOOL gravEnabled = ((RNTFibriCheckView*)self.view).gravEnabled;
+    _fibrichecker.gravEnabled = gravEnabled;
+}
+
+- (void)fibriCheckViewDidSetGyro {
+    BOOL gyroEnabled = ((RNTFibriCheckView*)self.view).gyroEnabled;
+    _fibrichecker.gyroEnabled = gyroEnabled;
+}
+
+- (void)fibriCheckViewDidSetAcc {
+    BOOL accEnabled = ((RNTFibriCheckView*)self.view).accEnabled;
+    _fibrichecker.accEnabled = accEnabled;
+}
+
+- (void)fibriCheckViewDidSetRotation {
+    BOOL rotationEnabled = ((RNTFibriCheckView*)self.view).rotationEnabled;
+    _fibrichecker.rotationEnabled = rotationEnabled;
+}
+
+- (void)fibriCheckViewDidSetMovementDetection {
+    BOOL movementDetectionEnabled = ((RNTFibriCheckView*)self.view).movementDetectionEnabled;
+    _fibrichecker.movementDetectionEnabled = movementDetectionEnabled;
+}
+
+- (void)fibriCheckViewDidSetFingerDetectionExpiryTime {
+    NSInteger fingerDetectionExpiryTime = ((RNTFibriCheckView*)self.view).fingerDetectionExpiryTime;
+    _fibrichecker.fingerDetectionExpiryTime = fingerDetectionExpiryTime;
+}
+
+- (void)fibriCheckViewDidSetWaitForStartRecordingSignal {
+    NSInteger waitForStartRecordingSignal = ((RNTFibriCheckView*)self.view).waitForStartRecordingSignal;
+    _fibrichecker.waitForStartRecordingSignal = waitForStartRecordingSignal;
+}
+
+
 // MARK: - UI
 - (void)viewDidLoad {
   [super viewDidLoad];

@@ -71,6 +71,12 @@ const App = () => {
       {camera && (
         <RNFibriCheckView
           style={styles.container}
+          sampleTime={120}
+          gravEnabled={true}
+          gyroEnabled={true}
+          accEnabled={true}
+          flashEnabled={true}
+          movementDetectionEnabled={true}
           onFingerDetected={() => setFingerPresent(true)}
           onFingerRemoved={() => setFingerPresent(false)}
           onCalibrationReady={() => console.log('calibration ready')}
@@ -86,9 +92,7 @@ const App = () => {
           onMovementDetected={() => console.log('movement detected')}
           onHeartBeat={(event) => setHeartRate(event.nativeEvent.heartRate)}
           onTimeRemaining={(event) => console.log(event.nativeEvent)}
-          onMeasurementProcessed={(event) =>
-            console.log(event.nativeEvent)
-          }
+          onMeasurementProcessed={(event) => console.log(event.nativeEvent)}
           onSampleReady={(event) => onSampleReady(event.nativeEvent.ppg)}
         />
       )}

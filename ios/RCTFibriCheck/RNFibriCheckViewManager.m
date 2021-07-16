@@ -18,6 +18,16 @@ RCT_EXPORT_VIEW_PROPERTY(onFingerDetectionTimeExpired, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onHeartBeat, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onTimeRemaining, RCTBubblingEventBlock);
 
+RCT_EXPORT_VIEW_PROPERTY(sampleTime, NSInteger);
+RCT_EXPORT_VIEW_PROPERTY(flashEnabled, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(gravEnabled, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(gyroEnabled, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(accEnabled, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(rotationEnabled, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(movementDetectionEnabled, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(fingerDetectionExpiryTime, NSInteger);
+RCT_EXPORT_VIEW_PROPERTY(waitForStartRecordingSignal, NSInteger);
+
 RCT_EXPORT_MODULE(FibriCheck)
 - (UIView *)view {
     self.fibriCheckViewController = [[RNTFibriCheckViewController alloc] init];
