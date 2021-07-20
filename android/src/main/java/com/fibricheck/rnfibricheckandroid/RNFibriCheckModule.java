@@ -1,6 +1,6 @@
 //  Created by react-native-create-bridge
 
-package com.fibricheckreactnativesdk.fibribridge;
+package com.fibricheck.rnfibricheckandroid;
 
 import android.app.Activity;
 import androidx.annotation.Nullable;
@@ -15,11 +15,11 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FibriBridgeModule extends ReactContextBaseJavaModule {
-  public static final String REACT_CLASS = "FibriBridge";
+public class RNFibriCheckModule extends ReactContextBaseJavaModule {
+  public static final String REACT_CLASS = "FibriCheck";
   private static ReactApplicationContext reactContext = null;
 
-  public FibriBridgeModule(ReactApplicationContext context) {
+  public RNFibriCheckModule(ReactApplicationContext context) {
     // Pass in the context to the constructor and save it so you can emit events
     // https://facebook.github.io/react-native/docs/native-modules-android.html#the-toast-module
     super(context);

@@ -71,12 +71,7 @@ const App = () => {
       {camera && (
         <RNFibriCheckView
           style={styles.container}
-          sampleTime={120}
-          gravEnabled={true}
-          gyroEnabled={true}
-          accEnabled={true}
-          flashEnabled={true}
-          movementDetectionEnabled={true}
+          graphBackgroundColor={'#0073ff'}
           onFingerDetected={() => setFingerPresent(true)}
           onFingerRemoved={() => setFingerPresent(false)}
           onCalibrationReady={() => console.log('calibration ready')}

@@ -54,7 +54,6 @@
     _fibrichecker.waitForStartRecordingSignal = waitForStartRecordingSignal;
 }
 
-
 // MARK: - UI
 - (void)viewDidLoad {
   [super viewDidLoad];
@@ -103,7 +102,8 @@
   };
 
   self.fibrichecker.onSampleReady = ^(double ppg, double raw) {
-    [weakSelf drawGraphPoint:ppg];
+    BOOL drawGraph = ((RNTFibriCheckView*)self.view).drawGraph;
+    if(drawGraph) [weakSelf drawGraphPoint:ppg];
     NSDictionary *data = @{@"ppg":[NSNumber numberWithFloat:ppg], @"raw":[NSNumber numberWithFloat:raw]};
     dispatch_async(dispatch_get_main_queue(), ^{
         if(((RNTFibriCheckView*)weakSelf.view).onSampleReady != nil) ((RNTFibriCheckView*)weakSelf.view).onSampleReady(data);

@@ -1,62 +1,42 @@
-#import <UIKit/UIKit.h>
-#import <React/RCTComponent.h>
+#import "RNFibriCheckViewManager.h"
+#import "RNTFibriCheckView.h"
+#import <React/RCTLog.h>
 
-@protocol FibriCheckViewDelegate <NSObject>
-- (void) fibriCheckViewDidSetSampleTime;
-- (void) fibriCheckViewDidSetGrav;
-- (void) fibriCheckViewDidSetFlash;
-- (void) fibriCheckViewDidSetGyro;
-- (void) fibriCheckViewDidSetAcc;
-- (void) fibriCheckViewDidSetRotation;
-- (void) fibriCheckViewDidSetMovementDetection;
-- (void) fibriCheckViewDidSetFingerDetectionExpiryTime;
-- (void) fibriCheckViewDidSetWaitForStartRecordingSignal;
-- (void) drawGraphPoint;
-- (void) addPoint;
-@end
+@implementation RNFibriCheckViewManager
 
-@interface RNTFibriCheckView : UIView {
-  float min;
-  float max;
-  float delta;
-  int index;
+RCT_EXPORT_VIEW_PROPERTY(onFingerDetected, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onFingerRemoved, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onSampleReady, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onMeasurementStart, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onMeasurementFinished, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onMeasurementProcessed, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onCalibrationReady, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onMovementDetected, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onPulseDetected, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onPulseDetectionTimeExpired, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onFingerDetectionTimeExpired, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onHeartBeat, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onTimeRemaining, RCTBubblingEventBlock);
+
+RCT_EXPORT_VIEW_PROPERTY(sampleTime, NSInteger);
+RCT_EXPORT_VIEW_PROPERTY(flashEnabled, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(gravEnabled, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(gyroEnabled, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(accEnabled, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(rotationEnabled, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(movementDetectionEnabled, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(fingerDetectionExpiryTime, NSInteger);
+RCT_EXPORT_VIEW_PROPERTY(waitForStartRecordingSignal, NSInteger);
+
+RCT_EXPORT_VIEW_PROPERTY(drawGraph, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(lineColor, NSString);
+RCT_EXPORT_VIEW_PROPERTY(lineThickness, NSInteger);
+RCT_EXPORT_VIEW_PROPERTY(graphBackgroundColor, NSString);
+
+RCT_EXPORT_MODULE(FibriCheck)
+- (UIView *)view {
+    self.fibriCheckViewController = [[RNTFibriCheckViewController alloc] init];
+    return self.fibriCheckViewController.view;
 }
-
-@property (nonatomic, weak) id<FibriCheckViewDelegate> delegate;
-
-@property (nonatomic) NSInteger *sampleTime;
-@property (nonatomic) BOOL flashEnabled;
-@property (nonatomic) BOOL gravEnabled;
-@property (nonatomic) BOOL gyroEnabled;
-@property (nonatomic) BOOL accEnabled;
-@property (nonatomic) BOOL rotationEnabled;
-@property (nonatomic) BOOL movementDetectionEnabled;
-@property (nonatomic) NSInteger *fingerDetectionExpiryTime;
-@property (nonatomic) NSInteger *waitForStartRecordingSignal;
-
-@property (nonatomic) NSInteger stepIncrement;
-@property (nonatomic) NSInteger verticalOffset;
-@property (weak, nonatomic) UIColor *lineColor;
-
-@property (nonatomic, copy) RCTBubblingEventBlock onFingerDetected;
-@property (nonatomic, copy) RCTBubblingEventBlock onFingerRemoved;
-@property (nonatomic, copy) RCTBubblingEventBlock onSampleReady;
-@property (nonatomic, copy) RCTBubblingEventBlock onMeasurementStart;
-@property (nonatomic, copy) RCTBubblingEventBlock onMeasurementFinished;
-@property (nonatomic, copy) RCTBubblingEventBlock onMeasurementProcessed;
-@property (nonatomic, copy) RCTBubblingEventBlock onCalibrationReady;
-@property (nonatomic, copy) RCTBubblingEventBlock onMovementDetected;
-@property (nonatomic, copy) RCTBubblingEventBlock onPulseDetected;
-@property (nonatomic, copy) RCTBubblingEventBlock onPulseDetectionTimeExpired;
-@property (nonatomic, copy) RCTBubblingEventBlock onFingerDetectionTimeExpired;
-@property (nonatomic, copy) RCTBubblingEventBlock onHeartBeat;
-@property (nonatomic, copy) RCTBubblingEventBlock onTimeRemaining;
-
-/*!
- *  Contains all the points currently displayed on the chart
- */
-@property (nonatomic, retain) NSMutableArray *points;
-
--(void) addPoint:(NSNumber *) newPoint;
 
 @end

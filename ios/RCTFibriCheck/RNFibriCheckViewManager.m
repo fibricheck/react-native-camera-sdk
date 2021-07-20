@@ -28,6 +28,11 @@ RCT_EXPORT_VIEW_PROPERTY(movementDetectionEnabled, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(fingerDetectionExpiryTime, NSInteger);
 RCT_EXPORT_VIEW_PROPERTY(waitForStartRecordingSignal, NSInteger);
 
+RCT_EXPORT_VIEW_PROPERTY(drawGraph, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(lineColor, NSString);
+RCT_EXPORT_VIEW_PROPERTY(lineThickness, NSInteger);
+RCT_EXPORT_VIEW_PROPERTY(graphBackgroundColor, NSString);
+
 RCT_EXPORT_MODULE(FibriCheck)
 - (UIView *)view {
     self.fibriCheckViewController = [[RNTFibriCheckViewController alloc] init];

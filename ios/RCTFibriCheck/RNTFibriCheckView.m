@@ -12,7 +12,6 @@
   self = [super initWithFrame:frame];
   if (self) {
     delta = 1;
-    self.lineColor = [UIColor whiteColor];
     self.stepIncrement = 2.5;
     self.verticalOffset = 6;
   }
@@ -20,7 +19,9 @@
 }
 
 - (void)drawRect:(CGRect)rect {
-  [self drawGraphArea];
+  if(self.graphBackgroundColor) {
+    [self drawGraphArea];
+  }
   [self drawGraphLine];
 }
 
@@ -29,9 +30,19 @@
     float xpos = self.bounds.size.width;
     float ypos = self.bounds.size.height - ([[_points objectAtIndex:0] floatValue] - min + (delta / 1000)) * (self.bounds.size.height / delta);
     float baseLine = self.bounds.size.height;
+    unsigned int integer = 0;
 
     CGContextRef context=UIGraphicsGetCurrentContext();
-    CGContextSetFillColorWithColor(context, [[UIColor colorWithRed:0.12 green:0.55 blue:0.58 alpha:1.0] CGColor]);
+
+    NSScanner *scanner = [NSScanner scannerWithString:self.graphBackgroundColor];
+    [scanner setCharactersToBeSkipped:[NSCharacterSet characterSetWithCharactersInString:@"#"]];
+    [scanner scanHexInt:&integer];
+    UIColor *color = [UIColor colorWithRed:((CGFloat) ((integer & 0xFF0000) >> 16))/255
+                                             green:((CGFloat) ((integer & 0xFF00) >> 8))/255
+                                              blue:((CGFloat) (integer & 0xFF))/255
+                                             alpha:1];
+
+    CGContextSetFillColorWithColor(context, color.CGColor);
 
     CGContextBeginPath(context);
     CGContextMoveToPoint(context, xpos, baseLine);
@@ -55,10 +66,18 @@
   if (_points.count != 0) {
     float xpos = self.bounds.size.width;
     float ypos = self.bounds.size.height - ([[_points objectAtIndex:0] floatValue] - min + (delta / 1000)) * (self.bounds.size.height / delta);
-
+    unsigned int integer = 0;
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetLineWidth(context, 2);
-    CGContextSetStrokeColorWithColor(context, self.lineColor.CGColor);
+    CGContextSetLineWidth(context, self.lineThickness / 4);
+
+    NSScanner *scanner = [NSScanner scannerWithString:self.lineColor];
+    [scanner setCharactersToBeSkipped:[NSCharacterSet characterSetWithCharactersInString:@"#"]];
+    [scanner scanHexInt:&integer];
+    UIColor *color = [UIColor colorWithRed:((CGFloat) ((integer & 0xFF0000) >> 16))/255
+                                             green:((CGFloat) ((integer & 0xFF00) >> 8))/255
+                                              blue:((CGFloat) (integer & 0xFF))/255
+                                             alpha:1];
+    CGContextSetStrokeColorWithColor(context, color.CGColor);
 
     CGContextBeginPath(context);
     CGContextMoveToPoint(context, xpos, ypos);

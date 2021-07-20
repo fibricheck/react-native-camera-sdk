@@ -49,6 +49,8 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
 
   private static final int SAMPLE_COUNT = 120;
 
+  public boolean drawGraphPoints = false;
+
   private LineGraphSeries<DataPoint> series;
 
   private ArrayList<Double> valueSR;
@@ -101,7 +103,9 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
     fibriChecker.setFibriListener(new FibriListener() {
 
       @Override public void onSampleReady(final double ppg, double raw) {
-        addGraphData(ppg);
+        if (drawGraphPoints) {
+          addGraphData(ppg);
+        }
         WritableMap event = Arguments.createMap();
         event.putDouble("ppg", ppg);
         event.putDouble("raw", raw);
@@ -246,6 +250,31 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
 
   // Set properties from React onto your native component via a setter method
   // https://facebook.github.io/react-native/docs/native-components-android.html#3-expose-view-property-setters-using-reactprop-or-reactpropgroup-annotation
+  @ReactProp(name = "drawGraph")
+  public void setDrawGraph(View view, boolean drawGraph) {
+    drawGraphPoints = drawGraph;
+  }
+
+  @ReactProp(name = "drawBackground")
+  public void setDrawBackground(View view, boolean drawBackground) {
+    series.setDrawBackground(drawBackground);
+  }
+
+  @ReactProp(name = "lineColor")
+  public void setLineColor(View view, String lineColor) {
+     series.setColor(Color.parseColor(lineColor));
+  }
+
+  @ReactProp(name = "lineThickness")
+  public void setLineThickness(View view, int lineThickness) {
+     series.setThickness(lineThickness);
+  }
+
+  @ReactProp(name = "graphBackgroundColor")
+  public void setGraphBackgroundColor(View view, String graphBackgroundColor) {
+     series.setBackgroundColor(Color.parseColor(graphBackgroundColor));
+  }
+
   @ReactProp(name = "sampleTime")
   public void setSampleTime(View view, int sampleTime) {
     fibriChecker.sampleTime = sampleTime;
@@ -339,8 +368,7 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
     series = new LineGraphSeries<>(dataPoints.toArray(new DataPoint[dataPoints.size()]));
     series.setColor(Color.BLUE);
     series.setThickness(8);
-    series.setColor(Color.WHITE);
-    series.setBackgroundColor(Color.parseColor("#1e8d95"));
+    series.setBackgroundColor(Color.TRANSPARENT);
     series.setDrawBackground(true);
 
     graphView.removeAllSeries();
