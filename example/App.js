@@ -8,18 +8,19 @@
  * https://github.com/facebook/react-native
  */
 
-import React, {Component, useEffect, useRef, useState} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
-import FibriView, {managerEmitter} from './bridges/FibriBridgeNativeView';
+import React, {useEffect, useState} from 'react';
+import {Platform, StyleSheet, Text, View, FlatList, Button} from 'react-native';
 import {request, PERMISSIONS} from 'react-native-permissions';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {
   VictoryLine,
   VictoryChart,
-  VictoryTheme,
   VictoryBrushContainer,
   VictoryAxis,
 } from 'victory-native';
+import {RNFibriCheckView} from 'react-native-fibricheck';
+import {createOAuth2Client} from '@extrahorizon/javascript-sdk';
+import {rqlBuilder} from '@extrahorizon/javascript-sdk';
 
 const App = () => {
   const [camera, setCamera] = useState(false);
@@ -29,9 +30,15 @@ const App = () => {
   const [isPulseDetected, setIsPulseDetected] = useState(false);
   const [graphData, setGraphData] = useState([]);
   const [domain, setDomain] = useState({minDomain: 0, maxDomain: 50});
+  const [measurements, setMeasurements] = useState([]);
+  const schemaId = '5a6f5d82454b300019e1df14';
+
+  const sdk = createOAuth2Client({
+    host: 'https://api.dev.fibricheck.com/',
+    clientId: '8878e7159758c1c87fa21d5a719ead2ec352d136',
+  });
 
   useEffect(() => {
-    addDeviceListeners();
     if (Platform.OS === 'ios') {
       request(PERMISSIONS.IOS.CAMERA).then((result) => {
         setCamera(result === 'granted');
@@ -41,10 +48,7 @@ const App = () => {
         setCamera(result === 'granted');
       });
     }
-
-    return () => {
-      removeDeviceListeners();
-    };
+    authentication();
   }, []);
 
   useEffect(() => {
@@ -55,35 +59,40 @@ const App = () => {
     }
   }, [graphData]);
 
-  function addDeviceListeners() {
-    managerEmitter.addListener('measurementStart', onMeasurementStart);
-    managerEmitter.addListener('fingerDetected', onFingerDetected);
-    managerEmitter.addListener('measurementProcessed', onMeasurementProcessed);
-    managerEmitter.addListener('fingerRemoved', onFingerRemoved);
-    managerEmitter.addListener('heartBeat', onHeartBeat);
-    managerEmitter.addListener('pulseDetected', onPulseDetected);
-    managerEmitter.addListener('sampleReady', ({ppg}) => onSampleReady(ppg));
-  }
+  const authentication = async () => {
+    await sdk.auth.authenticate({
+      password: '7pWYh7dd',
+      username: 'jan.vandertaelen@craftzing.com',
+    });
 
-  function removeDeviceListeners() {
-    managerEmitter.removeListener('measurementStart', onMeasurementStart);
-    managerEmitter.removeListener('fingerDetected', onFingerDetected);
-    managerEmitter.removeListener(
-      'measurementProcessed',
-      onMeasurementProcessed,
-    );
-    managerEmitter.removeListener('fingerRemoved', onFingerRemoved);
-    managerEmitter.removeListener('heartBeat', onHeartBeat);
-    managerEmitter.removeListener('pulseDetected', onPulseDetected);
-  }
+    console.log('sdk.users.health()', await sdk.users.health());
+    console.log('sdk.users.me()', await sdk.users.me());
 
-  function onPulseDetected() {
-    setIsPulseDetected(true);
-  }
+    await retrieveDocuments();
+  };
 
-  function onHeartBeat({heartRate}) {
-    setHeartRate(heartRate);
-  }
+  const retrieveDocuments = async () => {
+    const rql = rqlBuilder().limit(100).build();
+    const {data} = await sdk.data.documents.find(schemaId, {rql});
+    setMeasurements(data);
+  };
+
+  const sendMeasurement = async (measurement) => {
+    await sdk.auth.authenticate({
+      password: '7pWYh7dd',
+      username: 'jan.vandertaelen@craftzing.com',
+    });
+    console.log(JSON.stringify(measurement));
+    console.log({
+      ...JSON.parse(measurement),
+      ...require('./extraData.json'),
+    });
+    const {id} = await sdk.data.documents.create(schemaId, {
+      ...JSON.parse(measurement),
+      ...require('./extraData.json'),
+    });
+    console.log(id);
+  };
 
   function onSampleReady(ppg) {
     setGraphData((oldArray) => {
@@ -102,26 +111,44 @@ const App = () => {
     });
   }
 
-  function onFingerDetected() {
-    setFingerPresent(true);
-  }
-
-  function onFingerRemoved() {
-    setFingerPresent(true);
-  }
-
-  function onMeasurementStart() {
-    setMeasurementStarted(true);
-  }
-
-  function onMeasurementProcessed(measurement) {
-    console.log(measurement);
-  }
+  const renderItem = ({item}) => {
+    console.log(item);
+    const {status, data} = item;
+    return (
+      <View style={styles.item}>
+        <Text>{`${status} - ${data.heartrate} - ${data.indicator}`}</Text>
+      </View>
+    );
+  };
 
   return (
     <SafeAreaProvider>
-      {camera && <FibriView style={styles.container} />}
-      <VictoryChart
+      {camera && (
+        <RNFibriCheckView
+          style={styles.container}
+          graphBackgroundColor={'#0073ff'}
+          onFingerDetected={() => setFingerPresent(true)}
+          onFingerRemoved={() => setFingerPresent(false)}
+          onCalibrationReady={() => console.log('calibration ready')}
+          onMeasurementFinished={() => console.log('measurement finished')}
+          onMeasurementStart={() => setMeasurementStarted(true)}
+          onFingerDetectionTimeExpired={() =>
+            console.log('finger detection time expired')
+          }
+          onPulseDetected={() => setIsPulseDetected(true)}
+          onPulseDetectionTimeExpired={() =>
+            console.log('pulse detection time is expired')
+          }
+          onMovementDetected={() => console.log('movement detected')}
+          onHeartBeat={(event) => setHeartRate(event.nativeEvent.heartRate)}
+          onTimeRemaining={(event) => console.log(event.nativeEvent)}
+          onMeasurementProcessed={(event) =>
+            sendMeasurement(event.nativeEvent.measurement)
+          }
+          onSampleReady={(event) => onSampleReady(event.nativeEvent.ppg)}
+        />
+      )}
+      {/*<VictoryChart
         width={350}
         maxDomain={{x: domain.maxDomain, y: 100}}
         minDomain={{x: domain.minDomain, y: -100}}>
@@ -149,7 +176,7 @@ const App = () => {
             tickLabels: {fill: 'transparent'},
           }}
         />
-      </VictoryChart>
+      </VictoryChart>*/}
       <View style={styles.container}>
         <Text>{`Heartrate : ${heartRate}`}</Text>
         <Text>{`Vinger aanwezig : ${fingerPresent ? 'Ja' : 'Nee'}`}</Text>
@@ -157,6 +184,12 @@ const App = () => {
           isPulseDetected ? 'Ja' : 'Nee'
         }`}</Text>
         <Text>{`Meting gestart : ${measurementStarted ? 'Ja' : 'Nee'}`}</Text>
+        <FlatList
+          data={measurements}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+        />
+        <Button title={'Retrieve'} onPress={() => retrieveDocuments()} />
       </View>
     </SafeAreaProvider>
   );
@@ -171,14 +204,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  item: {
+    backgroundColor: '#f9c2ff',
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  title: {
+    fontSize: 32,
   },
 });

@@ -1,3 +1,2 @@
-import FibriBridge from './src/FibriView'
-
-export { FibriBridge };
+import RNFibriCheckView from './src/FibriCheckView'
+export {RNFibriCheckView};

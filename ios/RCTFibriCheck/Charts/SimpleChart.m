@@ -1,11 +1,3 @@
-//
-//  SimpleChart.m
-//  FibriCheck
-//
-//  Created by Qompium on 23/04/2018.
-//  Copyright © 2018 Qompium. All rights reserved.
-//
-
 #import "SimpleChart.h"
 
 @implementation SimpleChart

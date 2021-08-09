@@ -9,18 +9,16 @@ Pod::Spec.new do |s|
   s.description  = <<-DESC
                   react-native-fibricheck
                    DESC
-  s.homepage     = "https://github.com/github_account/react-native-fibricheck"
+  s.homepage     = "https://bitbucket.org/antwerpfactory/react-native-fibricheck"
   s.license      = "MIT"
   # s.license    = { :type => "MIT", :file => "FILE_LICENSE" }
-  s.authors      = { "Pointbreak" => "dev@pointbreak.co" }
-  s.platforms    = { :ios => "9.0" }
-  s.source       = { :git => "https://github.com/github_account/react-native-fibricheck.git", :tag => "#{s.version}" }
+  s.authors      = { "Craftzing" => "jan.vandertaelen@craftzing.com" }
+  s.platforms    = { :ios => "11.0" }
+  s.source       = { :git => "https://bitbucket.org/antwerpfactory/react-native-fibricheck.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,swift}"
   s.requires_arc = true
 
   s.dependency "React"
-  # ...
-  # s.dependency "..."
 end
 
