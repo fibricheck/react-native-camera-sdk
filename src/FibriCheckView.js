@@ -1,7 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { requireNativeComponent, View} from 'react-native'
-import { createOAuth2Client } from '@extrahorizon/javascript-sdk';
 
 export default class FibriCheckView extends React.Component {
 

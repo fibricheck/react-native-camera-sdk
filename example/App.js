@@ -125,7 +125,7 @@ const App = () => {
           onFingerRemoved={() => setFingerPresent(false)}
           onCalibrationReady={() => console.log('calibration ready')}
           onMeasurementFinished={() => console.log('measurement finished')}
-          onMeasurementStart={() => console.log('test')}
+          onMeasurementStart={() => setMeasurementStarted(true)}
           onFingerDetectionTimeExpired={() =>
             console.log('finger detection time expired')
           }
