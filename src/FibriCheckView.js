@@ -1,7 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import { requireNativeComponent, View} from 'react-native'
-import { createOAuth2Client } from '@extrahorizon/javascript-sdk';
 
 export default class FibriCheckView extends React.Component {
 
@@ -21,7 +20,7 @@ FibriCheckView.defaultProps = {
     lineColor: '#0073ff',
     lineThickness: 8,
     drawBackground: true,
-    sampleTime: 10,
+    sampleTime: 60,
     flashEnabled: true,
     gravEnabled: false,
     gyroEnabled: false,
@@ -29,7 +28,7 @@ FibriCheckView.defaultProps = {
     rotationEnabled: false,
     movementDetectionEnabled: true,
     fingerDetectionExpiryTime: 10,
-    waitForStartRecordingSignal: true,
+    waitForStartRecordingSignal: false,
 };
 
 FibriCheckView.propTypes = {

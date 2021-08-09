@@ -82,16 +82,10 @@ const App = () => {
       password: '7pWYh7dd',
       username: 'jan.vandertaelen@craftzing.com',
     });
-    console.log(JSON.stringify(measurement));
-    console.log({
-      ...JSON.parse(measurement),
-      ...require('./extraData.json'),
-    });
     const {id} = await sdk.data.documents.create(schemaId, {
       ...JSON.parse(measurement),
       ...require('./extraData.json'),
     });
-    console.log(id);
   };
 
   function onSampleReady(ppg) {
@@ -112,7 +106,6 @@ const App = () => {
   }
 
   const renderItem = ({item}) => {
-    console.log(item);
     const {status, data} = item;
     return (
       <View style={styles.item}>
@@ -127,6 +120,7 @@ const App = () => {
         <RNFibriCheckView
           style={styles.container}
           graphBackgroundColor={'#0073ff'}
+          flashEnabled={true}
           onFingerDetected={() => setFingerPresent(true)}
           onFingerRemoved={() => setFingerPresent(false)}
           onCalibrationReady={() => console.log('calibration ready')}
