@@ -21,7 +21,7 @@ FibriCheckView.defaultProps = {
     lineColor: '#0073ff',
     lineThickness: 8,
     drawBackground: true,
-    sampleTime: 10,
+    sampleTime: 60,
     flashEnabled: true,
     gravEnabled: false,
     gyroEnabled: false,
@@ -29,7 +29,7 @@ FibriCheckView.defaultProps = {
     rotationEnabled: false,
     movementDetectionEnabled: true,
     fingerDetectionExpiryTime: 10,
-    waitForStartRecordingSignal: true,
+    waitForStartRecordingSignal: false,
 };
 
 FibriCheckView.propTypes = {
