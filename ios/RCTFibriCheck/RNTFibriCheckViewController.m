@@ -169,7 +169,7 @@
 
   self.fibrichecker.onTimeRemaining = ^(NSUInteger seconds) {
     RCTLogInfo(@"Time Remaining: %lu", seconds);
-    NSDictionary *data = @{@"timeRemaining":[NSNumber numberWithInteger:seconds]};
+    NSDictionary *data = @{@"seconds":[NSNumber numberWithInteger:seconds]};
     dispatch_async(dispatch_get_main_queue(), ^{
         if(((RNTFibriCheckView*)weakSelf.view).onTimeRemaining != nil) ((RNTFibriCheckView*)weakSelf.view).onTimeRemaining(data);
     });
