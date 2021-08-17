@@ -13,7 +13,7 @@
     "start-clear-cache": "react-native start --reset-cache",
     "ios": "tsc && react-native run-ios",
     "build": "tsc",
-    "postinstall": "yarn && yarn build"
+    "prepare": "yarn build"
   },
   "files": [
     "build"
