@@ -16,7 +16,9 @@
     "prepare": "yarn build"
   },
   "files": [
-    "build"
+    "build",
+    "ios",
+    "android"
   ],
   "repository": {
     "type": "git",
