@@ -15,6 +15,9 @@
     "build": "tsc",
     "postinstall": "npm install && npm run build"
   },
+  "files": [
+    "build"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://bitbucket.org/antwerpfactory/react-native-fibricheck.git",
