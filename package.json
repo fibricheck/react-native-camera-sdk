@@ -13,7 +13,7 @@
     "start-clear-cache": "react-native start --reset-cache",
     "ios": "tsc && react-native run-ios",
     "build": "tsc",
-    "postinstall": "build"
+    "prepare": "yarn build"
   },
   "repository": {
     "type": "git",
