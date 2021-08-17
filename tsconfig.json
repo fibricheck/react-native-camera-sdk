@@ -1,0 +1,17 @@
+{
+  "include": ["src/**/*"],
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    // "strict": true,
+    "moduleResolution": "node",
+    "lib": ["es2015", "es2016", "esnext"],
+    "jsx": "react-native",
+    "resolveJsonModule": true,
+    "declaration": true,
+    "outDir": "./build",
+    "declarationDir": "build/types",
+    "allowSyntheticDefaultImports": true,
+  },
+  "exclude": ["node_modules"]
+}
