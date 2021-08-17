@@ -4,33 +4,35 @@ import { requireNativeComponent, ViewPropTypes } from 'react-native';
 
 interface FibriCheckViewProps {
   style: any;
-  drawGraph: boolean;
-  lineColor: string;
-  lineThickness: number;
   graphBackgroundColor: string;
-  drawBackground: boolean;
-  sampleTime: number;
-  flashEnabled: boolean;
-  gravEnabled: boolean;
-  gyroEnabled: boolean;
-  accEnabled: boolean;
-  rotationEnabled: boolean;
-  movementDetectionEnabled: boolean;
-  fingerDetectionExpiryTime: number;
-  waitForStartRecordingSignal: boolean;
-  onFingerDetected: () => void;
-  onFingerRemoved: () => void;
-  onFingerDetectionTimeExpired: () => void;
-  onCalibrationReady: () => void;
-  onHeartBeat: (event: { nativeEvent: { heartRate: number } }) => void;
-  onMeasurementFinished: () => void;
-  onMeasurementStart: () => void;
-  onTimeRemaining: (event: { nativeEvent: { seconds: number } }) => void;
-  onSampleReady: (event: { nativeEvent: { ppg: number; raw: number } }) => void;
-  onPulseDetected: () => void;
-  onPulseDetectionTimeExpired: () => void;
-  onMovementDetected: () => void;
-  onMeasurementProcessed: (event: {
+  drawGraph?: boolean;
+  lineColor?: string;
+  lineThickness?: number;
+  drawBackground?: boolean;
+  sampleTime?: number;
+  flashEnabled?: boolean;
+  gravEnabled?: boolean;
+  gyroEnabled?: boolean;
+  accEnabled?: boolean;
+  rotationEnabled?: boolean;
+  movementDetectionEnabled?: boolean;
+  fingerDetectionExpiryTime?: number;
+  waitForStartRecordingSignal?: boolean;
+  onFingerDetected?: () => void;
+  onFingerRemoved?: () => void;
+  onFingerDetectionTimeExpired?: () => void;
+  onCalibrationReady?: () => void;
+  onHeartBeat?: (event: { nativeEvent: { heartRate: number } }) => void;
+  onMeasurementFinished?: () => void;
+  onMeasurementStart?: () => void;
+  onTimeRemaining?: (event: { nativeEvent: { seconds: number } }) => void;
+  onSampleReady?: (event: {
+    nativeEvent: { ppg: number; raw: number };
+  }) => void;
+  onPulseDetected?: () => void;
+  onPulseDetectionTimeExpired?: () => void;
+  onMovementDetected?: () => void;
+  onMeasurementProcessed?: (event: {
     nativeEvent: { measurement: string };
   }) => void;
 }
