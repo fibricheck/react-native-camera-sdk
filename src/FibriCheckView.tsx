@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { requireNativeComponent, View } from 'react-native';
+import { requireNativeComponent, ViewPropTypes } from 'react-native';
 
 interface FibriCheckViewProps {
   style: any;
@@ -56,7 +56,7 @@ FibriCheckView.defaultProps = {
 };
 
 FibriCheckView.propTypes = {
-  ...View.propTypes,
+  ...ViewPropTypes,
   style: PropTypes.any,
   drawGraph: PropTypes.bool,
   lineColor: PropTypes.string,
