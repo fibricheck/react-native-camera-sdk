@@ -1,6 +1,7 @@
 {
   "include": ["src/**/*"],
   "compilerOptions": {
+    "skipLibCheck": true,
     "target": "es5",
     "module": "commonjs",
     // "strict": true,
@@ -11,7 +12,10 @@
     "declaration": true,
     "outDir": "./build",
     "declarationDir": "build/types",
-    "allowSyntheticDefaultImports": true,
+    "allowSyntheticDefaultImports": true,    
+    "baseUrl": "./",
+    "paths": {
+      "*": ["node_modules/*", "types/*"]
+    },
   },
-  "exclude": ["node_modules"]
 }
