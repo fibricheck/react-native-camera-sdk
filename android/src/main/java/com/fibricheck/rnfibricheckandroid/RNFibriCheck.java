@@ -371,6 +371,13 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
     series.setBackgroundColor(Color.TRANSPARENT);
     series.setDrawBackground(true);
 
+    DisplayMetrics displayMetrics = new DisplayMetrics();
+    getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+    int width = displayMetrics.widthPixels;
+    boolean drawAsPath = width >= 1080;
+    
+    series.setDrawAsPath(drawAsPath);
+
     graphView.removeAllSeries();
     graphView.addSeries(series);
   }
