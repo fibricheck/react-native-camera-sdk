@@ -1,12 +1,12 @@
 //  Created by react-native-create-bridge
 
 package com.fibricheck.rnfibricheckandroid;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import androidx.annotation.Nullable;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
