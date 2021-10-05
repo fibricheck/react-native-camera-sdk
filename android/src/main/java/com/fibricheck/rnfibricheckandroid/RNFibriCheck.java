@@ -1,6 +1,7 @@
 //  Created by react-native-create-bridge
 
 package com.fibricheck.rnfibricheckandroid;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
