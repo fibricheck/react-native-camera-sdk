@@ -38,5 +38,5 @@ jobs:
           yarn
           # yarn q-license-check
           yarn audit --level high 2>/dev/null || echo "audit DONE"
-          yarn lint
+          # yarn lint
           yarn --production
