@@ -1,7 +1,7 @@
 {
   "name": "@fibricheck/react-native-sdk",
   "title": "React Native Fibricheck",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "React Native FibriCheck",
   "main": "index.js",
   "publishConfig": {
@@ -17,6 +17,11 @@
     "build": "tsc",
     "add-suffix": "node ./node_modules/npm-version-suffix/run-add-suffix.js",
     "remove-suffix": "node ./node_modules/npm-version-suffix/run-remove-suffix.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fibricheck/fibricheck-react-native-sdk.git",
+    "baseUrl": "https://github.com/fibricheck/fibricheck-react-native-sdk.git"
   },
   "keywords": [
     "react-native"
