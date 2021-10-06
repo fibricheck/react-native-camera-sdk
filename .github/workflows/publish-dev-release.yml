@@ -1,4 +1,4 @@
-name: Publish @extrahorizon/fibricheck-react-native-sdk
+name: Publish @fibricheck/react-native-sdk
 
 on:
   push:
