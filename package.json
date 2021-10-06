@@ -20,8 +20,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://bitbucket.org/antwerpfactory/react-native-fibricheck.git",
-    "baseUrl": "https://bitbucket.org/antwerpfactory/react-native-fibricheck.git"
+    "url": "git+https://github.com/fibricheck/fibricheck-react-native-sdk.git",
+    "baseUrl": "https://github.com/fibricheck/fibricheck-react-native-sdk.git"
   },
   "keywords": [
     "react-native"
