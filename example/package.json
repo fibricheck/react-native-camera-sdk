@@ -12,10 +12,10 @@
   "dependencies": {
     "@dpwiese/react-native-canvas-charts": "0.0.4",
     "@extrahorizon/javascript-sdk": "^4.0.0-dev.90",
+    "@fibricheck/react-native-sdk": "^0.0.5",
     "react": "16.13.1",
     "react-native": "0.63.2",
     "react-native-charts-wrapper": "^0.5.7",
-    "react-native-fibricheck": "git@bitbucket.org:antwerpfactory/react-native-fibricheck.git",
     "react-native-permissions": "^2.2.0",
     "react-native-safe-area-context": "^3.1.7",
     "react-native-svg": "^12.1.1",

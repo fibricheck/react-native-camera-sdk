@@ -1,16 +1,17 @@
-# react-native-fibricheck
+# @fibricheck/react-native-sdk
 
 ## Getting started
 
-`$ npm install react-native-fibricheck --save`
+`$ npm install @fibricheck/react-native-sdk --save`
 
 ### Mostly automatic installation
 
-`$ react-native link react-native-fibricheck`
+`$ react-native link @fibricheck/react-native-sdk`
 
 ## Usage
+
 ```javascript
-import ReactNativeFibricheck from 'react-native-fibricheck';
+import ReactNativeFibricheck from '@fibricheck/react-native-sdk';
 
 // TODO: What to do with the module?
 ReactNativeFibricheck;

@@ -18,7 +18,7 @@ import {
   VictoryBrushContainer,
   VictoryAxis,
 } from 'victory-native';
-import {RNFibriCheckView} from 'react-native-fibricheck';
+import {RNFibriCheckView} from '@fibricheck/react-native-sdk';
 import {createOAuth2Client} from '@extrahorizon/javascript-sdk';
 import {rqlBuilder} from '@extrahorizon/javascript-sdk';
 
