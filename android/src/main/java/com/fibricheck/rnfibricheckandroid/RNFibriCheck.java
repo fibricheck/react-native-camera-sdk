@@ -2,7 +2,9 @@
 
 package com.fibricheck.rnfibricheckandroid;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
@@ -36,6 +38,7 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
+
 
 public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   public static final String REACT_CLASS = "FibriCheck";
@@ -77,6 +80,21 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   private static final String EVENT_PULSE_DETECTION_TIME_EXPIRED = "onPulseDetectionTimeExpired";
   private static final String EVENT_MOVEMENT_DETECTED = "onMovementDetected";
   private static final String EVENT_MEASUREMENT_PROCESSED = "onMeasurementProcessed";
+
+  public Activity getActivity(Context context) {
+    if (context == null) {
+      return null;
+    } else if (context instanceof ContextWrapper) {
+      if (context instanceof Activity) {
+        return (Activity) context;
+      } else {
+        return getActivity(((ContextWrapper) context).getBaseContext());
+      }
+    }
+
+    return null;
+  }
+
 
   @Override
   public String getName() {
@@ -373,7 +391,9 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
     series.setDrawBackground(true);
 
     DisplayMetrics displayMetrics = new DisplayMetrics();
-    getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+    getActivity(context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
     int width = displayMetrics.widthPixels;
     boolean drawAsPath = width >= 1080;
     
