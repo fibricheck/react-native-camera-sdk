@@ -40,8 +40,10 @@ const FibriCheckView = (props: FibriCheckViewProps) => {
 
   useEffect(() => {
     return function cleanup() {
+      // @ts-ignore
       UIManager.dispatchViewManagerCommand(
           findNodeHandle(this),
+          // @ts-ignore
           UIManager.FibriCheck.Commands.resetModule,
           [],
       );
