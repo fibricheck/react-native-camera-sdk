@@ -2,6 +2,10 @@
 
 package com.fibricheck.rnfibricheckandroid;
 
+import android.view.Display;
+import android.view.Window;
+import android.view.WindowManager;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
