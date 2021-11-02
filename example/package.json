@@ -12,7 +12,7 @@
   "dependencies": {
     "@dpwiese/react-native-canvas-charts": "0.0.4",
     "@extrahorizon/javascript-sdk": "^4.0.0-dev.90",
-    "@fibricheck/react-native-sdk": "git+ssh://github.com/fibricheck/fibricheck-react-native-sdk#chore/fix-for-android-builds",
+    "@fibricheck/react-native-sdk": "git+ssh://github.com/fibricheck/fibricheck-react-native-sdk#dev",
     "react": "16.13.1",
     "react-native": "0.63.2",
     "react-native-charts-wrapper": "^0.5.7",
