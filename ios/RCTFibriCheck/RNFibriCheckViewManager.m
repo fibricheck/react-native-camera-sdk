@@ -39,4 +39,9 @@ RCT_EXPORT_MODULE(FibriCheck)
     return self.fibriCheckViewController.view;
 }
 
+RCT_EXPORT_METHOD(resetModule:(nonnull NSNumber*) reactTag)
+{
+ self.fibriCheckViewController.stopCamera;
+}
+
 @end

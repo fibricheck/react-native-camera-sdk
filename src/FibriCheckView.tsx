@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { requireNativeComponent } from 'react-native';
+import React, { useEffect } from 'react';
+import {requireNativeComponent, UIManager, findNodeHandle} from 'react-native'
 
 interface FibriCheckViewProps {
   style: any;
@@ -37,6 +37,17 @@ interface FibriCheckViewProps {
 }
 
 const FibriCheckView = (props: FibriCheckViewProps) => {
+
+  useEffect(() => {
+    return function cleanup() {
+      UIManager.dispatchViewManagerCommand(
+          findNodeHandle(this),
+          UIManager.FibriCheck.Commands.resetModule,
+          [],
+      );
+    };
+  });
+
   return <FibriCheck {...props} />;
 };
 

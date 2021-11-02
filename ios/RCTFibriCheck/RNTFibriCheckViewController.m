@@ -54,6 +54,10 @@
     _fibrichecker.waitForStartRecordingSignal = waitForStartRecordingSignal;
 }
 
+- (void)stopCamera {
+    _fibrichecker.stop;
+}
+
 // MARK: - UI
 - (void)viewDidLoad {
   [super viewDidLoad];
