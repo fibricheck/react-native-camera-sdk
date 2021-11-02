@@ -55,6 +55,8 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
 
   public static final int COMMAND_START_RECORDING = 3;
 
+  private static final int COMMAND_RESET_MODULE = 4;
+
   private static final int SAMPLE_COUNT = 120;
 
   public boolean drawGraphPoints = false;
@@ -231,7 +233,8 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
     return MapBuilder.of(
         "startMeasurement", COMMAND_START_MEASUREMENT,
         "resetGraph", COMMAND_RESET_GRAPH,
-        "startRecording", COMMAND_START_RECORDING);
+        "startRecording", COMMAND_START_RECORDING,
+        "resetModule", COMMAND_RESET_MODULE);
   }
 
   @Override
@@ -261,6 +264,11 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
       case COMMAND_START_RECORDING: {
         Log.e(TAG, "Command Received: start recording");
         fibriChecker.startRecording();
+        break;
+      }
+      case COMMAND_RESET_MODULE: {
+        Log.e(TAG, "Command Received: reset Module");
+        fibriChecker.stop();
         break;
       }
 
@@ -400,7 +408,7 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
 
     int width = displayMetrics.widthPixels;
     boolean drawAsPath = width >= 1080;
-    
+
     series.setDrawAsPath(drawAsPath);
 
     graphView.removeAllSeries();
