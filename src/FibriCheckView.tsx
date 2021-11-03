@@ -5,7 +5,7 @@ import {
   findNodeHandle,
 } from 'react-native';
 
-interface FibriCheckViewProps {
+type FibriCheckViewProps = typeof FibriCheckView.defaultProps & {
   style: any;
   graphBackgroundColor?: string;
   drawGraph?: boolean;
@@ -38,10 +38,27 @@ interface FibriCheckViewProps {
   onMeasurementProcessed?: (event: {
     nativeEvent: { measurement: string };
   }) => void;
-}
+};
 
-export default class FibriCheckView extends React.Component {
-  constructor(props: FibriCheckViewProps) {
+export default class FibriCheckView extends React.Component<FibriCheckViewProps> {
+  static propTypes = {};
+  static defaultProps = {
+    drawGraph: true,
+    lineColor: '#0073ff',
+    lineThickness: 8,
+    drawBackground: true,
+    sampleTime: 60,
+    flashEnabled: true,
+    gravEnabled: false,
+    gyroEnabled: false,
+    accEnabled: false,
+    rotationEnabled: false,
+    movementDetectionEnabled: true,
+    fingerDetectionExpiryTime: 10,
+    waitForStartRecordingSignal: false,
+  };
+
+  constructor(props) {
     console.log('constructor', props);
     super(props);
   }
@@ -61,21 +78,5 @@ export default class FibriCheckView extends React.Component {
     return <FibriCheck {...this.props} />;
   }
 }
-
-FibriCheckView.defaultProps = {
-  drawGraph: true,
-  lineColor: '#0073ff',
-  lineThickness: 8,
-  drawBackground: true,
-  sampleTime: 60,
-  flashEnabled: true,
-  gravEnabled: false,
-  gyroEnabled: false,
-  accEnabled: false,
-  rotationEnabled: false,
-  movementDetectionEnabled: true,
-  fingerDetectionExpiryTime: 10,
-  waitForStartRecordingSignal: false,
-};
 
 const FibriCheck = requireNativeComponent('FibriCheck', FibriCheckView);
