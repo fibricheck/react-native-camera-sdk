@@ -109,9 +109,18 @@ const App = () => {
     );
   };
 
+  const [show, setShow] = useState(false);
+  console.log('show', show);
   return (
     <SafeAreaProvider>
-      {camera && (
+      <Button
+        onPress={() => {
+          console.log('setShow');
+          setShow((value) => !value);
+        }}
+        title={'Toggle'}
+      />
+      {camera && show && (
         <RNFibriCheckView
           style={styles.container}
           graphBackgroundColor={'#0073ff'}
@@ -150,7 +159,13 @@ const App = () => {
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
         />
-        <Button title={'Retrieve'} onPress={() => retrieveDocuments()} />
+        <Button
+          title={'Retrieve'}
+          onPress={() => {
+            console.log('retrieve');
+            retrieveDocuments();
+          }}
+        />
       </View>
     </SafeAreaProvider>
   );

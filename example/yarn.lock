@@ -750,9 +750,10 @@
     platform-specific "^1.1.0"
     ts-toolbelt "^9.6.0"
 
-"@fibricheck/react-native-sdk@git+ssh://github.com/fibricheck/fibricheck-react-native-sdk#chore/fix-for-android-builds":
-  version "0.0.12"
-  resolved "git+ssh://github.com/fibricheck/fibricheck-react-native-sdk#db97cffbf59e750321636b5c25b925cda9b577de"
+"@fibricheck/react-native-sdk@^0.0.14":
+  version "0.0.14"
+  resolved "https://npm.pkg.github.com/download/@fibricheck/react-native-sdk/0.0.14/04ad84f8e76ce32030d76df625ff722efd76462d8c845b98ffa90593b704080e#8dc109d088e55f8374c8d06d38565fcdb43ec6e0"
+  integrity sha512-F9M+2Q7ekPtTU+cZ7pCQbT+kTtAvw4VzOzdNR64ZqDYYfmUNdL3Q35IeRvaQ0uMItyH0MmIzk1FIfy8u4SucTQ==
 
 "@hapi/address@2.x.x":
   version "2.1.4"

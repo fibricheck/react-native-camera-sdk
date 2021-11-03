@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import {
   requireNativeComponent,
   UIManager,
@@ -40,21 +40,27 @@ interface FibriCheckViewProps {
   }) => void;
 }
 
-const FibriCheckView = (props: FibriCheckViewProps) => {
-  React.useEffect(() => {
-    return function cleanup() {
-      // @ts-ignore
-      UIManager.dispatchViewManagerCommand(
-        findNodeHandle(this),
-        // @ts-ignore
-        UIManager.FibriCheck.Commands.resetModule,
-        []
-      );
-    };
-  }, []);
+export default class FibriCheckView extends React.Component {
+  constructor(props: FibriCheckViewProps) {
+    console.log('constructor', props);
+    super(props);
+  }
 
-  return <FibriCheck {...props} />;
-};
+  componentWillUnmount() {
+    const handle = findNodeHandle(this);
+    // @ts-ignore
+    UIManager.dispatchViewManagerCommand(
+      handle,
+      // @ts-ignore
+      UIManager.FibriCheck.Commands.resetModule,
+      []
+    );
+  }
+
+  render() {
+    return <FibriCheck {...this.props} />;
+  }
+}
 
 FibriCheckView.defaultProps = {
   drawGraph: true,
@@ -72,8 +78,4 @@ FibriCheckView.defaultProps = {
   waitForStartRecordingSignal: false,
 };
 
-FibriCheckView.propTypes = {};
-
 const FibriCheck = requireNativeComponent('FibriCheck', FibriCheckView);
-
-export default FibriCheckView;
