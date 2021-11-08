@@ -1,3 +1,9 @@
+---
+description: >-
+  When you want to override the default settings (not recommended) you can
+  adjust some of the module default parameters.
+---
+
 # Other Settings
 
 ## Measurement Settings

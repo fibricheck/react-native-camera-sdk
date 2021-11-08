@@ -1,6 +1,5 @@
 # Table of contents
 
-* [Intro](README.md)
-* [Getting Started](getting-started.md)
+* [Getting Started](README.md)
 * [Listeners](listeners.md)
 * [Other Settings](other-settings.md)

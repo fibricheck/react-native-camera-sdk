@@ -1,3 +1,7 @@
+---
+description: A more detailed description of the available listeners on the module.
+---
+
 # Listeners
 
 ## onFingerDetected
