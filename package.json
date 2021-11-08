@@ -19,12 +19,15 @@
     "build",
     "ios",
     "android",
-    "react-native-sdk.podspec"
+    "react-native-camera-sdk.podspec"
   ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fibricheck/fibricheck-react-native-sdk.git",
-    "baseUrl": "https://github.com/fibricheck/fibricheck-react-native-sdk.git"
+    "url": "git+https://github.com/fibricheck/react-native-camera-sdk.git",
+    "baseUrl": "https://github.com/fibricheck/react-native-camera-sdk.git"
   },
   "keywords": [
     "react-native"
