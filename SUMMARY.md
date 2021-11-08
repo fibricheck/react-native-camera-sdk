@@ -1,3 +1,6 @@
 # Table of contents
 
-* [Camera SDK](README.md)
+* [Intro](README.md)
+* [Getting Started](getting-started.md)
+* [Listeners](listeners.md)
+* [Other Settings](other-settings.md)
