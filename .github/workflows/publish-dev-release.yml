@@ -1,4 +1,4 @@
-name: Publish @fibricheck/react-native-sdk
+name: Publish @fibricheck/react-native-camera-sdk
 
 on:
   push:
@@ -35,7 +35,7 @@ jobs:
           scope: '@fibricheck'
       - run: yarn install
       - run: yarn build
-       # - run: yarn add-suffix
+        # - run: yarn add-suffix
       - name: Extract version
         id: extract_version
         uses: Saionaro/extract-package-version@v1.0.6

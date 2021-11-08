@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.version      = package["version"]
   s.summary      = package["description"]
   s.description  = <<-DESC
-                  @fibricheck/react-native-sdk
+                  @fibricheck/react-native-camera-sdk
                    DESC
   s.homepage     = "https://github.com/fibricheck/fibricheck-react-native-sdk"
   s.license      = "MIT"
