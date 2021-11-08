@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React from 'react';
 import {
   requireNativeComponent,
   UIManager,
   findNodeHandle,
 } from 'react-native';
+import { CameraData } from './types';
 
 type FibriCheckViewProps = typeof FibriCheckView.defaultProps & {
   style: any;
@@ -25,23 +27,20 @@ type FibriCheckViewProps = typeof FibriCheckView.defaultProps & {
   onFingerRemoved?: () => void;
   onFingerDetectionTimeExpired?: () => void;
   onCalibrationReady?: () => void;
-  onHeartBeat?: (event: { nativeEvent: { heartRate: number } }) => void;
+  onHeartBeat: (heartRate: number) => void;
   onMeasurementFinished?: () => void;
   onMeasurementStart?: () => void;
-  onTimeRemaining?: (event: { nativeEvent: { seconds: number } }) => void;
-  onSampleReady?: (event: {
-    nativeEvent: { ppg: number; raw: number };
-  }) => void;
+  onTimeRemaining: (seconds: number) => void;
+  onSampleReady: (data: { ppg: number; raw: number; }) => void;
   onPulseDetected?: () => void;
   onPulseDetectionTimeExpired?: () => void;
   onMovementDetected?: () => void;
-  onMeasurementProcessed?: (event: {
-    nativeEvent: { measurement: string };
-  }) => void;
+  onMeasurementProcessed: (data: CameraData) => void;
 };
 
 export default class FibriCheckView extends React.Component<FibriCheckViewProps> {
   static propTypes = {};
+
   static defaultProps = {
     drawGraph: true,
     lineColor: '#0073ff',
@@ -75,7 +74,17 @@ export default class FibriCheckView extends React.Component<FibriCheckViewProps>
   }
 
   render() {
-    return <FibriCheck {...this.props} />;
+    return (
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      <FibriCheck
+        {...this.props}
+        // @ts-ignore
+        onSampleReady={event => this.props.onSampleReady(event.nativeEvent)}
+        onMeasurementProcessed={event => this.props.onMeasurementProcessed(JSON.parse(event.nativeEvent))}
+        onHeartBeat={event => this.props.onHeartBeat(event.nativeEvent.heartRate)}
+        onTimeRemaining={event => this.props.onTimeRemaining(event.nativeEvent.seconds)}
+      />
+    );
   }
 }
 
