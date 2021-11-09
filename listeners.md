@@ -4,7 +4,9 @@ description: A more detailed description of the available listeners on the modul
 
 # Listeners
 
-## onFingerDetected
+## Finger Detection
+
+### onFingerDetected
 
 ```java
 <GraphView
@@ -14,7 +16,7 @@ description: A more detailed description of the available listeners on the modul
 />
 ```
 
-## onFingerRemoved
+### onFingerRemoved
 
 ```javascript
 <GraphView
@@ -24,7 +26,7 @@ description: A more detailed description of the available listeners on the modul
 />
 ```
 
-## onFingerDetectionTimeExpired
+### onFingerDetectionTimeExpired
 
 ```javascript
 <GraphView
@@ -34,17 +36,9 @@ description: A more detailed description of the available listeners on the modul
 />
 ```
 
-## onCalibrationReady
+## Measurement Info
 
-```javascript
-<GraphView
-    ...
-    onCalibrationReady={() => ...your code here...}
-    ...
-/>
-```
-
-## onHeartBeat
+### onHeartBeat
 
 ```javascript
 <GraphView
@@ -54,37 +48,7 @@ description: A more detailed description of the available listeners on the modul
 />
 ```
 
-## onMeasurementFinished
-
-```javascript
-<GraphView
-    ...
-    onMeasurementFinished={() => ...your code here...}
-    ...
-/>
-```
-
-## onMeasurementStart
-
-```javascript
-<GraphView
-    ...
-    onMeasurementStart={() => ...your code here...}
-    ...
-/>
-```
-
-## onTimeRemaining
-
-```javascript
-<GraphView
-    ...
-    onTimeRemaining={(event) => ...your code here...}
-    ...
-/>
-```
-
-## onSampleReady
+### onSampleReady
 
 ```javascript
 <GraphView
@@ -94,7 +58,7 @@ description: A more detailed description of the available listeners on the modul
 />
 ```
 
-## onPulseDetected
+### onPulseDetected
 
 ```javascript
 <GraphView
@@ -104,7 +68,7 @@ description: A more detailed description of the available listeners on the modul
 />
 ```
 
-## onPulseDetectionTimeExpired
+### onPulseDetectionTimeExpired
 
 ```javascript
 <GraphView
@@ -114,7 +78,7 @@ description: A more detailed description of the available listeners on the modul
 />
 ```
 
-## onMovementDetected
+### onMovementDetected
 
 ```javascript
 <GraphView
@@ -124,7 +88,49 @@ description: A more detailed description of the available listeners on the modul
 />
 ```
 
-## onMeasurementProcessed
+## Measurement Process
+
+### onMeasurementStart
+
+```javascript
+<GraphView
+    ...
+    onMeasurementStart={() => ...your code here...}
+    ...
+/>
+```
+
+### onCalibrationReady
+
+```javascript
+<GraphView
+    ...
+    onCalibrationReady={() => ...your code here...}
+    ...
+/>
+```
+
+### onTimeRemaining
+
+```javascript
+<GraphView
+    ...
+    onTimeRemaining={(event) => ...your code here...}
+    ...
+/>
+```
+
+### onMeasurementFinished
+
+```javascript
+<GraphView
+    ...
+    onMeasurementFinished={() => ...your code here...}
+    ...
+/>
+```
+
+### onMeasurementProcessed
 
 ```javascript
 <GraphView
