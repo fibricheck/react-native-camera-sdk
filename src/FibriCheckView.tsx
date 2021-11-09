@@ -48,10 +48,10 @@ export default class FibriCheckView extends React.Component<FibriCheckViewProps>
     drawBackground: true,
     sampleTime: 60,
     flashEnabled: true,
-    gravEnabled: false,
-    gyroEnabled: false,
-    accEnabled: false,
-    rotationEnabled: false,
+    gravEnabled: true,
+    gyroEnabled: true,
+    accEnabled: true,
+    rotationEnabled: true,
     movementDetectionEnabled: true,
     fingerDetectionExpiryTime: 10,
     waitForStartRecordingSignal: false,
@@ -80,7 +80,11 @@ export default class FibriCheckView extends React.Component<FibriCheckViewProps>
         {...this.props}
         // @ts-ignore
         onSampleReady={event => this.props.onSampleReady(event.nativeEvent)}
-        onMeasurementProcessed={event => this.props.onMeasurementProcessed(JSON.parse(event.nativeEvent))}
+        onMeasurementProcessed={
+          event => {
+            this.props.onMeasurementProcessed(JSON.parse(event.nativeEvent.measurement));
+          }
+        }
         onHeartBeat={event => this.props.onHeartBeat(event.nativeEvent.heartRate)}
         onTimeRemaining={event => this.props.onTimeRemaining(event.nativeEvent.seconds)}
       />
