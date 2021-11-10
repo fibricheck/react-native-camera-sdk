@@ -26,17 +26,17 @@ The Ca
     onMeasurementFinished={() => console.log('measurement finished')}
     onMeasurementStart={() => setMeasurementStarted(true)}
     onFingerDetectionTimeExpired={() =>
-    console.log('finger detection time expired')
+        console.log('finger detection time expired')
     }
     onPulseDetected={() => setIsPulseDetected(true)}
     onPulseDetectionTimeExpired={() =>
-    console.log('pulse detection time is expired')
+        console.log('pulse detection time is expired')
     }
     onMovementDetected={() => console.log('movement detected')}
     onHeartBeat={(event) => setHeartRate(event.nativeEvent.heartRate)}
     onTimeRemaining={(event) => console.log(event.nativeEvent)}
     onMeasurementProcessed={(event) =>
-    sendMeasurement(event.nativeEvent.measurement)
+        sendMeasurement(event.nativeEvent.measurement)
     }
     onSampleReady={(event) => onSampleReady(event.nativeEvent.ppg)}
 />

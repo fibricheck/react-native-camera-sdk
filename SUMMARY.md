@@ -2,4 +2,4 @@
 
 * [Getting Started](README.md)
 * [Listeners](listeners.md)
-* [Other Settings](other-settings.md)
+* [Properties](properties.md)
