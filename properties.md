@@ -108,7 +108,7 @@ sdk.drawGraph = true;
 Determines the color of the graph line.
 
 ```javascript
-sdk.lineColor = "0073ff";
+sdk.lineColor = "#0073ff";
 ```
 
 ### lineThickness
