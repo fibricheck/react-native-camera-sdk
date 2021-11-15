@@ -1,14 +1,19 @@
 ---
-description: A more detailed description of the available listeners on the module.
+description: >-
+  The Camera SDK consists of multiple event listeners. The details of these
+  listeners and the events that they will throw will be discussed in more detail
+  here.
 ---
 
 # Listeners
 
 ## During the whole lifecycle
 
-these events can be thrown in any stage of the measurement
+These events can be thrown in any stage of the measurement
 
 ### onFingerDetected
+
+This event will fire when the presence of a finger is detected.
 
 ```java
 <GraphView
@@ -20,6 +25,8 @@ these events can be thrown in any stage of the measurement
 
 ### onFingerRemoved
 
+This event will fire when the pressence of a finger is no longer detected.
+
 ```javascript
 <GraphView
     ...
@@ -28,11 +35,13 @@ these events can be thrown in any stage of the measurement
 />
 ```
 
-## Pre recording
+## Pre-recording
 
-these events will only be thrown when not recording
+These events will only be thrown when not recording
 
 ### onFingerDetectionTimeExpired
+
+This event will fire when the `fingerDetectionExpiryTime` has been exceeded. Note that the default time is set to `-1`, meaning that this event won't fire.
 
 ```javascript
 <GraphView
@@ -44,6 +53,8 @@ these events will only be thrown when not recording
 
 ### onPulseDetected
 
+This event will fire when a pulse has been detected. The pulse detection is only active after the finger detection has been completed.
+
 ```javascript
 <GraphView
     ...
@@ -53,6 +64,8 @@ these events will only be thrown when not recording
 ```
 
 ### onPulseDetectionTimeExpired
+
+This event will fire when no pulse has been detected after 10 seconds.
 
 ```javascript
 <GraphView
@@ -64,6 +77,8 @@ these events will only be thrown when not recording
 
 ### onCalibrationReady
 
+When performing a measurement, a baseline needs to be calculated. When this baseline has been calculated, the calibration is ready and the sdk will throw this event.
+
 ```javascript
 <GraphView
     ...
@@ -73,6 +88,8 @@ these events will only be thrown when not recording
 ```
 
 ### onMeasurementStart
+
+This event will fire when the recording of the measurement has been initiated.
 
 ```javascript
 <GraphView
@@ -88,15 +105,19 @@ these events can be thrown while the measurement is recording
 
 ### onHeartBeat
 
+This event will fire when a heartbeat has been detected. It will return the heart rate as a number.
+
 ```javascript
 <GraphView
     ...
-    onHeartBeat={(event) => ...your code here...}
+    onHeartBeat={(hearRate: number) => ...your code here...}
     ...
 />
 ```
 
 ### onSampleReady
+
+This event will fire when a new sample is ready. It can be used the draw a graph or analyze data. _**For now, it's best to leave this event as is, because the JS bridge is not fast enough to handle this amount of data.**_
 
 ```javascript
 <GraphView
@@ -108,6 +129,8 @@ these events can be thrown while the measurement is recording
 
 ### onMovementDetected
 
+This event will fire when movement has been detected. Note that this event will only fire when the `movementDetectionEnabled` property is enabled. This value is `true` by default.&#x20;
+
 ```javascript
 <GraphView
     ...
@@ -117,6 +140,8 @@ these events can be thrown while the measurement is recording
 ```
 
 ### onTimeRemaining
+
+This event will fire every second while recording. It returns the time in seconds that are left for completing the measurement. This is to make sure that no external timers are used, as they can become out of sync with the internal measurement timer.
 
 ```javascript
 <GraphView
@@ -128,6 +153,8 @@ these events can be thrown while the measurement is recording
 
 ### onMeasurementFinished
 
+This event will fire when the recording is complete. The [Post Processing](listeners.md#post-recording) will begin now.
+
 ```javascript
 <GraphView
     ...
@@ -136,13 +163,13 @@ these events can be thrown while the measurement is recording
 />
 ```
 
-## Post recording
+## After the recording
 
-these events can be thrown when the recording phase has ended
+these events can be thrown when the recording phase has ended.&#x20;
 
 ### onMeasurementProcessed
 
-the measurement has been processed and is converted to a JSON String
+This event will fire when the measurement has been processed and is converted to a JSON String.
 
 ```javascript
 <GraphView
