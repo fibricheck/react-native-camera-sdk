@@ -110,7 +110,7 @@ This event will fire when a heartbeat has been detected. It will return the hear
 ```javascript
 <GraphView
     ...
-    onHeartBeat={(hearRate: number) => ...your code here...}
+    onHeartBeat={(heartRate: number) => ...your code here...}
     ...
 />
 ```
@@ -122,7 +122,7 @@ This event will fire when a new sample is ready. It can be used the draw a graph
 ```javascript
 <GraphView
     ...
-    onSampleReady={(event) => ...your code here...}
+    onSampleReady={(data) => ...your code here...}
     ...
 />
 ```
@@ -146,7 +146,7 @@ This event will fire every second while recording. It returns the time in second
 ```javascript
 <GraphView
     ...
-    onTimeRemaining={(event) => ...your code here...}
+    onTimeRemaining={(seconds: number) => ...your code here...}
     ...
 />
 ```
@@ -174,7 +174,7 @@ This event will fire when the measurement has been processed and is converted to
 ```javascript
 <GraphView
     ...
-    onMeasurementProcessed={(event) => ...your code here...}
+    onMeasurementProcessed={(data) => ...your code here...}
     ...
 />
 ```

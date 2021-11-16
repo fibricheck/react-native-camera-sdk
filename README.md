@@ -61,25 +61,24 @@ To make your first recording, you can use this code snippet:
     style={styles.container}
     graphBackgroundColor={'#0073ff'}
     flashEnabled={true}
-    onFingerDetected={() => setFingerPresent(true)}
-    onFingerRemoved={() => setFingerPresent(false)}
+    onFingerDetected={() => console.log('finger detected')}
+    onFingerRemoved={() => console.log('finger removed')}
     onCalibrationReady={() => console.log('calibration ready')}
     onMeasurementFinished={() => console.log('measurement finished')}
-    onMeasurementStart={() => setMeasurementStarted(true)}
+    onMeasurementStart={() => console.log('measurement recording started')}
     onFingerDetectionTimeExpired={() =>
         console.log('finger detection time expired')
     }
-    onPulseDetected={() => setIsPulseDetected(true)}
+    onPulseDetected={() => console.log('pulse detected')}
     onPulseDetectionTimeExpired={() =>
         console.log('pulse detection time is expired')
     }
     onMovementDetected={() => console.log('movement detected')}
-    onHeartBeat={(event) => setHeartRate(event.nativeEvent.heartRate)}
-    onTimeRemaining={(event) => console.log(event.nativeEvent)}
-    onMeasurementProcessed={(event) =>
-        sendMeasurement(event.nativeEvent.measurement)
+    onHeartBeat={(heartRate) => console.log(`current heart rate: ${heartRate}`)}
+    onTimeRemaining={(seconds) => console.log(`time remaining: ${seconds}`)}
+    onMeasurementProcessed={(data) =>
+        console.log('measurement processed and ready to send!');
     }
-    onSampleReady={(event) => onSampleReady(event.nativeEvent.ppg)}
 />
 ```
 
