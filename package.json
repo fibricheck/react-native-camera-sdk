@@ -6,6 +6,7 @@
   "main": "build/index.js",
   "types": "build/types/index.d.ts",
   "scripts": {
+    "add-suffix": "node ./node_modules/npm-version-suffix/run-add-suffix.js",
     "start": "react-native start",
     "android": "tsc && react-native run-android",
     "clear": "rm -rf $TMPDIR/react-native-packager-cache-* && rm -rf $TMPDIR/metro-bundler-cache-*",
