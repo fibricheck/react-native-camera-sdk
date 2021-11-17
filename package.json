@@ -36,8 +36,6 @@
     "react-native"
   ],
   "author": "Qompium",
-  "license": "MIT",
-  "licenseFilename": "LICENSE",
   "readmeFilename": "README.md",
   "peerDependencies": {
     "react": "^16.8.1",
