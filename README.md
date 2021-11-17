@@ -61,6 +61,8 @@ The recording makes use of the device's camera. So to begin, you need to provide
 ```
 import {request, PERMISSIONS} from 'react-native-permissions';  
 
+const [camera, setCamera] = useState(false);
+
 useEffect(() => {
     if (Platform.OS === 'ios') {
       request(PERMISSIONS.IOS.CAMERA).then(result => {
