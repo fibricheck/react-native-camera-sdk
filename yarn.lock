@@ -4407,10 +4407,9 @@ npm-run-path@^2.0.0:
   dependencies:
     path-key "^2.0.0"
 
-npm-version-suffix@^0.2.0:
+npm-version-suffix@galmail/npm-version-suffix:
   version "0.2.0"
-  resolved "https://registry.yarnpkg.com/npm-version-suffix/-/npm-version-suffix-0.2.0.tgz#751a930c71d4c4132ab914bcd88bf27f181fe9f1"
-  integrity sha512-EVpPSa1w2AYqx+Vmqg1JpYjhm4QeK/NAiZ86/AN709fHxk226SOYcG0bcYj5AzbOpRb4AsCmYYDmrl7aTExnPA==
+  resolved "https://codeload.github.com/galmail/npm-version-suffix/tar.gz/1a722358b3eebca458ca25065a84c8a32e978cd4"
   dependencies:
     escape-string-regexp "^2.0.0"
     execa "^1.0.0"

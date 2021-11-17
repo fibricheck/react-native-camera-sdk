@@ -82,7 +82,10 @@ export default class FibriCheckView extends React.Component<FibriCheckViewProps>
         onSampleReady={event => this.props.onSampleReady(event.nativeEvent)}
         onMeasurementProcessed={
           event => {
-            this.props.onMeasurementProcessed(JSON.parse(event.nativeEvent.measurement));
+            this.props.onMeasurementProcessed({
+              ...JSON.parse(event.nativeEvent.measurement),
+              measurement_timestamp: Date.now(),
+            });
           }
         }
         onHeartBeat={event => this.props.onHeartBeat(event.nativeEvent.heartRate)}
