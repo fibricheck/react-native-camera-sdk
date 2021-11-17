@@ -18,12 +18,6 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: '@fibricheck'
       - run: yarn install
-      - run: yarn test
-      - name: Upload test results
-        uses: actions/upload-artifact@v2
-        with:
-          name: test-results
-          path: test-results/
 
   publish:
     needs: build
