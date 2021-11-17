@@ -1,0 +1,21 @@
+{
+  "include": ["src/**/*"],
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "target": "es5",
+    "module": "ESNext",
+    // "strict": true,
+    "moduleResolution": "node",
+    "lib": ["es2015", "es2016", "esnext"],
+    "jsx": "react-native",
+    "resolveJsonModule": true,
+    "declaration": true,
+    "outDir": "./build",
+    "declarationDir": "build/types",
+    "allowSyntheticDefaultImports": true,    
+    "baseUrl": "./",
+    "paths": {
+      "*": ["node_modules/*", "types/*"]
+    },
+  },
+}

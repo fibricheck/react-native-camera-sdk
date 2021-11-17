@@ -1,30 +1,41 @@
 {
-  "name": "react-native-fibricheck",
+  "name": "@fibricheck/react-native-camera-sdk",
   "title": "React Native Fibricheck",
   "version": "1.0.0",
   "description": "React Native FibriCheck",
-  "main": "index.js",
+  "main": "build/index.js",
+  "types": "build/types/index.d.ts",
   "scripts": {
+    "add-suffix": "node ./node_modules/npm-version-suffix/run-add-suffix.js",
     "start": "react-native start",
     "android": "tsc && react-native run-android",
     "clear": "rm -rf $TMPDIR/react-native-packager-cache-* && rm -rf $TMPDIR/metro-bundler-cache-*",
     "fresh-start": "watchman watch-del-all && rm -rf $TMPDIR/react-native-packager-cache-* && rm -rf $TMPDIR/metro-bundler-cache-* && rm -rf node_modules/ && npm cache clean --force && npm install && npm run start-clear-cache",
     "start-clear-cache": "react-native start --reset-cache",
     "ios": "tsc && react-native run-ios",
-    "build": "tsc"
+    "build": "tsc --project tsconfig.json",
+    "prepare": "yarn build",
+    "lint": "eslint src/**/*.{ts,tsx}",
+    "lint-fix": "yarn lint --quiet --fix"
+  },
+  "files": [
+    "build",
+    "ios",
+    "android",
+    "react-native-camera-sdk.podspec"
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://bitbucket.org/antwerpfactory/react-native-fibricheck.git",
-    "baseUrl": "https://bitbucket.org/antwerpfactory/react-native-fibricheck.git"
+    "url": "git+https://github.com/fibricheck/react-native-camera-sdk.git",
+    "baseUrl": "https://github.com/fibricheck/react-native-camera-sdk.git"
   },
   "keywords": [
     "react-native"
   ],
-  "author": {
-    "name": "Jan Van der Taelen",
-    "email": "jan.vandertaelen@craftzing.com"
-  },
+  "author": "Qompium",
   "license": "MIT",
   "licenseFilename": "LICENSE",
   "readmeFilename": "README.md",
@@ -33,12 +44,18 @@
     "react-native": ">=0.60.0-rc.0 <1.0.x"
   },
   "devDependencies": {
+    "@qompium/eslint-config-q-react": "^1.2.11",
     "@types/react": "^16.4.6",
     "@types/react-native": "^0.56.4",
-    "babel-preset-react-native": "^5.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.3.0",
+    "@typescript-eslint/parser": "^5.3.0",
+    "chokidar": "^3.5.2",
+    "copyfiles": "^2.4.1",
+    "eslint": "^7.32.0",
+    "metro-react-native-babel-preset": "^0.56.4",
+    "npm-version-suffix": "galmail/npm-version-suffix",
     "react": "^16.9.0",
     "react-native": "^0.61.5",
-    "react-native-typescript-transformer": "^1.2.10",
-    "typescript": "^2.9.2"
+    "typescript": "^4.3.5"
   }
 }

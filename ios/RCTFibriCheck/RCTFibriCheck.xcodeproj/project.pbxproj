@@ -54,14 +54,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		C7B11BCB2698719800A3BD77 /* /Users/janvandertaelen/Documents/git/react-native-fibricheck/ios/RCTFibriCheck.xcodeproj */ = {
+		C7B11BCB2698719800A3BD77 /* /Users/janvandertaelen/Documents/git/@fibricheck/react-native-sdk/ios/RCTFibriCheck.xcodeproj */ = {
 			isa = PBXGroup;
 			children = (
 				C7B11BE12698769B00A3BD77 /* SystemConfiguration.framework */,
 				C7B11BD02698723900A3BD77 /* RCTFibriCheck */,
 				C7B11BCE2698719800A3BD77 /* Products */,
 			);
-			path = "/Users/janvandertaelen/Documents/git/react-native-fibricheck/ios/RCTFibriCheck.xcodeproj";
+			path = "/Users/janvandertaelen/Documents/git/@fibricheck/react-native-sdk/ios/RCTFibriCheck.xcodeproj";
 			sourceTree = "<absolute>";
 		};
 		C7B11BCE2698719800A3BD77 /* Products */ = {
@@ -145,7 +145,7 @@
 				English,
 				en,
 			);
-			mainGroup = C7B11BCB2698719800A3BD77 /* /Users/janvandertaelen/Documents/git/react-native-fibricheck/ios/RCTFibriCheck.xcodeproj */;
+			mainGroup = C7B11BCB2698719800A3BD77 /* /Users/janvandertaelen/Documents/git/@fibricheck/react-native-sdk/ios/RCTFibriCheck.xcodeproj */;
 			productRefGroup = C7B11BCE2698719800A3BD77 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";

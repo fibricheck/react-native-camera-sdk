@@ -12,13 +12,8 @@ import React, {useEffect, useState} from 'react';
 import {Platform, StyleSheet, Text, View, FlatList, Button} from 'react-native';
 import {request, PERMISSIONS} from 'react-native-permissions';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {
-  VictoryLine,
-  VictoryChart,
-  VictoryBrushContainer,
-  VictoryAxis,
-} from 'victory-native';
-import {RNFibriCheckView} from 'react-native-fibricheck';
+
+import {RNFibriCheckView} from '@fibricheck/react-native-sdk';
 import {createOAuth2Client} from '@extrahorizon/javascript-sdk';
 import {rqlBuilder} from '@extrahorizon/javascript-sdk';
 
@@ -114,9 +109,18 @@ const App = () => {
     );
   };
 
+  const [show, setShow] = useState(false);
+  console.log('show', show);
   return (
     <SafeAreaProvider>
-      {camera && (
+      <Button
+        onPress={() => {
+          console.log('setShow');
+          setShow((value) => !value);
+        }}
+        title={'Toggle'}
+      />
+      {camera && show && (
         <RNFibriCheckView
           style={styles.container}
           graphBackgroundColor={'#0073ff'}
@@ -142,35 +146,7 @@ const App = () => {
           onSampleReady={(event) => onSampleReady(event.nativeEvent.ppg)}
         />
       )}
-      {/*<VictoryChart
-        width={350}
-        maxDomain={{x: domain.maxDomain, y: 100}}
-        minDomain={{x: domain.minDomain, y: -100}}>
-        <VictoryLine
-          interpolation="natural"
-          samples={10}
-          containerComponent={
-            <VictoryBrushContainer
-              brushDomain={{x: [1, 7], y: [-3, 3]}}
-              brushDimension="x"
-              brushStyle={{fill: 'teal', opacity: 0.2}}
-            />
-          }
-          style={{
-            data: {stroke: 'teal'},
-          }}
-          data={graphData}
-          x="x"
-          y="y"
-        />
-        <VictoryAxis
-          style={{
-            axis: {stroke: 'transparent'},
-            ticks: {stroke: 'transparent'},
-            tickLabels: {fill: 'transparent'},
-          }}
-        />
-      </VictoryChart>*/}
+
       <View style={styles.container}>
         <Text>{`Heartrate : ${heartRate}`}</Text>
         <Text>{`Vinger aanwezig : ${fingerPresent ? 'Ja' : 'Nee'}`}</Text>
@@ -183,7 +159,13 @@ const App = () => {
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
         />
-        <Button title={'Retrieve'} onPress={() => retrieveDocuments()} />
+        <Button
+          title={'Retrieve'}
+          onPress={() => {
+            console.log('retrieve');
+            retrieveDocuments();
+          }}
+        />
       </View>
     </SafeAreaProvider>
   );

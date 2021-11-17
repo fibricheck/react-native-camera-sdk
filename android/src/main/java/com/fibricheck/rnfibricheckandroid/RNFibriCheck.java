@@ -2,7 +2,13 @@
 
 package com.fibricheck.rnfibricheckandroid;
 
+import android.view.Display;
+import android.view.Window;
+import android.view.WindowManager;
+
+import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
@@ -37,6 +43,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 
+
 public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   public static final String REACT_CLASS = "FibriCheck";
 
@@ -47,6 +54,8 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   public static final int COMMAND_RESET_GRAPH = 2;
 
   public static final int COMMAND_START_RECORDING = 3;
+
+  private static final int COMMAND_RESET_MODULE = 4;
 
   private static final int SAMPLE_COUNT = 120;
 
@@ -77,6 +86,21 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   private static final String EVENT_PULSE_DETECTION_TIME_EXPIRED = "onPulseDetectionTimeExpired";
   private static final String EVENT_MOVEMENT_DETECTED = "onMovementDetected";
   private static final String EVENT_MEASUREMENT_PROCESSED = "onMeasurementProcessed";
+
+  public Activity getActivity(Context context) {
+    if (context == null) {
+      return null;
+    } else if (context instanceof ContextWrapper) {
+      if (context instanceof Activity) {
+        return (Activity) context;
+      } else {
+        return getActivity(((ContextWrapper) context).getBaseContext());
+      }
+    }
+
+    return null;
+  }
+
 
   @Override
   public String getName() {
@@ -209,7 +233,8 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
     return MapBuilder.of(
         "startMeasurement", COMMAND_START_MEASUREMENT,
         "resetGraph", COMMAND_RESET_GRAPH,
-        "startRecording", COMMAND_START_RECORDING);
+        "startRecording", COMMAND_START_RECORDING,
+        "resetModule", COMMAND_RESET_MODULE);
   }
 
   @Override
@@ -239,6 +264,11 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
       case COMMAND_START_RECORDING: {
         Log.e(TAG, "Command Received: start recording");
         fibriChecker.startRecording();
+        break;
+      }
+      case COMMAND_RESET_MODULE: {
+        Log.e(TAG, "Command Received: reset Module");
+        fibriChecker.stop();
         break;
       }
 
@@ -373,10 +403,12 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
     series.setDrawBackground(true);
 
     DisplayMetrics displayMetrics = new DisplayMetrics();
-    getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+    getActivity(context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
     int width = displayMetrics.widthPixels;
     boolean drawAsPath = width >= 1080;
-    
+
     series.setDrawAsPath(drawAsPath);
 
     graphView.removeAllSeries();
