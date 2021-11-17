@@ -1,7 +1,7 @@
 {
   "name": "@fibricheck/react-native-camera-sdk",
   "title": "React Native Fibricheck",
-  "version": "0.0.22",
+  "version": "1.0.0",
   "description": "React Native FibriCheck",
   "main": "build/index.js",
   "types": "build/types/index.d.ts",
