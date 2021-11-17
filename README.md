@@ -110,7 +110,7 @@ When the permissions are all set up, you can implement the FibriCheck component 
 
 ```
 <RNFibriCheckView
-    style={styles.container}
+    style={{ flex: 1 }}
     graphBackgroundColor={'#0073ff'}
     flashEnabled={true}
     onFingerDetected={() => console.log('finger detected')}

@@ -7,6 +7,14 @@ description: >-
 
 # Properties
 
+## Styling
+
+This is the only required permission. As a starting point, you can pass `flex: 1`&#x20;
+
+```
+style = {{ flex: 1 }}
+```
+
 ## Measurement Settings
 
 ### sampleTime
