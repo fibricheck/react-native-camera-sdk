@@ -11,38 +11,26 @@ description: >-
 
 This is the only required property. As a starting point, you can pass `flex: 1`&#x20;
 
-```tsx
-<RNFibriCheckView
-    ...
-    style={{ flex: 1 }}
-    ...
-/>
+```
+style = {{ flex: 1 }}
 ```
 
 ## Measurement Settings
 
 ### sampleTime
 
-The duration of the measurement in seconds. Default is set to 1 minute.\<RNFibriCheckView
+The duration of the measurement in seconds. Default is set to 1 minute.
 
-```tsx
-<RNFibriCheckView
-    ...
-    sampleTime=60;
-    ...
-/>
+```javascript
+sampleTime = 60;
 ```
 
 ### flashEnabled
 
 When enabled and supported by the device the SDK will turn on the camera flashlight while measuring.
 
-```tsx
-<RNFibriCheckView
-    ...
-    flashEnabled={true};
-    ...
-/>
+```javascript
+flashEnabled = true;
 ```
 
 ### gravEnabled
@@ -50,11 +38,7 @@ When enabled and supported by the device the SDK will turn on the camera flashli
 When enabled and supported by the device, the measurement result will hold gravitational data.
 
 ```javascript
-<RNFibriCheckView
-    ...
-    gravEnabled=60;
-    ...
-/>
+gravEnabled = false;
 ```
 
 ### gyroEnabled

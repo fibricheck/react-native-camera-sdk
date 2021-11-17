@@ -30,7 +30,7 @@ To install the Camera SDK, you will need to have access to the [Camera SDK git r
 
 In your project, if you are using yarn or npm you need to create a file called `.npmrc` at the root level of your project and add these lines. Replace ${AUTH\_TOKEN} with your personal access token. You can get a new one [here](https://github.com/settings/tokens/new.). Make sure you enable the `read:packages` scope.
 
-```
+```properties
 @fibricheck:registry=https://npm.pkg.github.com
 @extrahorizon:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${AUTH_TOKEN}
@@ -42,13 +42,13 @@ Explanation from GitHub on how to add your token can be found [here](https://doc
 
 using npm:
 
-```
+```properties
 npm install @fibricheck/react-native-camera-sdk
 ```
 
 using yarn:
 
-```
+```properties
 yarn add @fibricheck/react-native-camera-sdk
 ```
 
@@ -58,7 +58,7 @@ yarn add @fibricheck/react-native-camera-sdk
 
 The recording makes use of the device's camera. So to begin, you need to provide camera permissions. You can use this snippet to accomplish that:
 
-```
+```typescript
 import {request, PERMISSIONS} from 'react-native-permissions';  
 
 const [camera, setCamera] = useState(false);
@@ -83,7 +83,7 @@ useEffect(() => {
 
 Add&#x20;
 
-```
+```xml
 <uses-permission android:name="android.permission.CAMERA" />
 ```
 
@@ -95,7 +95,7 @@ For more information regarding Android permissions, check the [official Android 
 
 Add&#x20;
 
-```
+```xml
 <key>NSCameraUsageDescription</key>
 <string>Your own description of the purpose</string>
 ```

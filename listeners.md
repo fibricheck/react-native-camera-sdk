@@ -15,7 +15,7 @@ These events can be thrown in any stage of the measurement
 
 This event will fire when the presence of a finger is detected.
 
-```java
+```tsx
 <RNFibriCheckView
     ...
     onFingerDetected={() => ...your code here...}
@@ -27,7 +27,7 @@ This event will fire when the presence of a finger is detected.
 
 This event will fire when the presence of a finger is no longer detected.
 
-```javascript
+```tsx
 <RNFibriCheckView
     ...
     onFingerRemoved={() => ...your code here...}
@@ -43,7 +43,7 @@ These events will only be thrown when not recording
 
 This event will fire when the `fingerDetectionExpiryTime` has been exceeded. Note that the default time is set to `-1`, meaning that this event won't fire.
 
-```javascript
+```tsx
 <RNFibriCheckView
     ...
     onFingerDetectionTimeExpired={() => ...your code here...}
@@ -55,7 +55,7 @@ This event will fire when the `fingerDetectionExpiryTime` has been exceeded. Not
 
 This event will fire when a pulse has been detected. The pulse detection is only active after the finger detection has been completed.
 
-```javascript
+```tsx
 <RNFibriCheckView
     ...
     onPulseDetected={() => ...your code here...}
@@ -67,7 +67,7 @@ This event will fire when a pulse has been detected. The pulse detection is only
 
 This event will fire when no pulse has been detected after 10 seconds.
 
-```javascript
+```tsx
 <RNFibriCheckView
     ...
     onPulseDetectionTimeExpired={() => ...your code here...}
@@ -79,7 +79,7 @@ This event will fire when no pulse has been detected after 10 seconds.
 
 When performing a measurement, a baseline needs to be calculated. When this baseline has been calculated, the calibration is ready and the sdk will throw this event.
 
-```javascript
+```tsx
 <RNFibriCheckView
     ...
     onCalibrationReady={() => ...your code here...}
@@ -91,7 +91,7 @@ When performing a measurement, a baseline needs to be calculated. When this base
 
 This event will fire when the recording of the measurement has been initiated.
 
-```javascript
+```tsx
 <RNFibriCheckView
     ...
     onMeasurementStart={() => ...your code here...}
@@ -107,7 +107,7 @@ these events can be thrown while the measurement is recording
 
 This event will fire when a heartbeat has been detected. It will return the heart rate as a number.
 
-```javascript
+```tsx
 <RNFibriCheckView
     ...
     onHeartBeat={(heartRate: number) => ...your code here...}
@@ -119,7 +119,7 @@ This event will fire when a heartbeat has been detected. It will return the hear
 
 This event will fire when a new sample is ready. It can be used the draw a graph or analyze data. _**For now, it's best to leave this event as is, because the JS bridge is not fast enough to handle this amount of data.**_
 
-```javascript
+```tsx
 <RNFibriCheckView
     ...
     onSampleReady={(data) => ...your code here...}
@@ -131,7 +131,7 @@ This event will fire when a new sample is ready. It can be used the draw a graph
 
 This event will fire when movement has been detected. Note that this event will only fire when the `movementDetectionEnabled` property is enabled. This value is `true` by default.&#x20;
 
-```javascript
+```tsx
 <RNFibriCheckView
     ...
     onMovementDetected={() => ...your code here...}
@@ -143,7 +143,7 @@ This event will fire when movement has been detected. Note that this event will 
 
 This event will fire every second while recording. It returns the time in seconds that are left for completing the measurement. This is to make sure that no external timers are used, as they can become out of sync with the internal measurement timer.
 
-```javascript
+```tsx
 <RNFibriCheckView
     ...
     onTimeRemaining={(seconds: number) => ...your code here...}
@@ -155,7 +155,7 @@ This event will fire every second while recording. It returns the time in second
 
 This event will fire when the recording is complete. The [Post Processing](listeners.md#post-recording) will begin now.
 
-```javascript
+```tsx
 <RNFibriCheckView
     ...
     onMeasurementFinished={() => ...your code here...}
@@ -171,7 +171,7 @@ these events can be thrown when the recording phase has ended.&#x20;
 
 This event will fire when the measurement has been processed and is converted to a JSON String.
 
-```javascript
+```tsx
 <RNFibriCheckView
     ...
     onMeasurementProcessed={(data) => ...your code here...}
