@@ -14,7 +14,7 @@ A FibriCheck measurement consists of PPG data. To gather this PPG data, the Came
 A FibriCheck Measurement consists of multiple phases:
 
 1. Finger detection
-   * Checks for the presence of a finger on the camera. A [timeout](properties.md#fingerdetectionexpirytime) can be set to 0 to skip this set. By default this is `-1` which means that it will keep checking until a finger has been detected.
+   * Checks for the presence of a finger on the camera. A [timeout](properties.md#fingerdetectionexpirytime) can be set to 0 to skip this phase. By default this is `-1` which means that it will keep checking until a finger has been detected.
 2. Pulse detection&#x20;
    * Checks if a pulse is present. When no pulse has been detected for 10 seconds, the calibration phase will start.
 3. Calibration
