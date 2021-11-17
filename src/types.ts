@@ -24,7 +24,7 @@ export interface CameraData {
   grav?: MotionData;
   gyro?: MotionData;
   heartrate: number;
-  measurementTimestamp: Date;
+  measurement_timestamp: number;
   quadrants: Yuv[][];
   technicalDetails: {
     camera_exposure_time: number;
