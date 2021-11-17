@@ -84,7 +84,7 @@ export default class FibriCheckView extends React.Component<FibriCheckViewProps>
           event => {
             this.props.onMeasurementProcessed({
               ...JSON.parse(event.nativeEvent.measurement),
-              measurementTimestamp: Date.now(),
+              measurement_timestamp: Date.now(),
             });
           }
         }
