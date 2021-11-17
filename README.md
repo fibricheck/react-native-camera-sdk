@@ -54,7 +54,57 @@ yarn add @fibricheck/react-native-camera-sdk
 
 ## Making your first recording
 
-To make your first recording, you can use this code snippet:
+### Permissions
+
+The recording makes use of the device's camera. So to begin, you need to provide camera permissions. You can use this snippet to accomplish that:
+
+```
+import {request, PERMISSIONS} from 'react-native-permissions';  
+
+useEffect(() => {
+    if (Platform.OS === 'ios') {
+      request(PERMISSIONS.IOS.CAMERA).then(result => {
+        setCamera(result === 'granted');
+      });
+    } else {
+      request(PERMISSIONS.ANDROID.CAMERA).then(result => {
+        setCamera(result === 'granted');
+      });
+    }
+  }, []);
+  
+```
+
+**Also, don't forget the define these permissions:**
+
+#### Android
+
+Add&#x20;
+
+```
+<uses-permission android:name="android.permission.CAMERA" />
+```
+
+To the `AndroidManifest.xml` file
+
+For more information regarding Android permissions, check the [official Android documentation](https://developer.android.com/training/permissions/declaring).
+
+#### iOS
+
+Add&#x20;
+
+```
+<key>NSCameraUsageDescription</key>
+<string>Your own description of the purpose</string>
+```
+
+To the `Info.plist` file
+
+For more information regarding these iOS permissions, check the [official iOS documentation](https://developer.apple.com/documentation/avfoundation/cameras\_and\_media\_capture/requesting\_authorization\_for\_media\_capture\_on\_ios?language=objc).
+
+### Component
+
+When the permissions are all set up, you can implement the FibriCheck component like this:
 
 ```
 <RNFibriCheckView
