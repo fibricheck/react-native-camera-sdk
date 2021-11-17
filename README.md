@@ -108,7 +108,7 @@ For more information regarding these iOS permissions, check the [official iOS do
 
 When the permissions are all set up, you can implement the FibriCheck component like this:
 
-```
+```tsx
 <RNFibriCheckView
     style={{ flex: 1 }}
     graphBackgroundColor={'#0073ff'}
