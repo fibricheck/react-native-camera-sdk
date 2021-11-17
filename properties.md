@@ -14,7 +14,7 @@ description: >-
 The duration of the measurement in seconds. Default is set to 1 minute.
 
 ```javascript
-sdk.sampleTime = 60;
+sampleTime = 60;
 ```
 
 ### flashEnabled
@@ -22,7 +22,7 @@ sdk.sampleTime = 60;
 When enabled and supported by the device the SDK will turn on the camera flashlight while measuring.
 
 ```javascript
-sdk.flashEnabled = true;
+flashEnabled = true;
 ```
 
 ### gravEnabled
@@ -30,7 +30,7 @@ sdk.flashEnabled = true;
 When enabled and supported by the device, the measurement result will hold gravitational data.
 
 ```javascript
-sdk.gravEnabled = false;
+gravEnabled = false;
 ```
 
 ### gyroEnabled
@@ -38,7 +38,7 @@ sdk.gravEnabled = false;
 When enabled and supported by the device, the measurement result will hold gyroscope data.
 
 ```javascript
-sdk.gyroEnabled = false;
+gyroEnabled = false;
 ```
 
 ### accEnabled
@@ -46,7 +46,7 @@ sdk.gyroEnabled = false;
 When enabled and supported by the device, the measurement result will hold accelerometer data.
 
 ```javascript
-sdk.accEnabled = false;
+accEnabled = false;
 ```
 
 ### rotationEnabled
@@ -54,17 +54,17 @@ sdk.accEnabled = false;
 When enabled and supported by the device, the measurement result will hold rotational data.
 
 ```
-sdk.rotationEnabled = false;
+rotationEnabled = false;
 ```
 
 ### movementDetectionEnabled
 
 When enabled the `onMovementDetected()` event will be thrown when movement is detected.
 
-The detection will trigger when the movement vector is lower than 6 or higher than 14.&#x20;
+The detection will trigger when the movement vector is lower than 6 or higher than 14.
 
 ```javascript
-sdk.movementDetectionEnabled = true;
+movementDetectionEnabled = true;
 ```
 
 ### fingerDetectionExpiryTime
@@ -74,7 +74,7 @@ The time until the finger detection will trigger the `onFingerDetectionTimeExpir
 By Default this value is `-1`, wich indicates that it will keep waiting untill a finger is detected
 
 ```
-sdk.fingerDetectionExpiryTime = -1;
+fingerDetectionExpiryTime = -1;
 ```
 
 ### waitForStartRecordingSignal
@@ -82,7 +82,7 @@ sdk.fingerDetectionExpiryTime = -1;
 Normally, when the calibration is ready, the measurement will start recording. When this flag is enabled, the measurement will wait untill the `startRecording()` command has been given.
 
 ```javascript
-sdk.waitForStartRecordingSignal = false;
+waitForStartRecordingSignal = false;
 ```
 
 ## Graph Settings
@@ -92,7 +92,7 @@ sdk.waitForStartRecordingSignal = false;
 Determines the graphBackground color. By default there is no background color
 
 ```javascript
-sdk.graphBackgroundColor = "";
+graphBackgroundColor = "";
 ```
 
 ### drawGraph
@@ -100,7 +100,7 @@ sdk.graphBackgroundColor = "";
 When enabled the component draws a graph of the recorded PPG signal.
 
 ```javascript
-sdk.drawGraph = true;
+drawGraph = true;
 ```
 
 ### lineColor
@@ -108,7 +108,7 @@ sdk.drawGraph = true;
 Determines the color of the graph line.
 
 ```javascript
-sdk.lineColor = "#0073ff";
+lineColor = "#0073ff";
 ```
 
 ### lineThickness
@@ -116,7 +116,7 @@ sdk.lineColor = "#0073ff";
 Determines the thickness of the graph line.
 
 ```javascript
-sdk.lineThickness = 8;
+lineThickness = 8;
 ```
 
 ### drawBackground
@@ -124,6 +124,5 @@ sdk.lineThickness = 8;
 When enabled, the component will draw a background for the graph
 
 ```javascript
-sdk.drawBackground = true;
+drawBackground = true;
 ```
-
