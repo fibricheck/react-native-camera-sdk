@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.license      = "MIT"
   # s.license    = { :type => "MIT", :file => "FILE_LICENSE" }
   s.authors      = { "Craftzing" => "jan.vandertaelen@craftzing.com" }
-  s.platforms    = { :ios => "11.0" }
+  s.platforms    = { :ios => "10.0" }
   s.source       = { :git => "https://github.com/fibricheck/react-native-camera-sdk.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,swift}"
