@@ -8,7 +8,7 @@ import {
 import { CameraData } from './types';
 
 type FibriCheckViewProps = typeof FibriCheckView.defaultProps & {
-  style: any;
+  style?: any;
   graphBackgroundColor?: string;
   drawGraph?: boolean;
   lineColor?: string;
@@ -43,7 +43,7 @@ export default class FibriCheckView extends React.Component<FibriCheckViewProps>
 
   static defaultProps = {
     style: {
-      flex: 1
+      flex: 1,
     },
     drawGraph: true,
     lineColor: '#0073ff',
@@ -86,11 +86,11 @@ export default class FibriCheckView extends React.Component<FibriCheckViewProps>
               ...JSON.parse(event.nativeEvent.measurement),
               measurement_timestamp: Date.now(),
             });
-          }
+          },
       } : {}),
       ...(this.props.onHeartBeat ? { onHeartBeat: event => this.props.onHeartBeat(event.nativeEvent.heartRate) } : {}),
-      ...(this.props.onTimeRemaining ? { onTimeRemaining: event => this.props.onTimeRemaining(event.nativeEvent.seconds) } : {})
-    }
+      ...(this.props.onTimeRemaining ? { onTimeRemaining: event => this.props.onTimeRemaining(event.nativeEvent.seconds) } : {}),
+    };
 
     return (
       <FibriCheck
