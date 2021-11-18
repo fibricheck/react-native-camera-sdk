@@ -9,7 +9,7 @@ description: >-
 
 ## Styling
 
-This is the only required property. As a starting point, you can pass `flex: 1`&#x20;
+Add custom styling to the component. As a default, `flex: 1` is used.
 
 ```tsx
 <RNFibriCheckView

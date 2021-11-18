@@ -104,6 +104,23 @@ To the `Info.plist` file
 
 For more information regarding these iOS permissions, check the [official iOS documentation](https://developer.apple.com/documentation/avfoundation/cameras\_and\_media\_capture/requesting\_authorization\_for\_media\_capture\_on\_ios?language=objc).
 
+#### Third-party library
+
+As you can see in the snippet, we make use of the `react-native-permissions` library. In order to use this library, make sure to add these values to your podfile:
+
+```
+target 'LocalMainStreet' do
+
+  # react-native-permissions permission handlers
+  permissions_path = '../node_modules/react-native-permissions/ios'
+  
+  pod 'Permission-Camera', :path => "#{permissions_path}/Camera.podspec"
+
+end
+```
+
+Make sure you execute `pod install` and restart the metro bundler after applying these changes. More information can be found in [the readme of their repository](https://github.com/zoontek/react-native-permissions#ios).
+
 ### Component
 
 When the permissions are all set up, you can implement the FibriCheck component like this:
