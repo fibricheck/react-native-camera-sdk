@@ -44,9 +44,10 @@ export default class FibriCheckView extends React.Component<FibriCheckViewProps>
   static defaultProps = {
     style: {
       flex: 1,
+      backgroundColor: '#ffffff',
     },
     drawGraph: true,
-    lineColor: '#0073ff',
+    lineColor: '#63b3a6',
     lineThickness: 8,
     drawBackground: true,
     sampleTime: 60,
