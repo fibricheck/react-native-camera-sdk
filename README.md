@@ -127,7 +127,7 @@ When the permissions are all set up, you can implement the FibriCheck component 
 
 ```tsx
 <RNFibriCheckView
-    style={{ flex: 1 }}
+    style={{ flex: 1, backgroundColor: '#ffffff' }}
     graphBackgroundColor={'#0073ff'}
     flashEnabled={true}
     onFingerDetected={() => console.log('finger detected')}

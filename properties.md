@@ -9,12 +9,14 @@ description: >-
 
 ## Styling
 
-Add custom styling to the component. As a default, `flex: 1` is used.
+Add custom styling to the component. As a default, `{ flex: 1, backgroundColor: '#ffffff' }` is used.
+
+**When customizing this, make sure to always add a **_**backgroundColor**_**!**
 
 ```tsx
 <RNFibriCheckView
     ...
-    style = {{ flex: 1 }}
+    style = {{ flex: 1, backgroundColor: '#ffffff' }}
     ...
 />
 ```
@@ -28,7 +30,7 @@ The duration of the measurement in seconds. Default is set to 1 minute.
 ```tsx
 <RNFibriCheckView
     ...
-    sampleTime=60;
+    sampleTime={60};
     ...
 />
 ```
@@ -137,12 +139,12 @@ Normally, when the calibration is ready, the measurement will start recording. W
 
 ### graphBackgroundColor
 
-Determines the graphBackground color. By default there is no background color
+Determines the color of the area under the graph. By default, this color is omitted. The backgroundColor is thus displayed under the graph.
 
 ```tsx
 <RNFibriCheckView
     ...
-    graphBackgroundColor={""};
+    //graphBackgroundColor={''};
     ...
 />
 ```
@@ -166,7 +168,7 @@ Determines the color of the graph line.
 ```tsx
 <RNFibriCheckView
     ...
-    lineColor={"#0073ff"};
+    lineColor={'#63b3a6'};
     ...
 />
 ```
@@ -178,7 +180,7 @@ Determines the thickness of the graph line.
 ```tsx
 <RNFibriCheckView
     ...
-    lineThickness=8
+    lineThickness={8}
     ...
 />
 ```
