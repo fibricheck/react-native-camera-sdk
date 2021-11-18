@@ -46,5 +46,4 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:support-v13:27.1.1'
     implementation 'com.google.code.gson:gson:+'
-    compile files('src/main/libs/fibrichecker.aar')
 }
