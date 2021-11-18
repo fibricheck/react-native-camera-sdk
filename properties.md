@@ -113,7 +113,7 @@ The detection will trigger when the movement vector is lower than 6 or higher th
 
 The time until the finger detection will trigger the `onFingerDetectionTimeExpired`() event.
 
-By Default this value is `-1`, wich indicates that it will keep waiting untill a finger is detected
+By Default this value is `-1`, which indicates that it will keep waiting until a finger is detected
 
 ```tsx
 <RNFibriCheckView

@@ -81,35 +81,31 @@ useEffect(() => {
 
 #### Android
 
-Add&#x20;
+Add this to the `AndroidManifest.xml` file:
 
 ```xml
 <uses-permission android:name="android.permission.CAMERA" />
 ```
 
-To the `AndroidManifest.xml` file
-
 For more information regarding Android permissions, check the [official Android documentation](https://developer.android.com/training/permissions/declaring).
 
 #### iOS
 
-Add&#x20;
+Add this to the `Info.plist` file:
 
 ```xml
 <key>NSCameraUsageDescription</key>
 <string>Your own description of the purpose</string>
 ```
 
-To the `Info.plist` file
-
 For more information regarding these iOS permissions, check the [official iOS documentation](https://developer.apple.com/documentation/avfoundation/cameras\_and\_media\_capture/requesting\_authorization\_for\_media\_capture\_on\_ios?language=objc).
 
 #### Third-party library
 
-As you can see in the snippet, we make use of the `react-native-permissions` library. In order to use this library, make sure to add these values to your podfile:
+As you can see in the snippet, we make use of the `react-native-permissions` library. In order to use this library, make sure to add these values to your `Podfile`:
 
 ```
-target 'LocalMainStreet' do
+target 'MyAppName' do
 
   # react-native-permissions permission handlers
   permissions_path = '../node_modules/react-native-permissions/ios'
@@ -119,7 +115,9 @@ target 'LocalMainStreet' do
 end
 ```
 
-Make sure you execute `pod install` and restart the metro bundler after applying these changes. More information can be found in [the readme of their repository](https://github.com/zoontek/react-native-permissions#ios).
+**Make sure you execute `pod install` and restart the metro bundler after applying these changes!**
+
+More information can be found in [the readme of their repository](https://github.com/zoontek/react-native-permissions#ios).
 
 ### Component
 
@@ -128,8 +126,6 @@ When the permissions are all set up, you can implement the FibriCheck component 
 ```tsx
 <RNFibriCheckView
     style={{ flex: 1, backgroundColor: '#ffffff' }}
-    graphBackgroundColor={'#0073ff'}
-    flashEnabled={true}
     onFingerDetected={() => console.log('finger detected')}
     onFingerRemoved={() => console.log('finger removed')}
     onCalibrationReady={() => console.log('calibration ready')}
