@@ -259,9 +259,12 @@
                 _state = MeasurementControllerStateFinished;
             }
             if (_previousState != MeasurementControllerStateRecording) {
+                _measurement = [[Measurement alloc] initWithConfig:[self configImageProcessor]];
                 _recordingStartTime = currentTime;
+
                 [self notifyDelegateDidStartRecording];
                 [self notifyDelegateDidChangeState: MeasurementControllerStateRecording];
+                
                 _previousState = MeasurementControllerStateRecording;
             }
 
