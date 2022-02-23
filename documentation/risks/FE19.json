@@ -1,0 +1,29 @@
+{
+  "keyValues": [],
+  "detectionMitigation": 3,
+  "detection": 10,
+  "origin": "Software",
+  "name": "16.03 The Camera SDK does not perform the indicated function",
+  "potentialCause": "The Camera SDK does not perform the indicated function",
+  "detectionMethods": "None",
+  "potentialEffect": "Poor quality of measurements",
+  "occurrenceMitigation": 1,
+  "occurrence": 3,
+  "riskDetails": [
+    "protective_measures_in_the_manufacturing_process"
+  ],
+  "remarks": "Usability studies performed",
+  "mitigationMethods": [
+    {
+      "method": "Software testing",
+      "specifications": [
+        "7319",
+        "A669"
+      ]
+    }
+  ],
+  "alap": "Currently no other method is known to further reduce this risk",
+  "id": "FE19",
+  "severity": 3,
+  "potentialFailureMode": "Software error preventing correct use of device"
+}

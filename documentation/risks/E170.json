@@ -1,0 +1,27 @@
+{
+  "keyValues": [],
+  "detectionMitigation": 3,
+  "detection": 10,
+  "origin": "Providing information for safe use",
+  "name": "23.12 User does not have enough knowledge or experience to open the instructions for use",
+  "potentialCause": "User does not have enough knowledge or experience to open the instructions for use",
+  "detectionMethods": "None",
+  "potentialEffect": "Delay in potential diagnosis",
+  "occurrenceMitigation": 1,
+  "occurrence": 3,
+  "riskDetails": [
+    "inherent_safety_by_design",
+    "information_for_safety"
+  ],
+  "remarks": "Tested in usability studies. If user can not open the IFU, the user is not able to use the device",
+  "mitigationMethods": [
+    {
+      "method": "Usability Testing",
+      "specifications": []
+    }
+  ],
+  "alap": "Currently no other method is known to further reduce this risk",
+  "id": "E170",
+  "severity": 8,
+  "potentialFailureMode": "Improper labeling"
+}

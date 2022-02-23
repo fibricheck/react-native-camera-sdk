@@ -1,0 +1,29 @@
+{
+  "id": "SOHXL",
+  "name": "23.17 Minimum requirements for the operating environment are not defined",
+  "origin": "Providing information for safe use",
+  "potentialFailureMode": "Improper labeling",
+  "potentialEffect": "Delay in potential diagnosis",
+  "severity": 8,
+  "potentialCause": "Minimum requirements for the operating environment are not defined",
+  "occurrence": 3,
+  "occurrenceMitigation": 3,
+  "detectionMethods": "None",
+  "detection": 10,
+  "detectionMitigation": 1,
+  "mitigationMethods": [
+    {
+      "method": "IFU in app",
+      "specifications": [
+        "1E74",
+        "0A88"
+      ]
+    }
+  ],
+  "riskDetails": [
+    "information_for_safety"
+  ],
+  "alap": "Currently no other method is known to further reduce this risk",
+  "remarks": "",
+  "keyValues": []
+}

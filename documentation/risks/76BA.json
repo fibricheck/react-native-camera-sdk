@@ -1,0 +1,32 @@
+{
+  "keyValues": [],
+  "detectionMitigation": 1,
+  "detection": 10,
+  "origin": "Software",
+  "name": "16.18 Incomplete data transformation",
+  "potentialCause": "Incomplete data transformation",
+  "detectionMethods": "None",
+  "potentialEffect": "Delay in potential diagnosis",
+  "occurrenceMitigation": 1,
+  "occurrence": 1,
+  "riskDetails": [
+    "protective_measures_in_the_manufacturing_process",
+    "inherent_safety_by_design"
+  ],
+  "remarks": "Errors occuring in the app are logged",
+  "mitigationMethods": [
+    {
+      "method": "Error logging",
+      "specifications": [
+        "305D"
+      ]
+    },
+    {
+      "method": "Code review"
+    }
+  ],
+  "alap": "Currently no other method is known to further reduce this risk",
+  "id": "76BA",
+  "severity": 8,
+  "potentialFailureMode": "Software error preventing correct use of device"
+}

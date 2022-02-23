@@ -1,0 +1,20 @@
+{
+  "id": "FK77O",
+  "name": "Check if the measurement sensors can be provided as properties",
+  "type": "manual",
+  "tier": "System - Smoke",
+  "planStatus": "Planned",
+  "motivation": "",
+  "testSteps": [
+    "Create a component and provide the sensor properties:\n\n- gravEnabled\n- gyroEnabled\n- accEnabled\n- rotationEnabled \n- movementDetectionEnabled"
+  ],
+  "expectedResult": "Component is rendered",
+  "requiredTestEnvironmentIds": [],
+  "keyValues": [],
+  "parentNames": [
+    "Initialize the camera sdk",
+    "Provide properties",
+    "[Measurement sensors] gravEnabled - gyroEnabled - accEnabled - rotationEnabled - movementDetectionEnabled"
+  ],
+  "updatedTime": 1645605304356
+}

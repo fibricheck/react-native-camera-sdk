@@ -1,0 +1,24 @@
+{
+  "keyValues": [],
+  "detectionMitigation": 0,
+  "detection": 10,
+  "origin": "Deliberate misuse",
+  "name": "28.04 Use of software emulators",
+  "potentialCause": "Use of software emulators",
+  "detectionMethods": "None",
+  "potentialEffect": "Misuse",
+  "occurrenceMitigation": 0,
+  "occurrence": 1,
+  "riskDetails": [],
+  "remarks": "",
+  "mitigationMethods": [
+    {
+      "method": "",
+      "specifications": []
+    }
+  ],
+  "alap": "Currently no methods is known to reduce the risk",
+  "id": "B334",
+  "severity": 8,
+  "potentialFailureMode": "Misuse"
+}

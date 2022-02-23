@@ -1,0 +1,36 @@
+{
+  "keyValues": [],
+  "detectionMitigation": 3,
+  "detection": 10,
+  "origin": "Measurement",
+  "name": "9.05 Unnatural colorations (e.g. tattoo's, ink..)",
+  "potentialCause": "Unnatural colorations (e.g. tattoo's, ink..)",
+  "detectionMethods": "None",
+  "potentialEffect": "Poor quality of measurements",
+  "occurrenceMitigation": 3,
+  "occurrence": 1,
+  "riskDetails": [
+    "inherent_safety_by_design",
+    "information_for_safety"
+  ],
+  "remarks": "",
+  "mitigationMethods": [
+    {
+      "method": "IFU in app/ software detection",
+      "specifications": [
+        "0A88",
+        "1E74"
+      ]
+    },
+    {
+      "method": "Software detection",
+      "specifications": [
+        "7319"
+      ]
+    }
+  ],
+  "alap": "Currently no other method is known to further reduce this risk, control system in place to detect if a signal is detected.",
+  "id": "F6A6",
+  "severity": 3,
+  "potentialFailureMode": "User error"
+}

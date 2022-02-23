@@ -1,0 +1,26 @@
+{
+  "keyValues": [],
+  "detectionMitigation": 1,
+  "detection": 10,
+  "origin": "Software",
+  "name": "16.17 Error in OTS software",
+  "potentialCause": "Error in OTS software",
+  "detectionMethods": "None",
+  "potentialEffect": "Delay in potential diagnosis",
+  "occurrenceMitigation": 3,
+  "occurrence": 3,
+  "riskDetails": [
+    "protective_measures_in_the_manufacturing_process"
+  ],
+  "remarks": "SOUP and test documentation per version.",
+  "mitigationMethods": [
+    {
+      "method": "Software testing",
+      "specifications": []
+    }
+  ],
+  "alap": "Currently no other method is known to further reduce this risk",
+  "id": "BF96",
+  "severity": 8,
+  "potentialFailureMode": "Software error preventing correct use of device"
+}

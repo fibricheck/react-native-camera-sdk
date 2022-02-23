@@ -1,0 +1,43 @@
+{
+  "keyValues": [],
+  "detectionMitigation": 5,
+  "detection": 10,
+  "origin": "Deliberate misuse",
+  "name": "28.03 Camera SDK is used on body parts different than specified",
+  "potentialCause": "FibriCheck is used on body parts different than specified",
+  "detectionMethods": "None",
+  "potentialEffect": "Poor quality of measurements",
+  "occurrenceMitigation": 3,
+  "occurrence": 3,
+  "riskDetails": [
+    "inherent_safety_by_design",
+    "information_for_safety"
+  ],
+  "remarks": "",
+  "mitigationMethods": [
+    {
+      "method": "IFU in app",
+      "specifications": [
+        "1E74",
+        "0A88"
+      ]
+    },
+    {
+      "method": "Instruction screen",
+      "specifications": [
+        "E249",
+        "7319"
+      ]
+    },
+    {
+      "method": "Educational information before usage",
+      "specifications": [
+        "EFEC"
+      ]
+    }
+  ],
+  "alap": "Currently no other method is known to further reduce this risk, control system in place to detect if a signal is detected.",
+  "id": "9B2F",
+  "severity": 3,
+  "potentialFailureMode": "User error"
+}

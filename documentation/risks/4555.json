@@ -1,0 +1,27 @@
+{
+  "keyValues": [],
+  "detectionMitigation": 3,
+  "detection": 10,
+  "origin": "Shelf-life",
+  "name": "17.01 The Camera SDK is outdated",
+  "potentialCause": "User did not update app",
+  "detectionMethods": "None",
+  "potentialEffect": "Delay in potential diagnosis",
+  "occurrenceMitigation": 1,
+  "occurrence": 1,
+  "riskDetails": [
+    "inherent_safety_by_design",
+    "information_for_safety"
+  ],
+  "remarks": "Previous app can be blocked and prevented from being used. Auto update of apps.",
+  "mitigationMethods": [
+    {
+      "method": "Notification/update button",
+      "specifications": []
+    }
+  ],
+  "alap": "Currently no other method is known to further reduce this risk",
+  "id": "4555",
+  "severity": 8,
+  "potentialFailureMode": "User error"
+}

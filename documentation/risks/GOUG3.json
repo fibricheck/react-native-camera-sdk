@@ -1,0 +1,29 @@
+{
+  "keyValues": [],
+  "detectionMitigation": 1,
+  "detection": 10,
+  "origin": "Providing information for safe use",
+  "name": "23.14 Instructions for use does not cover IT security controls",
+  "potentialCause": "Instructions for use does not cover IT security controls",
+  "detectionMethods": "None",
+  "potentialFailureMode": "Improper labeling",
+  "potentialEffect": "Security leak",
+  "occurrenceMitigation": 3,
+  "occurrence": 3,
+  "riskDetails": [
+    "information_for_safety"
+  ],
+  "remarks": "",
+  "mitigationMethods": [
+    {
+      "method": "integrated in IFU and included in app",
+      "specifications": [
+        "1E74",
+        "0A88"
+      ]
+    }
+  ],
+  "alap": "Currently no other method is known to reduce this risk",
+  "id": "GOUG3",
+  "severity": 3
+}

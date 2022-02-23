@@ -1,0 +1,28 @@
+{
+  "keyValues": [],
+  "detectionMitigation": 1,
+  "detection": 10,
+  "origin": "Measurement",
+  "name": "9.10 No measurement possible due to hardware related problems",
+  "potentialCause": "No measurement possible due to hardware related problems",
+  "detectionMethods": "None",
+  "potentialEffect": "Delay in potential diagnosis",
+  "occurrenceMitigation": 3,
+  "occurrence": 3,
+  "riskDetails": [
+    "inherent_safety_by_design"
+  ],
+  "remarks": "Device will not function properly",
+  "mitigationMethods": [
+    {
+      "method": "Error logging",
+      "specifications": [
+        "305D"
+      ]
+    }
+  ],
+  "alap": "Currently no other method is known to further reduce this risk.",
+  "id": "1C18",
+  "severity": 8,
+  "potentialFailureMode": "Hardware error"
+}

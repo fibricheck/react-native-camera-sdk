@@ -1,0 +1,11 @@
+{
+  "id": "H3X46",
+  "name": "Visualisations",
+  "description": "While executing a measurment, data is visualised in the component according to the provided properties",
+  "type": "requirement",
+  "origin": "user_need",
+  "keyValues": [],
+  "attachments": [],
+  "testIds": [],
+  "updatedTime": 1645063434033
+}

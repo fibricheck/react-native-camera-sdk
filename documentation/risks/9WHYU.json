@@ -1,0 +1,50 @@
+{
+  "keyValues": [],
+  "detectionMitigation": 1,
+  "detection": 10,
+  "origin": "Cybersecurity",
+  "name": "47.06 Unauthorized access to system",
+  "potentialCause": "Unauthorized access to system",
+  "detectionMethods": "None",
+  "potentialFailureMode": "Missing security controls",
+  "potentialEffect": "Security leak",
+  "occurrenceMitigation": 3,
+  "occurrence": 3,
+  "riskDetails": [
+    "inherent_safety_by_design",
+    "protective_measures_in_the_manufacturing_process"
+  ],
+  "remarks": "",
+  "mitigationMethods": [
+    {
+      "method": "Secure connection required",
+      "specifications": [
+        "1EE5"
+      ]
+    },
+    {
+      "method": "Personal accounts required",
+      "specifications": [
+        "67E3",
+        "F5A9"
+      ]
+    },
+    {
+      "method": "Pincode",
+      "specifications": [
+        "3505",
+        "F1BB"
+      ]
+    },
+    {
+      "method": "Inactivity locks the application",
+      "specifications": [
+        "6918",
+        "DD48"
+      ]
+    }
+  ],
+  "alap": "Currently no other method is known to further reduce this risk",
+  "id": "9WHYU",
+  "severity": 3
+}

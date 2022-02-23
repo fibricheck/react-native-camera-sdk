@@ -1,0 +1,28 @@
+{
+  "keyValues": [],
+  "detectionMitigation": 3,
+  "detection": 10,
+  "origin": "Control interface",
+  "name": "32.01 Complex or confusing control system",
+  "potentialCause": "Complex or confusing control system",
+  "detectionMethods": "None",
+  "potentialEffect": "Delay in potential diagnosis",
+  "occurrenceMitigation": 3,
+  "occurrence": 3,
+  "riskDetails": [
+    "inherent_safety_by_design"
+  ],
+  "remarks": "Usability studies performed",
+  "mitigationMethods": [
+    {
+      "method": "Clear design",
+      "specifications": [
+        "E249"
+      ]
+    }
+  ],
+  "alap": "Currently no other method is known to reduce this risk.",
+  "id": "626B",
+  "severity": 8,
+  "potentialFailureMode": "User error"
+}

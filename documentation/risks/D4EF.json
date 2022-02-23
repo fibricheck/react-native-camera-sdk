@@ -1,0 +1,30 @@
+{
+  "keyValues": [],
+  "detectionMitigation": 1,
+  "detection": 10,
+  "origin": "Providing information for safe use",
+  "name": "23.06 No access to the instructions for use due to hardware fault",
+  "potentialCause": "No access to the instructions for use due to hardware fault",
+  "detectionMethods": "None",
+  "potentialEffect": "Delay in potential diagnosis",
+  "occurrenceMitigation": 1,
+  "occurrence": 1,
+  "riskDetails": [
+    "inherent_safety_by_design",
+    "information_for_safety"
+  ],
+  "remarks": "Device will not work as intended",
+  "mitigationMethods": [
+    {
+      "method": "Device Monitoring",
+      "specifications": []
+    },
+    {
+      "method": " IFU on website"
+    }
+  ],
+  "alap": "Currently no method is known to further reduce this risk",
+  "id": "D4EF",
+  "severity": 8,
+  "potentialFailureMode": "Hardware error"
+}

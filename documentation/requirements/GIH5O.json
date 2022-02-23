@@ -1,0 +1,11 @@
+{
+  "id": "GIH5O",
+  "name": "Provide permissions",
+  "description": "In order to execute a measurement, camera permissions needed to be provided first",
+  "type": "requirement",
+  "origin": "user_need",
+  "keyValues": [],
+  "attachments": [],
+  "testIds": [],
+  "updatedTime": 1645058070467
+}

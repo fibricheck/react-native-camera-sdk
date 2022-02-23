@@ -1,0 +1,29 @@
+{
+  "keyValues": [],
+  "detectionMitigation": 1,
+  "detection": 10,
+  "origin": "Providing information for safe use",
+  "name": "23.09 Problems to use the application due to no access of the IFU on the website",
+  "potentialCause": "Problems to use the application due to no access of the IFU on the website",
+  "detectionMethods": "None",
+  "potentialEffect": "Delay in potential diagnosis",
+  "occurrenceMitigation": 3,
+  "occurrence": 3,
+  "riskDetails": [
+    "inherent_safety_by_design"
+  ],
+  "remarks": "",
+  "mitigationMethods": [
+    {
+      "method": "IFU in app",
+      "specifications": [
+        "1E74",
+        "0A88"
+      ]
+    }
+  ],
+  "alap": "Currently no other method is known to reduce this risk",
+  "id": "EC46",
+  "severity": 8,
+  "potentialFailureMode": "Improper labeling"
+}

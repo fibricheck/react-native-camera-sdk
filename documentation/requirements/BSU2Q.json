@@ -1,0 +1,11 @@
+{
+  "id": "BSU2Q",
+  "name": "Initialize a measurement",
+  "description": "To start a measurement, the components needs to be implemented in the screen that is designed to record the measurement",
+  "type": "requirement",
+  "origin": "user_need",
+  "keyValues": [],
+  "attachments": [],
+  "testIds": [],
+  "updatedTime": 1645062954364
+}

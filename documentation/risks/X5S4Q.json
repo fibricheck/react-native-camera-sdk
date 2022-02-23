@@ -1,0 +1,29 @@
+{
+  "keyValues": [],
+  "detectionMitigation": 1,
+  "detection": 10,
+  "origin": "Cybersecurity",
+  "name": "47.04 No encryption of data",
+  "potentialCause": "No encryption of data",
+  "detectionMethods": "None",
+  "potentialFailureMode": "Missing security controls",
+  "potentialEffect": "Security Leak",
+  "occurrenceMitigation": 3,
+  "occurrence": 1,
+  "riskDetails": [
+    "inherent_safety_by_design",
+    "protective_measures_in_the_manufacturing_process"
+  ],
+  "remarks": "",
+  "mitigationMethods": [
+    {
+      "method": "Certificate pinning",
+      "specifications": [
+        "1EE5"
+      ]
+    }
+  ],
+  "alap": "Currently no other method is known to further reduce this risk",
+  "id": "X5S4Q",
+  "severity": 3
+}

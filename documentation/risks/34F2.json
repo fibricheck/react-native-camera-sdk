@@ -1,0 +1,37 @@
+{
+  "keyValues": [],
+  "detectionMitigation": 3,
+  "detection": 10,
+  "origin": "Measurement",
+  "name": "9.06 Deposits are present on the camera lens, flash or screen",
+  "potentialCause": "Deposits are present on the camera lens, flash or screen",
+  "detectionMethods": "None",
+  "potentialEffect": "Poor quality of measurements",
+  "occurrenceMitigation": 3,
+  "occurrence": 5,
+  "riskDetails": [
+    "inherent_safety_by_design",
+    "information_for_safety"
+  ],
+  "remarks": "",
+  "mitigationMethods": [
+    {
+      "method": "IFU in app",
+      "specifications": [
+        "0A88",
+        "1E74"
+      ]
+    },
+    {
+      "method": "Software detection",
+      "specifications": [
+        "E249",
+        "7319"
+      ]
+    }
+  ],
+  "alap": "Currently no other method is known to further reduce this risk, control system in place to detect if a signal is detected",
+  "id": "34F2",
+  "severity": 3,
+  "potentialFailureMode": "User error"
+}

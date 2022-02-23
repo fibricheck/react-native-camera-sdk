@@ -1,0 +1,26 @@
+{
+  "keyValues": [],
+  "detectionMitigation": 1,
+  "detection": 10,
+  "origin": "Availability",
+  "name": "46.01 Software is temporarily not available",
+  "potentialCause": "Software is temporarily not available",
+  "detectionMethods": "None",
+  "potentialEffect": "Delay in potential diagnosis",
+  "occurrenceMitigation": 1,
+  "occurrence": 1,
+  "riskDetails": [
+    "protective_measures_in_the_manufacturing_process"
+  ],
+  "remarks": "",
+  "mitigationMethods": [
+    {
+      "method": "Supplier monitoring",
+      "specifications": []
+    }
+  ],
+  "alap": "Currently no other method is known to reduce this risk",
+  "id": "9493",
+  "severity": 8,
+  "potentialFailureMode": "Software error preventing correct use of device"
+}

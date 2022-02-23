@@ -1,0 +1,26 @@
+{
+  "keyValues": [],
+  "detectionMitigation": 5,
+  "detection": 10,
+  "origin": "Storage",
+  "name": "43.01 Integrity issue of app distribution platform",
+  "potentialCause": "Integrity issue of app distribution platform",
+  "detectionMethods": "None",
+  "potentialEffect": "Delay in potential diagnosis",
+  "occurrenceMitigation": 1,
+  "occurrence": 1,
+  "riskDetails": [
+    "protective_measures_in_the_manufacturing_process"
+  ],
+  "remarks": "",
+  "mitigationMethods": [
+    {
+      "method": "Code signing",
+      "specifications": []
+    }
+  ],
+  "alap": "Currently no other method is known to reduce this risk",
+  "id": "F228",
+  "severity": 8,
+  "potentialFailureMode": "Software error preventing correct use of device"
+}

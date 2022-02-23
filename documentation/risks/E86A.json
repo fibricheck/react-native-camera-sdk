@@ -1,0 +1,42 @@
+{
+  "keyValues": [],
+  "detectionMitigation": 5,
+  "detection": 10,
+  "origin": "Providing information for safe use",
+  "name": "23.10 Problems to use the application due to no access of a paper version of the IFU",
+  "potentialCause": "Problems to use the application due to no access of a paper version of the IFU",
+  "detectionMethods": "None",
+  "potentialEffect": "Delay in potential diagnosis",
+  "occurrenceMitigation": 1,
+  "occurrence": 3,
+  "riskDetails": [
+    "inherent_safety_by_design",
+    "information_for_safety"
+  ],
+  "remarks": "IFU in app",
+  "mitigationMethods": [
+    {
+      "method": "IFU in device and on website",
+      "specifications": [
+        "1E74",
+        "0A88"
+      ]
+    },
+    {
+      "method": " Instruction screen",
+      "specifications": [
+        "E249"
+      ]
+    },
+    {
+      "method": "Educational information before usage",
+      "specifications": [
+        "EFEC"
+      ]
+    }
+  ],
+  "alap": "Currently no other method is known to further reduce this risk",
+  "id": "E86A",
+  "severity": 8,
+  "potentialFailureMode": "Improper labeling"
+}

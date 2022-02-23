@@ -1,0 +1,24 @@
+{
+  "keyValues": [],
+  "detectionMitigation": 0,
+  "detection": 10,
+  "origin": "Providing information for safe use",
+  "name": "23.03 Inadequate specification of intended use",
+  "potentialCause": "Inadequate specification of intended use",
+  "detectionMethods": "None",
+  "potentialEffect": "Misuse",
+  "occurrenceMitigation": 0,
+  "occurrence": 1,
+  "riskDetails": [],
+  "remarks": "",
+  "mitigationMethods": [
+    {
+      "method": "",
+      "specifications": []
+    }
+  ],
+  "alap": "Currently no method is known to further reduce this risk",
+  "id": "5D78",
+  "severity": 8,
+  "potentialFailureMode": "Improper labeling"
+}

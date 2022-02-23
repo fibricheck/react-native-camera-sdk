@@ -1,0 +1,26 @@
+{
+  "keyValues": [],
+  "detectionMitigation": 1,
+  "detection": 10,
+  "origin": "Device mobile or portable",
+  "name": "27.04 Device model is not compatible with FibriCheck",
+  "potentialCause": "Device model is not compatible with FibriCheck",
+  "detectionMethods": "None",
+  "potentialEffect": "Delay in potential diagnosis",
+  "occurrenceMitigation": 1,
+  "occurrence": 3,
+  "riskDetails": [
+    "inherent_safety_by_design"
+  ],
+  "remarks": "",
+  "mitigationMethods": [
+    {
+      "method": "Device monitoring",
+      "specifications": []
+    }
+  ],
+  "alap": "Currently no other method is known to reduce this risk",
+  "id": "D418",
+  "severity": 8,
+  "potentialFailureMode": "Hardware error"
+}

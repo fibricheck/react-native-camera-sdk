@@ -1,0 +1,51 @@
+{
+  "keyValues": [],
+  "detectionMitigation": 3,
+  "detection": 10,
+  "origin": "Measurement",
+  "name": "9.01 Poor finger positioning",
+  "potentialCause": "Poor finger positioning",
+  "detectionMethods": "None",
+  "potentialEffect": "Poor quality of measurements",
+  "occurrenceMitigation": 3,
+  "occurrence": 5,
+  "riskDetails": [
+    "information_for_safety",
+    "inherent_safety_by_design"
+  ],
+  "remarks": "",
+  "mitigationMethods": [
+    {
+      "method": "IFU in app",
+      "specifications": [
+        "1E74",
+        "0A88"
+      ]
+    },
+    {
+      "method": "Software detection",
+      "specifications": [
+        "73CA",
+        "7319",
+        "2C9C",
+        "2D3C"
+      ]
+    },
+    {
+      "method": "Instruction screen",
+      "specifications": [
+        "E249"
+      ]
+    },
+    {
+      "method": " Educational information before usage",
+      "specifications": [
+        "EFEC"
+      ]
+    }
+  ],
+  "alap": "Currently no other method is known to further reduce this risk, control system in place to detect if a signal is detected",
+  "id": "C21F",
+  "severity": 3,
+  "potentialFailureMode": "User error"
+}

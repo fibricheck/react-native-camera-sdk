@@ -1,0 +1,24 @@
+{
+  "keyValues": [],
+  "detectionMitigation": 0,
+  "detection": 10,
+  "origin": "Device mobile or portable",
+  "name": "27.02 The Camera SDK does not function properly due to low battery level",
+  "potentialCause": "The Camera SDK does not function properly due to low battery level",
+  "detectionMethods": "None",
+  "potentialEffect": "Delay in potential diagnosis",
+  "occurrenceMitigation": 0,
+  "occurrence": 1,
+  "riskDetails": [],
+  "remarks": "Device will not function properly",
+  "mitigationMethods": [
+    {
+      "method": "",
+      "specifications": []
+    }
+  ],
+  "alap": "Currently no method is known to reduce this risk",
+  "id": "5CC7",
+  "severity": 8,
+  "potentialFailureMode": "Hardware error"
+}

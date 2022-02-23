@@ -1,0 +1,11 @@
+{
+  "id": "RNRC4",
+  "name": "Provide properties",
+  "description": "A lot of parameters can be changed in the camera sdk. When you want to override the default settings (not recommended) you can adjust some of the module's default parameters.",
+  "type": "requirement",
+  "origin": "user_need",
+  "keyValues": [],
+  "attachments": [],
+  "testIds": [],
+  "updatedTime": 1645058126150
+}

@@ -1,0 +1,30 @@
+{
+  "keyValues": [],
+  "detectionMitigation": 1,
+  "detection": 10,
+  "origin": "Device mobile or portable",
+  "name": "27.07 Environmental factors that can impair the hardware to perform the required processing for FibriCheck (i.e. Electromagnetic interference, temperature, moist,…)",
+  "potentialCause": "Environmental factors that can impair the hardware to perform the required processing for FibriCheck (i.e. Electromagnetic interference, temperature, moist,…)",
+  "detectionMethods": "None",
+  "potentialEffect": "Delay in potential diagnosis",
+  "occurrenceMitigation": 1,
+  "occurrence": 1,
+  "riskDetails": [
+    "protective_measures_in_the_manufacturing_process",
+    "inherent_safety_by_design"
+  ],
+  "remarks": "",
+  "mitigationMethods": [
+    {
+      "method": "IFU in app",
+      "specifications": [
+        "0A88",
+        "1E74"
+      ]
+    }
+  ],
+  "alap": "Currently no other method is known to reduce this risk.",
+  "id": "3F6B",
+  "severity": 8,
+  "potentialFailureMode": "Hardware error"
+}

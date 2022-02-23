@@ -1,0 +1,37 @@
+{
+  "keyValues": [],
+  "detectionMitigation": 3,
+  "detection": 10,
+  "origin": "Measurement",
+  "name": "9.03 Unclean fingers",
+  "potentialCause": "Unclean fingers",
+  "detectionMethods": "None",
+  "potentialEffect": "Poor quality of measurements",
+  "occurrenceMitigation": 3,
+  "occurrence": 3,
+  "riskDetails": [
+    "information_for_safety",
+    "inherent_safety_by_design"
+  ],
+  "remarks": "",
+  "mitigationMethods": [
+    {
+      "method": "IFU in app",
+      "specifications": [
+        "1E74",
+        "0A88"
+      ]
+    },
+    {
+      "method": "Software detection",
+      "specifications": [
+        "E249",
+        "7319"
+      ]
+    }
+  ],
+  "alap": "Currently no other method is known to further reduce this risk, control system in place to detect if a signal is detected.",
+  "id": "71DF",
+  "severity": 3,
+  "potentialFailureMode": "User error"
+}
