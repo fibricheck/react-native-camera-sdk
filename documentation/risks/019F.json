@@ -6,19 +6,14 @@
   "name": "27.01 Device failure",
   "potentialCause": "Device failure",
   "detectionMethods": "None",
-  "potentialEffect": "Delay in potential diagnosis",
+  "potentialEffect": "No measurement possible",
   "occurrenceMitigation": 0,
   "occurrence": 1,
   "riskDetails": [],
-  "remarks": "Device will not function properly",
-  "mitigationMethods": [
-    {
-      "method": "",
-      "specifications": []
-    }
-  ],
-  "alap": "Currently no method is known to reduce this risk",
+  "remarks": "",
+  "mitigationMethods": [],
+  "alap": "",
   "id": "019F",
-  "severity": 8,
+  "severity": 1,
   "potentialFailureMode": "Hardware error"
 }

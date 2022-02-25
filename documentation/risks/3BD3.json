@@ -1,28 +1,19 @@
 {
   "keyValues": [],
-  "detectionMitigation": 3,
+  "detectionMitigation": 0,
   "detection": 10,
   "origin": "Software",
   "name": "16.01 Software does not launch",
   "potentialCause": "Software does not launch",
   "detectionMethods": "None",
-  "potentialEffect": "Delay in potential diagnosis",
-  "occurrenceMitigation": 1,
+  "potentialEffect": "No measurement possible",
+  "occurrenceMitigation": 0,
   "occurrence": 1,
-  "riskDetails": [
-    "protective_measures_in_the_manufacturing_process"
-  ],
+  "riskDetails": [],
   "remarks": "",
-  "mitigationMethods": [
-    {
-      "method": "Software testing",
-      "specifications": [
-        "43F5"
-      ]
-    }
-  ],
-  "alap": "Currently no other method is known to further reduce this risk",
+  "mitigationMethods": [],
+  "alap": "",
   "id": "3BD3",
-  "severity": 8,
+  "severity": 1,
   "potentialFailureMode": "Software error preventing correct use of device"
 }

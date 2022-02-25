@@ -1,30 +1,19 @@
 {
   "keyValues": [],
-  "detectionMitigation": 3,
+  "detectionMitigation": 0,
   "detection": 10,
   "origin": "Device mobile or portable",
   "name": "27.06 Inadequate disclosure of limitations",
   "potentialCause": "Inadequate disclosure of limitations",
   "detectionMethods": "None",
-  "potentialEffect": "User over-reliance on device output",
-  "occurrenceMitigation": 1,
+  "potentialEffect": "No measurement possible",
+  "occurrenceMitigation": 0,
   "occurrence": 3,
-  "riskDetails": [
-    "inherent_safety_by_design",
-    "information_for_safety"
-  ],
+  "riskDetails": [],
   "remarks": "",
-  "mitigationMethods": [
-    {
-      "method": "IFU in app",
-      "specifications": [
-        "0A88",
-        "1E74"
-      ]
-    }
-  ],
-  "alap": "Currently no other method is known to reduce this risk",
+  "mitigationMethods": [],
+  "alap": "",
   "id": "A026",
-  "severity": 8,
+  "severity": 1,
   "potentialFailureMode": "Hardware error"
 }

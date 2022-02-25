@@ -1,27 +1,19 @@
 {
   "keyValues": [],
-  "detectionMitigation": 3,
+  "detectionMitigation": 0,
   "detection": 10,
   "origin": "Software",
   "name": "16.13 Memory failure",
   "potentialCause": "Memory failure",
   "detectionMethods": "None",
-  "potentialEffect": "Delay in potential diagnosis",
-  "occurrenceMitigation": 1,
+  "potentialEffect": "No measurement possible",
+  "occurrenceMitigation": 0,
   "occurrence": 3,
-  "riskDetails": [
-    "inherent_safety_by_design",
-    "protective_measures_in_the_manufacturing_process"
-  ],
-  "remarks": "No other method is known to reduce the risk",
-  "mitigationMethods": [
-    {
-      "method": "Device Monitoring",
-      "specifications": []
-    }
-  ],
-  "alap": "Currently no method is known to reduce the risk",
+  "riskDetails": [],
+  "remarks": "",
+  "mitigationMethods": [],
+  "alap": "",
   "id": "3F1F",
-  "severity": 8,
+  "severity": 1,
   "potentialFailureMode": "Software error preventing correct use of device"
 }

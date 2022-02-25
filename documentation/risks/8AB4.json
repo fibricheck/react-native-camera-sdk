@@ -1,41 +1,19 @@
 {
   "keyValues": [],
-  "detectionMitigation": 1,
+  "detectionMitigation": 0,
   "detection": 10,
   "origin": "Errors due to UI design features",
   "name": "24.08 Insufficient visibility, audibility and tactility",
   "potentialCause": "Insufficient visibility, audibility and tactility",
   "detectionMethods": "None",
-  "potentialEffect": "Delay in potential diagnosis",
-  "occurrenceMitigation": 1,
+  "potentialEffect": "Poor quality of measurements",
+  "occurrenceMitigation": 0,
   "occurrence": 3,
-  "riskDetails": [
-    "inherent_safety_by_design"
-  ],
-  "remarks": "Usability studies performed",
-  "mitigationMethods": [
-    {
-      "method": "IFU in app",
-      "specifications": [
-        "0A88",
-        "1E74"
-      ]
-    },
-    {
-      "method": "Instruction screen",
-      "specifications": [
-        "E249"
-      ]
-    },
-    {
-      "method": "Educational information before usage",
-      "specifications": [
-        "EFEC"
-      ]
-    }
-  ],
-  "alap": "Currently no other method is known to further reduce this risk",
+  "riskDetails": [],
+  "remarks": "",
+  "mitigationMethods": [],
+  "alap": "",
   "id": "8AB4",
-  "severity": 8,
+  "severity": 1,
   "potentialFailureMode": "Unclear user interface prevents correct use of device"
 }

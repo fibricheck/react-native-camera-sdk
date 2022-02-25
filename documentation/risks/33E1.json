@@ -1,48 +1,19 @@
 {
   "keyValues": [],
-  "detectionMitigation": 1,
+  "detectionMitigation": 0,
   "detection": 10,
   "origin": "Measurement",
   "name": "9.02 Movements during measurement",
   "potentialCause": "Movements during measurement",
   "detectionMethods": "None",
-  "potentialEffect": "Poor quality of measurements",
-  "occurrenceMitigation": 5,
+  "potentialEffect": "No measurement possible",
+  "occurrenceMitigation": 0,
   "occurrence": 5,
-  "riskDetails": [
-    "information_for_safety",
-    "inherent_safety_by_design"
-  ],
+  "riskDetails": [],
   "remarks": "",
-  "mitigationMethods": [
-    {
-      "method": "IFU in app",
-      "specifications": [
-        "1E74",
-        "0A88"
-      ]
-    },
-    {
-      "method": "Software detection",
-      "specifications": [
-        "2D3C"
-      ]
-    },
-    {
-      "method": "Instruction screen",
-      "specifications": [
-        "E249"
-      ]
-    },
-    {
-      "method": "Educational information before usage",
-      "specifications": [
-        "EFEC"
-      ]
-    }
-  ],
-  "alap": "Currently no other method is known to further reduce this risk, control system in place to detect if the signal is not good enough for analysis",
+  "mitigationMethods": [],
+  "alap": "",
   "id": "33E1",
-  "severity": 3,
+  "severity": 1,
   "potentialFailureMode": "User error"
 }
