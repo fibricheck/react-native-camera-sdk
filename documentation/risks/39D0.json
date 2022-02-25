@@ -1,32 +1,19 @@
 {
   "keyValues": [],
-  "detectionMitigation": 3,
+  "detectionMitigation": 0,
   "detection": 10,
   "origin": "Device mobile or portable",
   "name": "27.03 Flash/LED gets too hot",
   "potentialCause": "Flash/LED gets too hot",
   "detectionMethods": "None",
-  "potentialEffect": "Delay in potential diagnosis",
-  "occurrenceMitigation": 3,
+  "potentialEffect": "No measurement possible",
+  "occurrenceMitigation": 0,
   "occurrence": 3,
-  "riskDetails": [
-    "inherent_safety_by_design",
-    "information_for_safety"
-  ],
-  "remarks": "Monitoring in place",
-  "mitigationMethods": [
-    {
-      "method": "Instruction screen",
-      "specifications": [
-        "E249"
-      ]
-    },
-    {
-      "method": "Device monitoring"
-    }
-  ],
-  "alap": "Currently no other method is known to reduce this risk",
+  "riskDetails": [],
+  "remarks": "",
+  "mitigationMethods": [],
+  "alap": "",
   "id": "39D0",
-  "severity": 8,
+  "severity": 1,
   "potentialFailureMode": "Hardware limitation"
 }

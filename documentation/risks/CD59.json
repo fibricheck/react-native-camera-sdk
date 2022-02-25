@@ -1,47 +1,19 @@
 {
   "keyValues": [],
-  "detectionMitigation": 5,
+  "detectionMitigation": 0,
   "detection": 10,
   "origin": "Measurement",
   "name": "9.08 SUT is speaking during measurement",
   "potentialCause": "SUT is speaking during measurement",
   "detectionMethods": "None",
   "potentialEffect": "Poor quality of measurements",
-  "occurrenceMitigation": 3,
+  "occurrenceMitigation": 0,
   "occurrence": 5,
-  "riskDetails": [
-    "inherent_safety_by_design"
-  ],
+  "riskDetails": [],
   "remarks": "",
-  "mitigationMethods": [
-    {
-      "method": "IFU in app",
-      "specifications": [
-        "1E74",
-        "0A88"
-      ]
-    },
-    {
-      "method": "Software detection ",
-      "specifications": [
-        "2D3C"
-      ]
-    },
-    {
-      "method": "Instruction screen",
-      "specifications": [
-        "E249"
-      ]
-    },
-    {
-      "method": "Educational information before usage",
-      "specifications": [
-        "EFEC"
-      ]
-    }
-  ],
-  "alap": "Currently no other method is known to further reduce this risk, control system in place to detect if a signal is detected",
+  "mitigationMethods": [],
+  "alap": "",
   "id": "CD59",
-  "severity": 3,
+  "severity": 1,
   "potentialFailureMode": "User error"
 }

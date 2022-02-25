@@ -1,41 +1,19 @@
 {
   "keyValues": [],
-  "detectionMitigation": 5,
+  "detectionMitigation": 0,
   "detection": 10,
   "origin": "Test subject environment",
   "name": "8.01 Too much ambient noise to perform a high quality measurement",
   "potentialCause": "Too much ambient noise to perform a high quality measurement",
   "detectionMethods": "None",
   "potentialEffect": "Poor quality of measurements",
-  "occurrenceMitigation": 1,
+  "occurrenceMitigation": 0,
   "occurrence": 3,
-  "riskDetails": [
-    "inherent_safety_by_design"
-  ],
+  "riskDetails": [],
   "remarks": "",
-  "mitigationMethods": [
-    {
-      "method": "IFU in app",
-      "specifications": [
-        "0A88",
-        "1E74"
-      ]
-    },
-    {
-      "method": "Software detection",
-      "specifications": [
-        "2D3C"
-      ]
-    },
-    {
-      "method": "Educational information",
-      "specifications": [
-        "EFEC"
-      ]
-    }
-  ],
-  "alap": "Currently no other method is known to further reduce this risk, control system in place to detect if the signal is not good enough for analysis",
+  "mitigationMethods": [],
+  "alap": "",
   "id": "E007",
-  "severity": 3,
+  "severity": 1,
   "potentialFailureMode": "Errors related to environment of use"
 }

@@ -1,26 +1,19 @@
 {
   "keyValues": [],
-  "detectionMitigation": 1,
+  "detectionMitigation": 0,
   "detection": 10,
   "origin": "Device mobile or portable",
   "name": "27.05 Processor of device is overloaded",
   "potentialCause": "Processor of device is overloaded",
   "detectionMethods": "None",
-  "potentialEffect": "Delay in potential diagnosis",
-  "occurrenceMitigation": 3,
+  "potentialEffect": "No measurement possible",
+  "occurrenceMitigation": 0,
   "occurrence": 3,
-  "riskDetails": [
-    "inherent_safety_by_design"
-  ],
+  "riskDetails": [],
   "remarks": "",
-  "mitigationMethods": [
-    {
-      "method": "Software detection",
-      "specifications": []
-    }
-  ],
-  "alap": "Currently no other method is known to reduce this risk",
+  "mitigationMethods": [],
+  "alap": "",
   "id": "DE8B",
-  "severity": 8,
+  "severity": 1,
   "potentialFailureMode": "Hardware error"
 }

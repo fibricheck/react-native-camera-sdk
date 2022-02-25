@@ -1,53 +1,19 @@
 {
   "keyValues": [],
-  "detectionMitigation": 3,
+  "detectionMitigation": 0,
   "detection": 10,
   "origin": "User",
   "name": "1.03 Misinterpretations of the product claims",
   "potentialCause": "Misinterpretations of the product claims",
   "detectionMethods": "None",
-  "potentialEffect": "User over-reliance on device output",
-  "occurrenceMitigation": 1,
+  "potentialEffect": "No measurement possible",
+  "occurrenceMitigation": 0,
   "occurrence": 3,
-  "riskDetails": [
-    "inherent_safety_by_design"
-  ],
-  "remarks": "App description in Store",
-  "mitigationMethods": [
-    {
-      "method": "IFU in app",
-      "specifications": [
-        "1E74",
-        "0A88"
-      ]
-    },
-    {
-      "method": "ToS during registration",
-      "specifications": [
-        "FD37"
-      ]
-    },
-    {
-      "method": "Instruction screen",
-      "specifications": [
-        "E249"
-      ]
-    },
-    {
-      "method": "Pop-up message",
-      "specifications": [
-        "CDDC"
-      ]
-    },
-    {
-      "method": "Measurement details",
-      "specifications": [
-        "8AED"
-      ]
-    }
-  ],
-  "alap": "Currently no other method is known to further reduce this risk",
+  "riskDetails": [],
+  "remarks": "",
+  "mitigationMethods": [],
+  "alap": "",
   "id": "3EE7",
-  "severity": 8,
+  "severity": 1,
   "potentialFailureMode": "Misinterpretation of intended use"
 }

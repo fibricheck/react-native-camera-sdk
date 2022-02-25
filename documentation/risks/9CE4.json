@@ -1,42 +1,19 @@
 {
   "keyValues": [],
-  "detectionMitigation": 3,
+  "detectionMitigation": 0,
   "detection": 10,
   "origin": "Test subject environment",
   "name": "8.02 The Camera SDK is used during activities that require undivided attention (e.g. driving, flying..)",
   "potentialCause": "The Camera SDK is used during activities that require undivided attention (e.g. driving, flying..)",
   "detectionMethods": "None",
   "potentialEffect": "Poor quality of measurements",
-  "occurrenceMitigation": 1,
+  "occurrenceMitigation": 0,
   "occurrence": 3,
-  "riskDetails": [
-    "inherent_safety_by_design"
-  ],
+  "riskDetails": [],
   "remarks": "",
-  "mitigationMethods": [
-    {
-      "method": "IFU in app",
-      "specifications": [
-        "1E74",
-        "0A88"
-      ]
-    },
-    {
-      "method": "Software detection ",
-      "specifications": [
-        "2D3C",
-        "2C9C"
-      ]
-    },
-    {
-      "method": "Educational information before usage",
-      "specifications": [
-        "EFEC"
-      ]
-    }
-  ],
-  "alap": "Currently no other method is known to further reduce this risk, control system in place to detect if the signal is not good enough for analysis",
+  "mitigationMethods": [],
+  "alap": "",
   "id": "9CE4",
-  "severity": 3,
+  "severity": 1,
   "potentialFailureMode": "Errors related to environment of use"
 }

@@ -1,29 +1,19 @@
 {
   "keyValues": [],
-  "detectionMitigation": 1,
+  "detectionMitigation": 0,
   "detection": 10,
   "origin": "Software",
   "name": "16.12 Changes or updates in Operating System",
   "potentialCause": "Changes or updates in Operating System",
   "detectionMethods": "None",
-  "potentialEffect": "Delay in potential diagnosis",
-  "occurrenceMitigation": 3,
+  "potentialEffect": "No measurement possible",
+  "occurrenceMitigation": 0,
   "occurrence": 3,
-  "riskDetails": [
-    "inherent_safety_by_design",
-    "protective_measures_in_the_manufacturing_process"
-  ],
+  "riskDetails": [],
   "remarks": "",
-  "mitigationMethods": [
-    {
-      "method": "Software testing",
-      "specifications": [
-        "8289"
-      ]
-    }
-  ],
-  "alap": "Currently no other method is known to further reduce this risk",
+  "mitigationMethods": [],
+  "alap": "",
   "id": "CD35",
-  "severity": 8,
+  "severity": 1,
   "potentialFailureMode": "Software error preventing correct use of device"
 }
