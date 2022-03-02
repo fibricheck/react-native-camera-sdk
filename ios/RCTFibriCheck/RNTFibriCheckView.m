@@ -8,6 +8,10 @@
   return self;
 }
 
+- (void)didSetProps:(NSArray<NSString *> *)changedProps {
+    [self.delegate startMeasurement];
+}
+
 - (id)initWithFrame:(CGRect)frame {
   self = [super initWithFrame:frame];
   if (self) {
