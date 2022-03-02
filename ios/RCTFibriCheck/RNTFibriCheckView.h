@@ -14,6 +14,7 @@
 - (void) stopCamera;
 - (void) drawGraphPoint;
 - (void) addPoint;
+- (void) startMeasurement;
 @end
 
 @interface RNTFibriCheckView : UIView {
