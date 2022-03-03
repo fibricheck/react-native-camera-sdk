@@ -10,9 +10,9 @@
   "occurrenceMitigation": 0,
   "occurrence": 3,
   "riskDetails": [],
-  "remarks": "",
+  "remarks": "Contractual agreements with 3rd parties.",
   "mitigationMethods": [],
-  "alap": "",
+  "alap": "Currently no method is known to reduce this risk",
   "id": "A026",
   "severity": 1,
   "potentialFailureMode": "Hardware error"

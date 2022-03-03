@@ -30,7 +30,8 @@
     }
   },
   "gf161": {
-    "isPresent": false
+    "isPresent": false,
+    "rationale": "See GF161 below."
   },
   "gl016": {
     "isPresent": false

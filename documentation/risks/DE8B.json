@@ -12,7 +12,7 @@
   "riskDetails": [],
   "remarks": "",
   "mitigationMethods": [],
-  "alap": "",
+  "alap": "Currently no method is known to reduce this risk",
   "id": "DE8B",
   "severity": 1,
   "potentialFailureMode": "Hardware error"
