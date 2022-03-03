@@ -1,0 +1,13 @@
+{
+  "id": "G2CQV",
+  "name": "The visualisations will take in account the provided properties",
+  "description": "The following visualisation properties can be provided: \n- graphBackgroundColor\n- drawGraph \n- lineColor \n- lineThickness \n- drawBackground",
+  "type": "specification",
+  "origin": "user_need",
+  "keyValues": [],
+  "attachments": [],
+  "testIds": [
+    "FNTMY"
+  ],
+  "updatedTime": 1645641931022
+}

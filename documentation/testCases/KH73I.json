@@ -1,0 +1,22 @@
+{
+  "id": "KH73I",
+  "name": "onFingerDetected & onFingerRemoved can be fired during the whole measurement sequence",
+  "type": "manual",
+  "tier": "System - Smoke",
+  "planStatus": "Planned",
+  "motivation": "",
+  "testSteps": [
+    "Take a measurement",
+    "Remove finger from camera in any step of the measurement process",
+    "Put finger back on the camera"
+  ],
+  "expectedResult": "onFingerDetected and onFingerRemoved are fired at the correct time",
+  "requiredTestEnvironmentIds": [],
+  "keyValues": [],
+  "parentNames": [
+    "Execute a measurement",
+    "Data exchange",
+    "Active listeners during the whole lifecycle"
+  ],
+  "updatedTime": 1645580187064
+}
