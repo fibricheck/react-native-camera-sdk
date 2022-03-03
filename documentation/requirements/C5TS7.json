@@ -1,0 +1,13 @@
+{
+  "id": "C5TS7",
+  "name": "[Graph Settings] graphBackgroundColor - drawGraph - lineColor - lineThickness - drawBackground",
+  "description": "These properties affects the visualisation of the graph component\n\n- *graphBackgroundColor*: Determines the color of the area under the graph. By default, this color is omitted. The backgroundColor is thus displayed under the graph.\n- *drawGraph*: When enabled the component draws a graph of the recorded PPG signal.\n- *lineColor*: Determines the color of the graph line.\n- *lineThickness*: Determines the thickness of the graph line.\n- *drawBackground*: When enabled, the component will draw a background for the graph\n",
+  "type": "specification",
+  "origin": "user_need",
+  "keyValues": [],
+  "attachments": [],
+  "testIds": [
+    "IRCTM"
+  ],
+  "updatedTime": 1645605029272
+}

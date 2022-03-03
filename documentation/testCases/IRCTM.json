@@ -1,0 +1,20 @@
+{
+  "id": "IRCTM",
+  "name": "Check if the graph settings can be provided as properties",
+  "type": "manual",
+  "tier": "System - Smoke",
+  "planStatus": "Planned",
+  "motivation": "",
+  "testSteps": [
+    "Create a component and provide the graph properties: \n\n- graphBackgroundColor\n- drawGraph\n- lineColor\n- lineThickness \n- drawBackground"
+  ],
+  "expectedResult": "Component is rendered",
+  "requiredTestEnvironmentIds": [],
+  "keyValues": [],
+  "parentNames": [
+    "Initialize the camera sdk",
+    "Provide properties",
+    "[Graph Settings] graphBackgroundColor - drawGraph - lineColor - lineThickness - drawBackground"
+  ],
+  "updatedTime": 1645605195402
+}

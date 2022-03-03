@@ -1,0 +1,22 @@
+{
+  "id": "6NSVH",
+  "name": "Check if a component is renderd",
+  "type": "manual",
+  "tier": "System - Smoke",
+  "planStatus": "Planned",
+  "motivation": "",
+  "testSteps": [
+    "Import camera component",
+    "Provide camera permissions",
+    "Try to render the compenent with this snippet: \n```\n<RNFibriCheckView\n    style={{ flex: 1, backgroundColor: '#ffffff' }}\n    onFingerDetected={() => console.log('finger detected')}\n    onFingerRemoved={() => console.log('finger removed')}\n    onCalibrationReady={() => console.log('calibration ready')}\n    onMeasurementFinished={() => console.log('measurement finished')}\n    onMeasurementStart={() => console.log('measurement recording started')}\n    onFingerDetectionTimeExpired={() =>\n        console.log('finger detection time expired')\n    }\n    onPulseDetected={() => console.log('pulse detected')}\n    onPulseDetectionTimeExpired={() =>\n        console.log('pulse detection time is expired')\n    }\n    onMovementDetected={() => console.log('movement detected')}\n    onHeartBeat={(heartRate) => console.log(`current heart rate: ${heartRate}`)}\n    onTimeRemaining={(seconds) => console.log(`time remaining: ${seconds}`)}\n    onMeasurementProcessed={(data) =>\n        console.log('measurement processed and ready to send!');\n    }\n/>\n```"
+  ],
+  "expectedResult": "Component is rendered",
+  "requiredTestEnvironmentIds": [],
+  "keyValues": [],
+  "parentNames": [
+    "Execute a measurement",
+    "Initialize a measurement",
+    "Render component"
+  ],
+  "updatedTime": 1645093045519
+}

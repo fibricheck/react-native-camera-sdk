@@ -1,0 +1,11 @@
+{
+  "id": "4ILQF",
+  "name": "Initialize the camera sdk",
+  "description": "When initializing the Camera SDK,  Multiple properties and listeners can be adjusted/attached for improving the visualization/customization of the process.",
+  "type": "user_need",
+  "origin": "user_need",
+  "keyValues": [],
+  "attachments": [],
+  "testIds": [],
+  "updatedTime": 1645062564979
+}

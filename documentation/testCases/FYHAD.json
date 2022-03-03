@@ -1,0 +1,20 @@
+{
+  "id": "FYHAD",
+  "name": "Check if the measurement settings are applied to the measurement",
+  "type": "manual",
+  "tier": "System - Smoke",
+  "planStatus": "Planned",
+  "motivation": "",
+  "testSteps": [
+    "Create a component and provide these values:\n- sampleTime -> 60\n- flashEnabled -> true\n- waitForStartRecordingSignal -> false\n- fingerDetectionExpiryTime -> 10"
+  ],
+  "expectedResult": "The component is rendered with the provided values",
+  "requiredTestEnvironmentIds": [],
+  "keyValues": [],
+  "parentNames": [
+    "Execute a measurement",
+    "Visualisations",
+    "The visualisations will take in account the measurement settings"
+  ],
+  "updatedTime": 1645605624453
+}

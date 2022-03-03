@@ -1,0 +1,20 @@
+{
+  "id": "HMSNY",
+  "name": "Check if pulse detection callbacks can be provided",
+  "type": "manual",
+  "tier": "System - Smoke",
+  "planStatus": "Planned",
+  "motivation": "",
+  "testSteps": [
+    "Create a component and provide these callbacks:\n\n- onPulseDetected \n- onPulseDetectionTimeExpired"
+  ],
+  "expectedResult": "Component is rendered",
+  "requiredTestEnvironmentIds": [],
+  "keyValues": [],
+  "parentNames": [
+    "Initialize the camera sdk",
+    "Provide callback functions to event listeners",
+    "[Pulse detection] onPulseDetected - onPulseDetectionTimeExpired"
+  ],
+  "updatedTime": 1645606151010
+}

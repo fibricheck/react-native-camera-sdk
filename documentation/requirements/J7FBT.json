@@ -1,0 +1,13 @@
+{
+  "id": "J7FBT",
+  "name": "Visualisations are natively rendered in the component",
+  "description": "All the visualisations are natively rendered, so it won't affect the JS bridge.  This will benefit the performance greatly.",
+  "type": "specification",
+  "origin": "user_need",
+  "keyValues": [],
+  "attachments": [],
+  "testIds": [
+    "0YORY"
+  ],
+  "updatedTime": 1645581118624
+}

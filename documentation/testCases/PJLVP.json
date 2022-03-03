@@ -1,0 +1,20 @@
+{
+  "id": "PJLVP",
+  "name": "Check if the styling settings can be provided as properties",
+  "type": "manual",
+  "tier": "System - Smoke",
+  "planStatus": "Planned",
+  "motivation": "",
+  "testSteps": [
+    "Create a component and provide this styling property:\n\n- style"
+  ],
+  "expectedResult": "Component is rendered",
+  "requiredTestEnvironmentIds": [],
+  "keyValues": [],
+  "parentNames": [
+    "Initialize the camera sdk",
+    "Provide properties",
+    "[Styling Settings] style"
+  ],
+  "updatedTime": 1645605923256
+}

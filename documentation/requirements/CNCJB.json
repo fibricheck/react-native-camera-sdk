@@ -1,0 +1,13 @@
+{
+  "id": "CNCJB",
+  "name": "[Styling Settings] style",
+  "description": "Add custom styling to the component. As a default, `{ flex: 1, backgroundColor: '#ffffff' }` is used.\n\nWhen customizing this, make sure to always add a backgroundColor!\n\n\n",
+  "type": "specification",
+  "origin": "user_need",
+  "keyValues": [],
+  "attachments": [],
+  "testIds": [
+    "PJLVP"
+  ],
+  "updatedTime": 1645605958091
+}
