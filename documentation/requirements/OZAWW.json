@@ -1,0 +1,13 @@
+{
+  "id": "OZAWW",
+  "name": "The visualisations will take in account the measurement settings",
+  "description": "The following measurement settings properties can be provided: \n- sampleTime \n- flashEnabled \n- waitForStartRecordingSignal \n- fingerDetectionExpiryTime",
+  "type": "specification",
+  "origin": "user_need",
+  "keyValues": [],
+  "attachments": [],
+  "testIds": [
+    "FYHAD"
+  ],
+  "updatedTime": 1645605548626
+}

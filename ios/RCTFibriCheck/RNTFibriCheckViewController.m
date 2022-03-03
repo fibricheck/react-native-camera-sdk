@@ -63,6 +63,10 @@
   [super viewDidLoad];
   self.fibrichecker = [FibriChecker new];
   [self addListeners];
+}
+
+- (void)startMeasurement {
+  NSLog(@"startMeasurement");
   [_fibrichecker startMeasurement];
 }
 

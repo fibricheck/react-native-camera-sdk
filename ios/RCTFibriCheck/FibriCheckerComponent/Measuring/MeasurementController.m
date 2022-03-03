@@ -259,9 +259,12 @@
                 _state = MeasurementControllerStateFinished;
             }
             if (_previousState != MeasurementControllerStateRecording) {
+                _measurement = [[Measurement alloc] initWithConfig:[self configImageProcessor]];
                 _recordingStartTime = currentTime;
+
                 [self notifyDelegateDidStartRecording];
                 [self notifyDelegateDidChangeState: MeasurementControllerStateRecording];
+                
                 _previousState = MeasurementControllerStateRecording;
             }
 
@@ -328,7 +331,8 @@
 - (void) detectMovementWithAccX: (float) accx accY:(float)accy accZ:(float)accz {
     if (self.movementDetectionEnabled) {
         double acc_vec =  sqrt( pow(accx,2) + pow(accy,2) + pow(accz,2) );
-        if (acc_vec > self.movementVectorUpperLimit || acc_vec < self.movementVectorLowerLimit) {
+        
+        if (acc_vec != 0 && (acc_vec > self.movementVectorUpperLimit || acc_vec < self.movementVectorLowerLimit)) {
             self.state = MeasurementControllerStateDetectingFinger;
             [self notifyDelegateDidReceiveMovement];
         }

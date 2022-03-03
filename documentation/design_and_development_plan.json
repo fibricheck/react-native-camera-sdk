@@ -1,0 +1,89 @@
+{
+  "createdTime": 1644919253201,
+  "updatedTime": 1644919253201,
+  "initiatingDate": "2021/11/15",
+  "projectTeam": {
+    "projectManager": "Inge Liebens",
+    "regulatoryAnalyst": "Jo Van der Auwera",
+    "reviewTeamMember": "Inge Liebens\n\nThomas Reyskens\n\nJo Van der Auwera\n",
+    "developmentTeam": "Thomas Reyskens\n",
+    "riskAnalyst": "Jo Van der Auwera\n"
+  },
+  "initialRiskAnalysis": {
+    "gf180": "https://drive.google.com/open?id=1HXP3TGakoyx-ZALHrCj5tz6LSlL39v8d&authuser=jo.vanderauwera%40fibricheck.com&usp=drive_fs",
+    "gf181": "https://drive.google.com/open?id=1K7ho06-7yQ42wxjuoPvqdgx5zFqF0qMj&authuser=jo.vanderauwera%40fibricheck.com&usp=drive_fs",
+    "gf182": "https://drive.google.com/open?id=1K4j3IGTdVASPQh7KoycNXYFU-klmiRDg&authuser=jo.vanderauwera%40fibricheck.com&usp=drive_fs",
+    "linkToTicket": "https://qompium.atlassian.net/browse/FIBSDK-5?jql=project%20%3D%20%22FIBSDK%22%20AND%20fixVersion%20%3D%20%221.0.6%22"
+  },
+  "validationPlanning": {
+    "gf130": {
+      "isPresent": false,
+      "rationale": "No usability validation required for this component as it is part of a larger solution which requires validation."
+    },
+    "gf120": {
+      "isPresent": false,
+      "rationale": "No clinical validation required as this is only a recording component."
+    },
+    "performanceTesting": {
+      "isPresent": false,
+      "rationale": "No performance or bench testing is required as only PPG signals are recorded."
+    }
+  },
+  "gf161": {
+    "isPresent": false,
+    "rationale": "See GF161 below."
+  },
+  "gl016": {
+    "isPresent": false
+  },
+  "gf164": {
+    "isPresent": false
+  },
+  "gf165": {
+    "isPresent": false
+  },
+  "gf166": {
+    "isPresent": false
+  },
+  "gf168": {
+    "isPresent": false
+  },
+  "gf1612": {
+    "isPresent": false
+  },
+  "gf182": {
+    "isPresent": false
+  },
+  "gf183": {
+    "isPresent": false
+  },
+  "gf250": {
+    "isPresent": false
+  },
+  "instructionsForUse": {
+    "isPresent": false
+  },
+  "gf131": {
+    "isPresent": false
+  },
+  "gf121": {
+    "isPresent": false
+  },
+  "performanceTesting": {
+    "isPresent": false
+  },
+  "gf169": {
+    "isPresent": false
+  },
+  "projectScope": "This is the first version of the React Native Camera SDK. It is a component that is already included in the FibriCheck React Native component, but now documented independently. \n\nThe component is responsible for extraction of the PPG signal on a mobile phone and can be seen as the core measurement component.",
+  "gf151": "https://drive.google.com/open?id=1HUrv5JltD2NJlBeczT_X__mcaDBUYWAZ&authuser=jo.vanderauwera%40fibricheck.com&usp=drive_fs",
+  "regulatoryRequirements": "Regulatory requirements are not affected by separate documentation of the measurement component.",
+  "gf172": {
+    "isPresent": false
+  },
+  "gf173": {
+    "isPresent": false
+  },
+  "releaseLink": "https://qompium.atlassian.net/issues/?jql=project%20%3D%20%22FIBSDK%22%20AND%20fixVersion%20%3D%20%221.0.6%22",
+  "gf163": "https://drive.google.com/open?id=1HWQxl25C_XnYxtT--uW8hPCrv8UFCtF0&authuser=jo.vanderauwera%40fibricheck.com&usp=drive_fs"
+}

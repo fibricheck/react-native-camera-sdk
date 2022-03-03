@@ -1,0 +1,20 @@
+{
+  "id": "Q4VAU",
+  "name": "Component doesn't render when no permissions are given",
+  "type": "manual",
+  "tier": "System - Smoke",
+  "planStatus": "Inherited",
+  "motivation": "",
+  "testSteps": [
+    "Load the camera component when no permissions are given"
+  ],
+  "expectedResult": "Component doesn't render\n",
+  "requiredTestEnvironmentIds": [],
+  "keyValues": [],
+  "parentNames": [
+    "Initialize the camera sdk",
+    "Provide permissions",
+    ""
+  ],
+  "updatedTime": 1645581942289
+}

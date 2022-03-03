@@ -22,6 +22,7 @@
 #pragma mark - Public
 
 - (instancetype)init {
+    NSLog(@"FibriChecker init");
     self = [super init];
     if (self) {
         self.measurementController = [MeasurementController new];
