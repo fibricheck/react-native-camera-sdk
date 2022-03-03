@@ -11,8 +11,12 @@
   "occurrence": 3,
   "riskDetails": [],
   "remarks": "",
-  "mitigationMethods": [],
-  "alap": "",
+  "mitigationMethods": [
+    {
+      "method": ""
+    }
+  ],
+  "alap": "Currently no method is known to reduce this risk",
   "id": "1C18",
   "severity": 1,
   "potentialFailureMode": "Hardware error"

@@ -12,7 +12,7 @@
   "riskDetails": [],
   "remarks": "",
   "mitigationMethods": [],
-  "alap": "",
+  "alap": "Currently no method is known to reduce this risk",
   "id": "39D0",
   "severity": 1,
   "potentialFailureMode": "Hardware limitation"

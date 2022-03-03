@@ -12,7 +12,7 @@
   "riskDetails": [],
   "remarks": "",
   "mitigationMethods": [],
-  "alap": "",
+  "alap": "Currently no method is known to reduce this risk",
   "id": "3F1F",
   "severity": 1,
   "potentialFailureMode": "Software error preventing correct use of device"

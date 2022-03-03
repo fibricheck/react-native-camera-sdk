@@ -1,18 +1,25 @@
 {
   "keyValues": [],
-  "detectionMitigation": 0,
+  "detectionMitigation": 3,
   "detection": 10,
   "origin": "Measurement",
   "name": "9.07 SUT with conditions that impact the blood circulation in the fingers (e.g perniosis, cold fingers..)",
   "potentialCause": "SUT with conditions that impact the blood circulation in the fingers (e.g perniosis, cold fingers..)",
   "detectionMethods": "None",
   "potentialEffect": "Poor quality of measurements",
-  "occurrenceMitigation": 0,
+  "occurrenceMitigation": 3,
   "occurrence": 3,
-  "riskDetails": [],
+  "riskDetails": [
+    "inherent_safety_by_design",
+    "protective_measures_in_the_manufacturing_process"
+  ],
   "remarks": "",
-  "mitigationMethods": [],
-  "alap": "",
+  "mitigationMethods": [
+    {
+      "method": "Finger detection"
+    }
+  ],
+  "alap": "Currently no other method is known to further reduce this risk",
   "id": "AEF3",
   "severity": 1,
   "potentialFailureMode": "User error"

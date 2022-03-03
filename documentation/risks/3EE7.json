@@ -10,9 +10,9 @@
   "occurrenceMitigation": 0,
   "occurrence": 3,
   "riskDetails": [],
-  "remarks": "",
+  "remarks": "Contractual agreements with 3rd parties, if necessary.",
   "mitigationMethods": [],
-  "alap": "",
+  "alap": "Currently no method is known to further reduce this risk",
   "id": "3EE7",
   "severity": 1,
   "potentialFailureMode": "Misinterpretation of intended use"
