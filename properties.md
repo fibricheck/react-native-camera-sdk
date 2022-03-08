@@ -78,10 +78,12 @@ When enabled and supported by the device, the measurement result will hold accel
 ```tsx
 <RNFibriCheckView
     ...
-    accEnabled={false};
+    accEnabled={true};
     ...
 />
 ```
+
+_In some cases it might be useful to disable the accelerometer by setting `accEnabled={false}`. This prevents movement detection from happening and is what we call `debug mode`._
 
 ### rotationEnabled
 
@@ -90,7 +92,7 @@ When enabled and supported by the device, the measurement result will hold rotat
 ```tsx
 <RNFibriCheckView
     ...
-    rotationEnabled={false};
+    rotationEnabled={true};
     ...
 />
 ```
