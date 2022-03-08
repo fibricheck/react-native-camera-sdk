@@ -78,12 +78,10 @@ When enabled and supported by the device, the measurement result will hold accel
 ```tsx
 <RNFibriCheckView
     ...
-    accEnabled={true};
+    accEnabled={false};
     ...
 />
 ```
-
-_In some cases it might be useful to disable the accelerometer by setting `accEnabled={false}`. This prevents movement detection from happening and is what we call `debug mode`._
 
 ### rotationEnabled
 
@@ -110,6 +108,8 @@ The detection will trigger when the movement vector is lower than 6 or higher th
     ...
 />
 ```
+
+_In some cases it might be useful to disable the accelerometer by setting_ `movementDetectionEnable={false}`. _This prevents movement detection from happening and is what we call `debug mode`._
 
 ### fingerDetectionExpiryTime
 
