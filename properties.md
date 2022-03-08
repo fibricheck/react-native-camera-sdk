@@ -109,7 +109,7 @@ The detection will trigger when the movement vector is lower than 6 or higher th
 />
 ```
 
-_In some cases it might be useful to disable the accelerometer by setting_ `movementDetectionEnable={false}`. _This prevents movement detection from happening and is what we call `debug mode`._
+_In some cases it might be useful to disable movement detection by setting_ `movementDetectionEnable={false}`. _This prevents movement detection from happening and is what we call `debug mode`._
 
 ### fingerDetectionExpiryTime
 
