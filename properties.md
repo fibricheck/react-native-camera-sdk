@@ -111,11 +111,25 @@ The detection will trigger when the movement vector is lower than 6 or higher th
 
 _In some cases it might be useful to disable movement detection by setting_ `movementDetectionEnable={false}`. _This prevents movement detection from happening and is what we call `debug mode`._
 
+### pulseDetectionExpiryTime
+
+The time until the pulse detection will trigger the `onPulseDetectionTimeExpired`() event.
+
+By default this value is 10.
+
+```tsx
+<RNFibriCheckView
+    ...
+    pulseDetectionExpiryTime={10};
+    ...
+/>
+```
+
 ### fingerDetectionExpiryTime
 
 The time until the finger detection will trigger the `onFingerDetectionTimeExpired`() event.
 
-By Default this value is `-1`, which indicates that it will keep waiting until a finger is detected
+By default this value is `-1`, which indicates that it will keep waiting until a pulse is detected
 
 ```tsx
 <RNFibriCheckView
