@@ -44,11 +44,15 @@ typedef NS_ENUM(NSInteger, MeasurementControllerEvent) {
 @property (assign) BOOL waitForStartRecordingSignal;
 @property (assign) BOOL flashEnabled;
 @property (assign) BOOL movementDetectionEnabled;
+@property (assign) BOOL skippedMovementDetection;
+@property (assign) BOOL skippedPulseDetection;
+@property (assign) BOOL skippedFingerDetection;
 @property (assign) BOOL gyroEnabled;
 @property (assign) BOOL accEnabled;
 @property (assign) BOOL gravEnabled;
 @property (assign) BOOL rotationEnabled;
 @property (assign) NSUInteger sampleTime;
+@property (assign) NSUInteger attempts;
 @property (assign) NSUInteger pulseDetectionExpiryTime;
 @property (assign) NSUInteger fingerDetectionExpiryTime;
 @property (assign) NSUInteger quadrantRows;

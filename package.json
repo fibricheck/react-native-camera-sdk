@@ -16,7 +16,8 @@
     "build": "tsc --project tsconfig.json",
     "prepare": "yarn build",
     "lint": "eslint src/**/*.{ts,tsx}",
-    "lint-fix": "yarn lint --quiet --fix"
+    "lint-fix": "yarn lint --quiet --fix",
+    "postinstall": "sh ./scripts/get_version.sh"
   },
   "files": [
     "build",

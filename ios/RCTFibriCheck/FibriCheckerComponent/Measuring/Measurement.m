@@ -144,14 +144,19 @@
 
     meaModel[@"quadrants"] = quadrants;
 
-    // ppg
     meaModel[@"ppg"] = @{@"frequency":frequency, @"signal":_ppg};
 
-    // time
     meaModel[@"time"] = _time;
 
-    // heart rate
     meaModel[@"heartRate"] = @(_heartRate);
+
+    meaModel[@"attempts"] = @(_attempts);
+
+    meaModel[@"skippedMovementDetection"] = _skippedMovementDetection;
+
+    meaModel[@"skippedPulseDetection"] = _skippedPulseDetection;
+
+    meaModel[@"skippedFingerDetection"] = _skippedFingerDetection;
 
     return [meaModel copy];
 }
