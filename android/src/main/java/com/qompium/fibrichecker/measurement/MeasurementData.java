@@ -14,6 +14,8 @@ public class MeasurementData implements Serializable {
 
   public double heartrate;
 
+  public int attempts;
+
   public List<List<YuvList>> quadrants;
 
   public HashMap<String, Object> technicalDetails;
@@ -27,6 +29,12 @@ public class MeasurementData implements Serializable {
   public MotionData grav;
 
   public MotionData gyro;
+
+  public boolean skippedPulseDetection = false;
+
+  public boolean skippedFingerDetection = false;
+
+  public boolean skippedMovementDetection = false;
 
   public Number measurementTimestamp;
 

@@ -101,6 +101,14 @@ public abstract class FibriChecker implements CameraListener {
 
   private Event event = Event.INIT;
 
+  private int attempts = 0
+
+  private boolean skippedPulseDetection = false;
+
+  private boolean skippedFingerDetection = false;
+
+  private boolean skippedMovementDetection = false;
+
   int hardwareLevel;
 
   int currentIso = 0;
@@ -210,6 +218,8 @@ public abstract class FibriChecker implements CameraListener {
     } else {
       this.fibriListener = new FibriListener();
     }
+
+    this.skippedMovementDetection = !builder.movementDetectionEnabled;
   }
 
   public abstract void start();
@@ -248,6 +258,7 @@ public abstract class FibriChecker implements CameraListener {
     measurementData = new MeasurementData();
     measurementStartTime = SystemClock.uptimeMillis();
     measurementData.measurementTimestamp = System.currentTimeMillis();
+    attempts++;
   }
 
   @Override public void onCameraDestroyed() {
@@ -445,6 +456,7 @@ public abstract class FibriChecker implements CameraListener {
   private void checkPulseDetectionTimer() {
 
     if (pulseDetectionExpiryTime > 0 && (SystemClock.uptimeMillis() - pulseDetectionStartTime) > pulseDetectionExpiryTime) {
+      skippedPulseDetection = true;
       event = Event.PULSE_DETECTION_TIME_EXPIRED;
       fibriListener.onPulseDetectionTimeExpired();
     }
@@ -453,6 +465,7 @@ public abstract class FibriChecker implements CameraListener {
   private void checkFingerDetectionTimer() {
 
     if (fingerDetectionExpiryTime > 0 && (SystemClock.uptimeMillis() - fingerDetectionStartTime) > fingerDetectionExpiryTime) {
+      skippedFingerDetection = true;
       event = Event.FINGER_DETECTION_TIME_EXPIRED;
       fibriListener.onFingerDetectionTimeExpired();
     }
@@ -530,6 +543,8 @@ public abstract class FibriChecker implements CameraListener {
       if (currentExposureTime != 0) {
         measurementData.technicalDetails.put("camera_exposure_time", currentExposureTime);
       }
+
+      measurementData.attempts = attempts;
 
       return measurementData;
     }

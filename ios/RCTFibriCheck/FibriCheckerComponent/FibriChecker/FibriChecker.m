@@ -91,6 +91,7 @@
     self.measurementController.minYValue = self.minYValue;
     self.measurementController.maxStdDevYValue = self.maxStdDevYValue;
     self.measurementController.minVValue = self.minVValue;
+    self.measurementController.skippedMovementDetection = !self.movementDetectionEnabled;
 }
 
 #pragma mark - MeasureControllerDelegate

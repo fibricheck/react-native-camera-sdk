@@ -5,6 +5,7 @@ import {
   UIManager,
   findNodeHandle,
 } from 'react-native';
+import packageVersion from '../package-version.json';
 import { CameraData } from './types';
 
 type FibriCheckViewProps = typeof FibriCheckView.defaultProps & {
@@ -60,6 +61,8 @@ export default class FibriCheckView extends React.Component<FibriCheckViewProps>
     fingerDetectionExpiryTime: 10,
     waitForStartRecordingSignal: false,
   };
+
+  static versionNumber = packageVersion.version;
 
   constructor(props) {
     console.log('constructor', props);
