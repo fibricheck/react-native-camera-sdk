@@ -17,7 +17,7 @@
     "prepare": "yarn build",
     "lint": "eslint src/**/*.{ts,tsx}",
     "lint-fix": "yarn lint --quiet --fix",
-    "postinstall": "sh ./scripts/get_version.sh"
+    "prepublish": "sh ./scripts/get_version.sh"
   },
   "files": [
     "build",
