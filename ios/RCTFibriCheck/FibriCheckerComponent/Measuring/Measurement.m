@@ -152,11 +152,11 @@
 
     meaModel[@"attempts"] = @(_attempts);
 
-    meaModel[@"skippedMovementDetection"] = _skippedMovementDetection;
+    meaModel[@"skippedMovementDetection"] = @(_skippedMovementDetection);
 
-    meaModel[@"skippedPulseDetection"] = _skippedPulseDetection;
+    meaModel[@"skippedPulseDetection"] = @(_skippedPulseDetection);
 
-    meaModel[@"skippedFingerDetection"] = _skippedFingerDetection;
+    meaModel[@"skippedFingerDetection"] = @(_skippedFingerDetection);
 
     return [meaModel copy];
 }
