@@ -2,16 +2,12 @@
 
 package com.fibricheck.rnfibricheckandroid;
 
-import android.view.Display;
-import android.view.Window;
-import android.view.WindowManager;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Color;
-import android.os.Handler;
-import android.os.Looper;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -25,7 +21,6 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
-import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -88,6 +83,7 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   private static final String EVENT_MEASUREMENT_PROCESSED = "onMeasurementProcessed";
 
   public Activity getActivity(Context context) {
+
     if (context == null) {
       return null;
     } else if (context instanceof ContextWrapper) {
@@ -104,6 +100,7 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
 
   @Override
   public String getName() {
+
     // Tell React the name of the module
     // https://facebook.github.io/react-native/docs/native-components-android.html#1-create-the-viewmanager-subclass
     return REACT_CLASS;
@@ -111,6 +108,7 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
 
   @Override
   public LinearLayout createViewInstance(ThemedReactContext context) {
+
     Log.i(TAG, "Creating View instance");
 
     linearLayout = new LinearLayout(context);
@@ -122,9 +120,6 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
     linearLayout.addView(graphView);
 
     fibriChecker = new FibriChecker.FibriBuilder(context.getCurrentActivity(), linearLayout).build();
-
-    final ReactContext reactContext = (ReactContext) linearLayout.getContext();
-    final Handler handler = new Handler(Looper.getMainLooper());
     fibriChecker.setFibriListener(new FibriListener() {
 
       @Override public void onSampleReady(final double ppg, double raw) {
@@ -279,6 +274,8 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
     }
   }
 
+  //region Props Setters
+
   // Set properties from React onto your native component via a setter method
   // https://facebook.github.io/react-native/docs/native-components-android.html#3-expose-view-property-setters-using-reactprop-or-reactpropgroup-annotation
   @ReactProp(name = "drawGraph")
@@ -351,7 +348,16 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   public void setWaitForStartRecordingSignal(View view, boolean waitForStartRecordingSignal) {
     fibriChecker.waitForStartRecordingSignal = waitForStartRecordingSignal;
   }
+  //endregion
 
+  @Override
+  protected void onAfterUpdateTransaction(@NonNull LinearLayout view) {
+
+    super.onAfterUpdateTransaction(view);
+    // This will be called when all the props are set
+  }
+
+  //region Graphs
   private GraphView createGraphView(Context context) {
 
     graphView = new GraphView(context);
@@ -362,6 +368,7 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   }
 
   private void invalidateGraphView(GraphView graphView, Context context) {
+
     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
     graphView.setBackgroundColor(Color.TRANSPARENT);
     params.gravity = Gravity.CENTER_HORIZONTAL;
@@ -372,6 +379,7 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   }
 
   private void setViewPortOptions(GraphView graphView) {
+
     graphView.getViewport().setScalable(false);
     graphView.getViewport().setScrollable(false);
     graphView.getViewport().setXAxisBoundsManual(true);
@@ -385,7 +393,7 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   }
 
   private void setSeries(GraphView graphView, Context context) {
-
+    
     ArrayList<DataPoint> dataPoints = new ArrayList<>();
 
     // fill array wih empty values
@@ -416,11 +424,13 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   }
 
   private void addGraphData(double value) {
+
     calculateYaxisBoundaries(value);
     series.appendData(new DataPoint(++xValue, value), true, SAMPLE_COUNT);
   }
 
   private void calculateYaxisBoundaries(double value) {
+
     addValueToSR(value);
     graphView.getViewport().setMaxY(Collections.max(valueSR) + 0.2);
     graphView.getViewport().setMinY(Collections.min(valueSR) - 0.2);
@@ -433,6 +443,7 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
       valueSR.remove(0);
     }
   }
+  //endregion
 
   @Override
   public Map getExportedCustomBubblingEventTypeConstants() {

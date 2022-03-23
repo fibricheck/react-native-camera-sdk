@@ -225,6 +225,7 @@ public abstract class FibriChecker implements CameraListener {
   public abstract void start();
 
   public void startRecording() {
+
     if (!calibrationReadyDispatched) {
       throw new IllegalStateException("Measurement must be calibrated to start a recording");
     }
@@ -546,8 +547,8 @@ public abstract class FibriChecker implements CameraListener {
 
       measurementData.attempts = attempts;
       measurementData.skippedPulseDetection = skippedPulseDetection;
-      measurementData.skippedMovementDetection = skippedMovementDetection;
       measurementData.skippedFingerDetection = skippedFingerDetection;
+      measurementData.skippedMovementDetection = !movementDetectionEnabled;
 
       return measurementData;
     }
