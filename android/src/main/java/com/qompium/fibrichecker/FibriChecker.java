@@ -101,7 +101,7 @@ public abstract class FibriChecker implements CameraListener {
 
   private Event event = Event.INIT;
 
-  private int attempts = 0
+  private int attempts = 0;
 
   private boolean skippedPulseDetection = false;
 
