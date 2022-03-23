@@ -545,6 +545,9 @@ public abstract class FibriChecker implements CameraListener {
       }
 
       measurementData.attempts = attempts;
+      measurementData.skippedPulseDetection = skippedPulseDetection;
+      measurementData.skippedMovementDetection = skippedMovementDetection;
+      measurementData.skippedFingerDetection = skippedFingerDetection;
 
       return measurementData;
     }
