@@ -355,6 +355,7 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
 
     super.onAfterUpdateTransaction(view);
     // This will be called when all the props are set
+    fibriChecker.initializeListeners();
   }
 
   //region Graphs
