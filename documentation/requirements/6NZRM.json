@@ -1,0 +1,13 @@
+{
+  "id": "6NZRM",
+  "name": "The Processed measurement will contain all the data that was enabled",
+  "description": "A default measurement should include:\n\n- attempts\n- skippedPulseDetection\n- skippedFingerDetection\n- skippedMovementDetection\n- technical_details\n- heartrate\n- quadrants\n- time vector\n\nAll extra enabled data (like motion data) should also be added",
+  "type": "specification",
+  "origin": "user_need",
+  "keyValues": [],
+  "attachments": [],
+  "testIds": [
+    "QKDVS"
+  ],
+  "updatedTime": 1648138569496
+}
