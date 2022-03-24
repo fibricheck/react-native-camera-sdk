@@ -23,6 +23,7 @@ type FibriCheckViewProps = typeof FibriCheckView.defaultProps & {
   rotationEnabled?: boolean;
   movementDetectionEnabled?: boolean;
   fingerDetectionExpiryTime?: number;
+  pulseDetectionExpiryTime?: number;
   waitForStartRecordingSignal?: boolean;
   onFingerDetected?: () => void;
   onFingerRemoved?: () => void;
@@ -53,12 +54,13 @@ export default class FibriCheckView extends React.Component<FibriCheckViewProps>
     drawBackground: true,
     sampleTime: 60,
     flashEnabled: true,
-    gravEnabled: true,
-    gyroEnabled: true,
-    accEnabled: true,
-    rotationEnabled: true,
+    gravEnabled: false,
+    gyroEnabled: false,
+    accEnabled: false,
+    rotationEnabled: false,
     movementDetectionEnabled: true,
-    fingerDetectionExpiryTime: 10,
+    fingerDetectionExpiryTime: -1,
+    pulseDetectionExpiryTime: 10,
     waitForStartRecordingSignal: false,
   };
 

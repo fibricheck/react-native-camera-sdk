@@ -140,7 +140,7 @@ public abstract class FibriChecker implements CameraListener {
     sgFilter = new SGFilter(MOVING_WINDOW_SIZE);
 
     initBeatListener();
-    initializeListeners();
+    //initializeListeners();
   }
 
   private void initBeatListener() {
@@ -385,7 +385,7 @@ public abstract class FibriChecker implements CameraListener {
     }
   }
 
-  protected void initializeListeners() {
+  public void initializeListeners() {
 
     sensorListener = new SensorListener(context);
     sensorListener.addListener(Sensor.TYPE_ACCELEROMETER);
