@@ -537,17 +537,17 @@ public abstract class FibriChecker implements CameraListener {
       }
 
       measurementData.heartrate = beatListener.getHeartRate();
-      measurementData.technicalDetails.put("camera_hardware_level",
+      measurementData.technical_details.put("camera_hardware_level",
         getStringFromHardwareLevel(hardwareLevel));
 
       if (cameraResolution != null) {
-        measurementData.technicalDetails.put("camera_resolution", cameraResolution);
+        measurementData.technical_details.put("camera_resolution", cameraResolution);
       }
       if (currentIso != 0) {
-        measurementData.technicalDetails.put("camera_iso", currentIso);
+        measurementData.technical_details.put("camera_iso", currentIso);
       }
       if (currentExposureTime != 0) {
-        measurementData.technicalDetails.put("camera_exposure_time", currentExposureTime);
+        measurementData.technical_details.put("camera_exposure_time", currentExposureTime);
       }
 
       measurementData.attempts = attempts;
