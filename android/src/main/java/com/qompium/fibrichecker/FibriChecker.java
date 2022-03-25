@@ -101,6 +101,16 @@ public abstract class FibriChecker implements CameraListener {
 
   private Event event = Event.INIT;
 
+  private int attempts = 0;
+
+  private boolean skippedPulseDetection = false;
+
+  private boolean skippedFingerDetection = false;
+
+  private boolean skippedMovementDetection = false;
+
+  protected String cameraResolution;
+
   int hardwareLevel;
 
   int currentIso = 0;
@@ -125,12 +135,12 @@ public abstract class FibriChecker implements CameraListener {
 
     // Values calculated in MathLab to get a LP/HP/BP/Notch-filter
     firFilter =
-        new FirFilter(new double[] { 1.0, 0.0, 0.0, 0.0 }, new double[] { 1.0, 1.0, 1.0, 1.0 });
+      new FirFilter(new double[] { 1.0, 0.0, 0.0, 0.0 }, new double[] { 1.0, 1.0, 1.0, 1.0 });
 
     sgFilter = new SGFilter(MOVING_WINDOW_SIZE);
 
     initBeatListener();
-    initializeListeners();
+    //initializeListeners();
   }
 
   private void initBeatListener() {
@@ -210,11 +220,14 @@ public abstract class FibriChecker implements CameraListener {
     } else {
       this.fibriListener = new FibriListener();
     }
+
+    this.skippedMovementDetection = !builder.movementDetectionEnabled;
   }
 
   public abstract void start();
 
   public void startRecording() {
+
     if (!calibrationReadyDispatched) {
       throw new IllegalStateException("Measurement must be calibrated to start a recording");
     }
@@ -248,6 +261,7 @@ public abstract class FibriChecker implements CameraListener {
     measurementData = new MeasurementData();
     measurementStartTime = SystemClock.uptimeMillis();
     measurementData.measurementTimestamp = System.currentTimeMillis();
+    attempts++;
   }
 
   @Override public void onCameraDestroyed() {
@@ -258,7 +272,7 @@ public abstract class FibriChecker implements CameraListener {
   }
 
   protected void handleStates(final Quadrant quadrantData, final double[] yuvData,
-      final float[][] motionData, final long timestamp) {
+                              final float[][] motionData, final long timestamp) {
 
     double dataPoint;
 
@@ -318,7 +332,7 @@ public abstract class FibriChecker implements CameraListener {
 
         // Wait while the exposure lock is setting
         if ((SystemClock.uptimeMillis() - calibrationStartTime > CALIBRATION_DELAY)
-            && !calibrationReadyDispatched) {
+          && !calibrationReadyDispatched) {
           fibriListener.onCalibrationReady();
           calibrationReadyDispatched = true;
         }
@@ -350,7 +364,7 @@ public abstract class FibriChecker implements CameraListener {
         dataPoint = processData(yuvData);
 
         measurementRawList.add(
-            new MeasurementRaw(quadrantData, motionData, updateTimer(timestamp)));
+          new MeasurementRaw(quadrantData, motionData, updateTimer(timestamp)));
         fibriListener.onSampleReady(dataPoint, yuvData[0]);
 
         break;
@@ -371,7 +385,7 @@ public abstract class FibriChecker implements CameraListener {
     }
   }
 
-  protected void initializeListeners() {
+  public void initializeListeners() {
 
     sensorListener = new SensorListener(context);
     sensorListener.addListener(Sensor.TYPE_ACCELEROMETER);
@@ -445,6 +459,7 @@ public abstract class FibriChecker implements CameraListener {
   private void checkPulseDetectionTimer() {
 
     if (pulseDetectionExpiryTime > 0 && (SystemClock.uptimeMillis() - pulseDetectionStartTime) > pulseDetectionExpiryTime) {
+      skippedPulseDetection = true;
       event = Event.PULSE_DETECTION_TIME_EXPIRED;
       fibriListener.onPulseDetectionTimeExpired();
     }
@@ -453,6 +468,7 @@ public abstract class FibriChecker implements CameraListener {
   private void checkFingerDetectionTimer() {
 
     if (fingerDetectionExpiryTime > 0 && (SystemClock.uptimeMillis() - fingerDetectionStartTime) > fingerDetectionExpiryTime) {
+      skippedFingerDetection = true;
       event = Event.FINGER_DETECTION_TIME_EXPIRED;
       fibriListener.onFingerDetectionTimeExpired();
     }
@@ -504,7 +520,7 @@ public abstract class FibriChecker implements CameraListener {
     ArrayList<MeasurementRaw> measurementRawList;
 
     public ProcessRawMeasurementTask(MeasurementData measurementData,
-        ArrayList<MeasurementRaw> measurementRawList) {
+                                     ArrayList<MeasurementRaw> measurementRawList) {
 
       this.measurementData = measurementData;
       this.measurementRawList = measurementRawList;
@@ -521,15 +537,23 @@ public abstract class FibriChecker implements CameraListener {
       }
 
       measurementData.heartrate = beatListener.getHeartRate();
-      measurementData.technicalDetails.put("camera_hardware_level",
-          getStringFromHardwareLevel(hardwareLevel));
+      measurementData.technical_details.put("camera_hardware_level",
+        getStringFromHardwareLevel(hardwareLevel));
 
+      if (cameraResolution != null) {
+        measurementData.technical_details.put("camera_resolution", cameraResolution);
+      }
       if (currentIso != 0) {
-        measurementData.technicalDetails.put("camera_iso", currentIso);
+        measurementData.technical_details.put("camera_iso", currentIso);
       }
       if (currentExposureTime != 0) {
-        measurementData.technicalDetails.put("camera_exposure_time", currentExposureTime);
+        measurementData.technical_details.put("camera_exposure_time", currentExposureTime);
       }
+
+      measurementData.attempts = attempts;
+      measurementData.skippedPulseDetection = skippedPulseDetection;
+      measurementData.skippedFingerDetection = skippedFingerDetection;
+      measurementData.skippedMovementDetection = !movementDetectionEnabled;
 
       return measurementData;
     }
@@ -731,7 +755,7 @@ public abstract class FibriChecker implements CameraListener {
     }
 
     public FibriBuilder fingerDetectionValues(int minYValue, int maxYValue, int maxStdDevYValue,
-        int minVValue) {
+                                              int minVValue) {
 
       if (minYValue > 0) {
         this.minYValue = minYValue;
@@ -757,7 +781,7 @@ public abstract class FibriChecker implements CameraListener {
     public FibriChecker build() throws IllegalStateException {
 
       return (android.os.Build.VERSION.SDK_INT >= 22) ? new FibriCheckerImpl2(viewGroup, context, this)
-          : new FibriCheckerImpl1(viewGroup, context, this);
+        : new FibriCheckerImpl1(viewGroup, context, this);
     }
   }
 }

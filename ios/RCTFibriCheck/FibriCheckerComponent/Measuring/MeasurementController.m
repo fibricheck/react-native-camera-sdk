@@ -62,6 +62,7 @@
         _fingerGoodCount = 0;
         _fingerDetected = NO;
         _previousTime = _sampleTime;
+        _attempts = 0;
     }
     return self;
 }
@@ -261,6 +262,7 @@
             if (_previousState != MeasurementControllerStateRecording) {
                 _measurement = [[Measurement alloc] initWithConfig:[self configImageProcessor]];
                 _recordingStartTime = currentTime;
+                _attempts += 1;
 
                 [self notifyDelegateDidStartRecording];
                 [self notifyDelegateDidChangeState: MeasurementControllerStateRecording];
@@ -284,6 +286,10 @@
             if (_previousState != MeasurementControllerStateFinished) {
                 self.measurement.startTime = self.recordingStartTime;
                 self.measurement.heartRate = self.beatListener.heartRate;
+                self.measurement.skippedMovementDetection = self.skippedMovementDetection;
+                self.measurement.skippedFingerDetection = self.skippedFingerDetection;
+                self.measurement.skippedPulseDetection = self.skippedPulseDetection;
+                self.measurement.attempts = self.attempts;
 
                 [self notifyDelegateDidChangeState:MeasurementControllerStateFinished];
                 _previousState = MeasurementControllerStateFinished;
@@ -385,6 +391,7 @@
 
 - (void) checkFingerDetectionTimer {
     if (self.fingerDetectionExpiryTime > 0 && ([[NSDate date] timeIntervalSince1970] - self.fingerDetectionStartTime) > self.fingerDetectionExpiryTime) {
+        self.skippedFingerDetection = YES;
         self.event = MeasurementControllerEventFingerDetectionTimeExpired;
         [self notifyDelegateDidReceiveFingerDetectionTimeout];
     }
@@ -392,6 +399,7 @@
 
 - (void) checkPulseDetectionTimer {
     if (self.pulseDetectionExpiryTime > 0 && ([[NSDate date] timeIntervalSince1970] - self.pulseDetectionStartTime) > self.pulseDetectionExpiryTime) {
+        self.skippedPulseDetection = YES;
         self.event = MeasurementControllerEventPulseDetectionTimeExpired;
         [self notifyDelegateDidReceivePulseDetectionTimeout];
     }

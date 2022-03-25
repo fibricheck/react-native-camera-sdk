@@ -14,9 +14,11 @@ public class MeasurementData implements Serializable {
 
   public double heartrate;
 
+  public int attempts;
+
   public List<List<YuvList>> quadrants;
 
-  public HashMap<String, Object> technicalDetails;
+  public HashMap<String, Object> technical_details;
 
   public List<Integer> time;
 
@@ -28,11 +30,17 @@ public class MeasurementData implements Serializable {
 
   public MotionData gyro;
 
+  public boolean skippedPulseDetection = false;
+
+  public boolean skippedFingerDetection = false;
+
+  public boolean skippedMovementDetection = false;
+
   public Number measurementTimestamp;
 
   public MeasurementData () {
 
-    this.technicalDetails = new HashMap<>();
+    this.technical_details = new HashMap<>();
     this.time = new ArrayList<>();
     this.acc = new MotionData();
     this.grav = new MotionData();

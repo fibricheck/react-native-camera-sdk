@@ -387,6 +387,8 @@ public class FibriCheckerImpl2 extends FibriChecker {
 
       mVideoSize = chooseVideoSize(map.getOutputSizes(MediaRecorder.class));
       mPreviewSize = chooseVideoSize(map.getOutputSizes(SurfaceTexture.class));
+      cameraResolution = mVideoSize.toString();
+
       Log.i(TAG, "Chosen video/preview size: " + mVideoSize.toString() + "/" + mPreviewSize.toString());
       fps = characteristics.get(CameraCharacteristics.CONTROL_AE_AVAILABLE_TARGET_FPS_RANGES);
 

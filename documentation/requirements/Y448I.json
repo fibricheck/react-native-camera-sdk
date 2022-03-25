@@ -1,0 +1,13 @@
+{
+  "id": "Y448I",
+  "name": "Default properties",
+  "description": "When not all Properties are set, default properties will be applied:\n\n```\ndefaultProps = {\n    style: {\n      flex: 1,\n      backgroundColor: '#ffffff',\n    },\n    drawGraph: true,\n    lineColor: '#63b3a6',\n    lineThickness: 8,\n    drawBackground: true,\n    sampleTime: 60,\n    flashEnabled: true,\n    gravEnabled: false,\n    gyroEnabled: false,\n    accEnabled: false,\n    rotationEnabled: false,\n    movementDetectionEnabled: true,\n    fingerDetectionExpiryTime: -1,\n    pulseDetectionExpiryTime: 10,\n    waitForStartRecordingSignal: false,\n  };\n```",
+  "type": "specification",
+  "origin": "user_need",
+  "keyValues": [],
+  "attachments": [],
+  "testIds": [
+    "8GV76"
+  ],
+  "updatedTime": 1648138008198
+}
