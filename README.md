@@ -155,7 +155,7 @@ When benchmarking the SDK, we noticed that drawing on the JS Thread while taking
 
 ### Using the correct camera lens
 
-Placing your finger on the wrong camera can also result in a bad quality measurement. The Camera SDK makes use of `wide-angle-camera` of your phone. To make sure the correct lens is used, you can create a 'peephole' for this lens. This way, the user can check wich is the correct lens to use. At the moment for writing, there is one library that is able to select the correct lens: [react-native-vision-camera](https://github.com/mrousavy/react-native-vision-camera). We make use of this snippet:&#x20;
+Placing your finger on the wrong camera can also result in a bad quality measurement. The Camera SDK makes use of `wide-angle-camera` of your phone. To make sure the correct lens is used, you can create a 'peephole' for this lens. This way, the user can check wich is the correct lens to use. At the moment of writing, there is one library that is able to select the correct lens: [react-native-vision-camera](https://github.com/mrousavy/react-native-vision-camera). We make use of this snippet:&#x20;
 
 ```tsx
 import { Camera, useCameraDevices } from 'react-native-vision-camera';
