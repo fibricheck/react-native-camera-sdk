@@ -147,4 +147,59 @@ When the permissions are all set up, you can implement the FibriCheck component 
 />
 ```
 
-##
+## Pitfalls
+
+### Drawing on the JS Thread
+
+When benchmarking the SDK, we noticed that drawing on the JS Thread while taking a measurement caused severe spikes in the processing power. This will results in a bad quality measurement. So when creating a visualisation, for example counting down the seconds that are left in a measurement, make sure you are not drawing on the JS Thread.  Either make use of [Native Driver](https://reactnative.dev/blog/2017/02/14/using-native-driver-for-animated) or use [React Reanimated](https://github.com/software-mansion/react-native-reanimated). When using third party libraries for creating animations, make sure they also offload the drawing from the JS Thread.&#x20;
+
+### Using the correct camera lens
+
+Placing your finger on the wrong camera can also result in a bad quality measurement. The Camera SDK makes use of `wide-angle-camera` of your phone. To make sure the correct lens is used, you can create a 'peephole' for this lens. This way, the user can check wich is the correct lens to use. At the moment for writing, there is one library that is able to select the correct lens: [react-native-vision-camera](https://github.com/mrousavy/react-native-vision-camera). We make use of this snippet:&#x20;
+
+```tsx
+import { Camera, useCameraDevices } from 'react-native-vision-camera';
+import styled from 'styled-components/native';
+
+const SCREEN_HEIGHT = Dimensions.get('window').height;
+const SCREEN_WIDTH = Dimensions.get('window').width;
+
+const radiusBasis = Number(
+  Math.round(SCREEN_HEIGHT / (SCREEN_HEIGHT <= 800 ? 6 : 8)),
+);
+
+const CameraContainer = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  max-height: ${radiusBasis}px;
+`;
+
+const CameraContent = styled.View`
+  overflow: hidden;
+  border-radius: 100px;
+`;
+
+const devices = useCameraDevices('wide-angle-camera');
+const device = devices.back;
+
+export const FindYourLens = () => {
+  return (
+    <CameraContainer>
+      <CameraContent>
+        <Camera
+            style={...}
+            device={device}
+            preset={'vga-640x480'}
+        />
+      </CameraContent>
+    </CameraContainer>
+  );
+};
+```
+
+Asking the camera permissions is of course also necessary, but out of scope for this snippet
+
+### Not using Hermes
+
+When benchmarking the SDK, we noticed that [Hermes](https://reactnative.dev/docs/hermes) also had a big impact in the performance of low end devices. So we advice you to enable it if possible. Instructions can be found in [their documentation](https://reactnative.dev/docs/hermes#android).
