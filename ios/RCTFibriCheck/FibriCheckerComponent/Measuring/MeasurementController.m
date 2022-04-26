@@ -17,7 +17,7 @@
 #import "ImageProcessorConfig.h"
 
 #define FINGER_GOOD_COUNT 25
-#define FINGER_BAD_COUNT 6
+#define FINGER_BAD_COUNT 10
 #define CALIBRATION_DELAY 1
 
 #define RADIANS_TO_DEGREES(radians) ((radians) * (180.0 / M_PI))
@@ -25,6 +25,7 @@
 @interface MeasurementController()
 
 @property BOOL fingerDetected;
+@property BOOL initialFingerDetectionState;
 @property BOOL calibrationReadyDispatched;
 
 @property NSTimeInterval recordingStartTime;
@@ -61,6 +62,7 @@
         _fingerBadCount = 0;
         _fingerGoodCount = 0;
         _fingerDetected = NO;
+        _initialFingerDetectionState = YES;
         _previousTime = _sampleTime;
         _attempts = 0;
     }
@@ -116,6 +118,7 @@
     [self setCameraExposureMode:AVCaptureExposureModeContinuousAutoExposure];
     self.fingerBadCount = self.fingerGoodCount = 0;
     self.calibrationReadyDispatched = self.fingerDetected = NO;
+    self.initialFingerDetectionState = YES;
 }
 
 - (void)registerForNotifications {
@@ -313,14 +316,16 @@
         self.fingerGoodCount = 0;
     }
 
-    if (self.fingerDetected && self.fingerBadCount >= FINGER_BAD_COUNT) {
+    if ((self.initialFingerDetectionState || self.fingerDetected) && self.fingerBadCount >= FINGER_BAD_COUNT) {
         self.fingerDetected = NO;
+        self.initialFingerDetectionState = NO;
         self.state = MeasurementControllerStateDetectingFinger;
         self.event = MeasurementControllerEventFingerRemoved;
         [self notifyDelegateDidReceiveFingerRemoved];
     }
 
     if (!self.fingerDetected && self.fingerGoodCount > FINGER_GOOD_COUNT) {
+        self.initialFingerDetectionState = NO;
         self.fingerDetected = YES;
         self.event = MeasurementControllerEventFingerDetected;
         [self notifyDelegateDidReceiveFingerDetected];
