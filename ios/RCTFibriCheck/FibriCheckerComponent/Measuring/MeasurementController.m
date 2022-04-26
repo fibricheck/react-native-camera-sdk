@@ -17,7 +17,7 @@
 #import "ImageProcessorConfig.h"
 
 #define FINGER_GOOD_COUNT 25
-#define FINGER_BAD_COUNT 10
+#define FINGER_BAD_COUNT 7
 #define CALIBRATION_DELAY 1
 
 #define RADIANS_TO_DEGREES(radians) ((radians) * (180.0 / M_PI))
