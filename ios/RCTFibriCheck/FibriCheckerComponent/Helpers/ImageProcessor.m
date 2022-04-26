@@ -153,6 +153,9 @@
 }
 
 - (bool)fingerOnCamera:(DataPoint*)dp {
+    if (_minYValue == 0) {
+        return YES;
+    }
     if (dp.y > _minYValue && dp.y < _maxYValue &&
         dp.stdDevY < _maxStdDevYValue && dp.v > _minVValue ) {
         return YES;
