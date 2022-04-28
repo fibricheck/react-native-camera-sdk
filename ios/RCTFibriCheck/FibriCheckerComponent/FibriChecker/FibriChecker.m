@@ -43,7 +43,7 @@
         self.upperMovementLimit = 14;
         self.lowerMovementLimit = 6;
         self.movementDetectionEnabled = true;
-        self.maxYValue = 125;
+        self.maxYValue = 160;
         self.minYValue = 30;
         self.maxStdDevYValue = 35;
         self.minVValue = 150;

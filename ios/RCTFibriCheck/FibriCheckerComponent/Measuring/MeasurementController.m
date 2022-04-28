@@ -17,7 +17,7 @@
 #import "ImageProcessorConfig.h"
 
 #define FINGER_GOOD_COUNT 25
-#define FINGER_BAD_COUNT 10
+#define FINGER_BAD_COUNT 7
 #define CALIBRATION_DELAY 1
 
 #define RADIANS_TO_DEGREES(radians) ((radians) * (180.0 / M_PI))
@@ -25,6 +25,7 @@
 @interface MeasurementController()
 
 @property BOOL fingerDetected;
+@property BOOL isFingerDetectionGracePeriodActive;
 @property BOOL initialFingerDetectionState;
 @property BOOL calibrationReadyDispatched;
 
@@ -59,6 +60,7 @@
         _event = MeasurementControllerEventInit;
         _accelerationFactor = 9.81;
         _calibrationReadyDispatched = NO;
+        _isFingerDetectionGracePeriodActive = NO;
         _fingerBadCount = 0;
         _fingerGoodCount = 0;
         _fingerDetected = NO;
@@ -311,7 +313,7 @@
     if ([self.imageProcessor fingerOnCamera:dp]) {
         self.fingerGoodCount++;
         self.fingerBadCount = 0;
-    } else {
+    } else if(!_isFingerDetectionGracePeriodActive) {
         self.fingerBadCount++;
         self.fingerGoodCount = 0;
     }
@@ -325,9 +327,13 @@
     }
 
     if (!self.fingerDetected && self.fingerGoodCount > FINGER_GOOD_COUNT) {
+        self.isFingerDetectionGracePeriodActive = YES;
         self.initialFingerDetectionState = NO;
         self.fingerDetected = YES;
         self.event = MeasurementControllerEventFingerDetected;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.isFingerDetectionGracePeriodActive = NO;
+        });
         [self notifyDelegateDidReceiveFingerDetected];
     }
 }

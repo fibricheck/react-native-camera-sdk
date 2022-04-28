@@ -7,7 +7,7 @@
   "motivation": "",
   "testSteps": [
     "Take a measurement",
-    "Remove finger from camera in any step of the measurement process",
+    "Remove finger from camera in any step of the measurement process\n\n*condition:*  fingerDetectionExpiryTime is not altered (default = -1)",
     "Put finger back on the camera"
   ],
   "expectedResult": "onFingerDetected and onFingerRemoved are fired at the correct time",
@@ -18,5 +18,5 @@
     "Data exchange",
     "Active listeners during the whole lifecycle"
   ],
-  "updatedTime": 1645580187064
+  "updatedTime": 1651137444410
 }
