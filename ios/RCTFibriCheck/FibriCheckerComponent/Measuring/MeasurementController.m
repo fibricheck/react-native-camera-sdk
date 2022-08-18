@@ -347,13 +347,13 @@
 
 - (void) detectMovementWithAccX: (float) accx accY:(float)accy accZ:(float)accz {
     if (self.movementDetectionEnabled) {
-        double acc_vec =  sqrt( pow(accx,2) + pow(accy,2) + pow(accz,2) );
-        if (acc_vec == 0) {
-            self.state = MeasurementControllerStateDetectingFinger;
+        double accVector =  sqrt( pow(accx,2) + pow(accy,2) + pow(accz,2) );
+        if (accVector == 0) {
             [self notifyDelegateDidReceiveBrokenAccSensorData];
+            [self stopCamera];
         }
         
-        if (acc_vec > self.movementVectorUpperLimit || acc_vec < self.movementVectorLowerLimit) {
+        if (accVector > self.movementVectorUpperLimit || accVector < self.movementVectorLowerLimit) {
             self.state = MeasurementControllerStateDetectingFinger;
             [self notifyDelegateDidReceiveMovement];
         }
