@@ -224,7 +224,6 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
           ReactContext reactContext = (ReactContext) linearLayout.getContext();
           reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_MEASUREMENT_ERROR, event);
       }
-      }
     });
 
     fibriChecker.start();

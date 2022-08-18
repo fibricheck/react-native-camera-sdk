@@ -6,7 +6,7 @@
   "planStatus": "Planned",
   "motivation": "",
   "testSteps": [
-    "Star a measurement",
+    "Start a measurement",
     "Move a bit with your hand",
     "Stay still for the rest of the recording"
   ],
@@ -18,5 +18,5 @@
     "Data exchange",
     "Active listeners during the recording"
   ],
-  "updatedTime": 1645580705642
+  "updatedTime": 1660811012733
 }
