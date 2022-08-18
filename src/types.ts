@@ -11,13 +11,6 @@ interface Yuv {
   y: number[];
 }
 
-type Abnormalities =
-  | 'inverted'
-  | 'bad_signal_quality'
-  | 'pulse_not_found'
-  | 'saturated_rgb'
-  | 'quality_flag' | 'finger_not_found';
-
 export interface CameraData {
   acc?: MotionData;
   rotation?: MotionData;
@@ -32,7 +25,5 @@ export interface CameraData {
     camera_iso: number;
   };
   time: number[];
-  yList: number[];
-  abnormalities?: Abnormalities[];
   attempts?: number;
 }

@@ -81,6 +81,7 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   private static final String EVENT_PULSE_DETECTION_TIME_EXPIRED = "onPulseDetectionTimeExpired";
   private static final String EVENT_MOVEMENT_DETECTED = "onMovementDetected";
   private static final String EVENT_MEASUREMENT_PROCESSED = "onMeasurementProcessed";
+  private static final String EVENT_MEASUREMENT_ERROR = "onMeasurementError";
 
   public Activity getActivity(Context context) {
 
@@ -215,6 +216,13 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
         } catch (JSONException | NullPointerException ex) {
           Log.e(TAG, ex.toString());
         }
+      }
+
+       @Override public void onMeasurementError(String message) {
+          WritableMap event = Arguments.createMap();
+          event.putString("message", message);
+          ReactContext reactContext = (ReactContext) linearLayout.getContext();
+          reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_MEASUREMENT_ERROR, event);
       }
     });
 
