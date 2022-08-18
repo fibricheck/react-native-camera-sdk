@@ -38,7 +38,7 @@ type FibriCheckViewProps = typeof FibriCheckView.defaultProps & {
   onPulseDetectionTimeExpired?: () => void;
   onMovementDetected?: () => void;
   onMeasurementProcessed?: (data: CameraData) => void;
-  onMeasurementError?: (message: string) => void;
+  onMeasurementError?: (message: MeasurementError) => void;
 };
 
 export default class FibriCheckView extends React.Component<FibriCheckViewProps> {
@@ -110,3 +110,7 @@ export default class FibriCheckView extends React.Component<FibriCheckViewProps>
 }
 
 const FibriCheck = requireNativeComponent('FibriCheck', FibriCheckView);
+
+enum MeasurementError {
+  BrokenAccSensor = 'BROKEN_ACC_SENSOR'
+}

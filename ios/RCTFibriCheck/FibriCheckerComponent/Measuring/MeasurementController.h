@@ -79,6 +79,7 @@ typedef NS_ENUM(NSInteger, MeasurementControllerEvent) {
 - (void)measurementController:(MeasurementController *)measurementController didChangeState:(MeasurementControllerState)state;
 - (void)measurementController:(MeasurementController *)measurementController progressUpdated:(NSUInteger)elapsedTime;
 - (void)measurementController:(MeasurementController *)measurementController heartRateUpdated:(NSUInteger)heartRate;
+- (void)measurementController:(MeasurementController *)measurementController didReceiveMeasurementError:(NSString*)message;
 
 - (void)measurementControllerDidStartRecording;
 - (void)measurementControllerDidReceiveError;
