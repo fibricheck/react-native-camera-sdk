@@ -6,7 +6,7 @@ import {
   findNodeHandle,
 } from 'react-native';
 import packageVersion from '../package-version.json';
-import { CameraData } from './types';
+import { CameraData, MeasurementError } from './types';
 
 type FibriCheckViewProps = typeof FibriCheckView.defaultProps & {
   style?: any;
