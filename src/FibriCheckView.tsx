@@ -111,6 +111,6 @@ export default class FibriCheckView extends React.Component<FibriCheckViewProps>
 
 const FibriCheck = requireNativeComponent('FibriCheck', FibriCheckView);
 
-enum MeasurementError {
+export enum MeasurementError {
   BrokenAccSensor = 'BROKEN_ACC_SENSOR'
 }
