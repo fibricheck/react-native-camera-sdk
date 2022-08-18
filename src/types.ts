@@ -27,3 +27,7 @@ export interface CameraData {
   time: number[];
   attempts?: number;
 }
+
+export enum MeasurementError {
+  BrokenAccSensor = 'BROKEN_ACC_SENSOR'
+}
