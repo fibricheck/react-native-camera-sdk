@@ -140,6 +140,7 @@ const App = () => {
           onMovementDetected={() => console.log('movement detected')}
           onHeartBeat={(event) => setHeartRate(event.nativeEvent.heartRate)}
           onTimeRemaining={(event) => console.log(event.nativeEvent)}
+          onMeasurementError={(event) => console.log(event.nativeEvent)}
           onMeasurementProcessed={(event) =>
             sendMeasurement(event.nativeEvent.measurement)
           }
@@ -149,11 +150,11 @@ const App = () => {
 
       <View style={styles.container}>
         <Text>{`Heartrate : ${heartRate}`}</Text>
-        <Text>{`Vinger aanwezig : ${fingerPresent ? 'Ja' : 'Nee'}`}</Text>
-        <Text>{`Hartslag gedetecteerd : ${
-          isPulseDetected ? 'Ja' : 'Nee'
+        <Text>{`Finger present : ${fingerPresent ? 'Yes' : 'No'}`}</Text>
+        <Text>{`Pulse detected : ${
+          isPulseDetected ? 'Yes' : 'No'
         }`}</Text>
-        <Text>{`Meting gestart : ${measurementStarted ? 'Ja' : 'Nee'}`}</Text>
+        <Text>{`Measurement Started : ${measurementStarted ? 'Yes' : 'No'}`}</Text>
         <FlatList
           data={measurements}
           renderItem={renderItem}

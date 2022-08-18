@@ -49,6 +49,7 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onMeasurementStart;
 @property (nonatomic, copy) RCTBubblingEventBlock onMeasurementFinished;
 @property (nonatomic, copy) RCTBubblingEventBlock onMeasurementProcessed;
+@property (nonatomic, copy) RCTBubblingEventBlock onMeasurementError;
 @property (nonatomic, copy) RCTBubblingEventBlock onCalibrationReady;
 @property (nonatomic, copy) RCTBubblingEventBlock onMovementDetected;
 @property (nonatomic, copy) RCTBubblingEventBlock onPulseDetected;
