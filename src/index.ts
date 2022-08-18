@@ -1,4 +1,4 @@
 import RNFibriCheckView from './FibriCheckView';
-import { CameraData } from './types';
+import { CameraData, MeasurementError } from './types';
 
-export { RNFibriCheckView, CameraData };
+export { RNFibriCheckView, CameraData, MeasurementError };
