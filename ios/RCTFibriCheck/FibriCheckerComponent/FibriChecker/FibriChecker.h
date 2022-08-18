@@ -52,6 +52,7 @@
 @property (copy) void (^onMovementDetected)(void);
 @property (copy) void (^onMeasurementStart)(void);
 @property (copy) void (^onMeasurementFinished)(void);
+@property (copy) void (^onMeasurementError)(NSString*);
 @property (copy) void (^onMeasurementProcessed)(Measurement*);
 @property (copy) void (^onSampleReady)(double, double);
 @property (copy) void (^onTimeRemaining)(NSUInteger);
