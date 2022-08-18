@@ -10,8 +10,6 @@ import static com.qompium.fibrichecker.measurement.Quadrant.QUADRANT_ROWS;
 
 public class MeasurementData implements Serializable {
 
-  public ArrayList<Double> yList;
-
   public double heartrate;
 
   public int attempts;
@@ -46,7 +44,6 @@ public class MeasurementData implements Serializable {
     this.grav = new MotionData();
     this.rotation = new MotionData();
     this.gyro = new MotionData();
-    this.yList = new ArrayList<>();
 
     initQuadrants();
   }
@@ -69,7 +66,6 @@ public class MeasurementData implements Serializable {
         quadrants.get(i).get(j).addYUV(quadrant.getYuv(i, j));
       }
     }
-    this.yList.add(quadrant.avgY);
   }
 
   public void addAcc (float[] data) {
@@ -90,11 +86,6 @@ public class MeasurementData implements Serializable {
   public void addGrav(float[] data) {
 
     this.grav.addData(data);
-  }
-
-  public ArrayList<Double> getYList () {
-
-    return this.yList;
   }
 
   public ArrayList<Double> getVList () {
