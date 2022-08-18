@@ -123,6 +123,12 @@
     }
 }
 
+- (void)measurementController:(MeasurementController *)measurementController didReceiveMeasurementError:(NSString*)message {
+    if (self.onMeasurementError != nil) {
+        self.onMeasurementError(message);
+    }
+}
+
 - (void)measurementController:(MeasurementController *)measurementController heartRateUpdated:(NSUInteger)heartRate {
     if (self.onHeartBeat != nil) {
         self.onHeartBeat(heartRate);

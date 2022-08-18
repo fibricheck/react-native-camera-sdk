@@ -10,6 +10,7 @@ RCT_EXPORT_VIEW_PROPERTY(onSampleReady, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onMeasurementStart, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onMeasurementFinished, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onMeasurementProcessed, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onMeasurementError, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onCalibrationReady, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onMovementDetected, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onPulseDetected, RCTBubblingEventBlock);

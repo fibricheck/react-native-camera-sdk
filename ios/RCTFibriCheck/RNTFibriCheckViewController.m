@@ -182,6 +182,14 @@
         if(((RNTFibriCheckView*)weakSelf.view).onTimeRemaining != nil) ((RNTFibriCheckView*)weakSelf.view).onTimeRemaining(data);
     });
   };
+
+  self.fibrichecker.onMeasurementError = ^(NSString* message) {
+    RCTLogInfo(@"Measurement error occured: %@", message);
+    NSDictionary *data = @{@"message": message};
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if(((RNTFibriCheckView*)weakSelf.view).onMeasurementError != nil) ((RNTFibriCheckView*)weakSelf.view).onMeasurementError(data);
+    });
+  };
 }
 
 @end

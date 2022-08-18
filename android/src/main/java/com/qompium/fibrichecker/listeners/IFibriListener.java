@@ -22,6 +22,8 @@ public interface IFibriListener {
 
   void onMeasurementProcessed (MeasurementData measurementData);
 
+  void onMeasurementError (String message);
+
   void onMeasurementStart ();
 
   void onMovementDetected ();

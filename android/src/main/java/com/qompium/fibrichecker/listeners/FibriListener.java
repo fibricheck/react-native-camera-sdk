@@ -40,6 +40,10 @@ public class FibriListener implements IFibriListener {
 
   }
 
+  @Override public void onMeasurementError (String message) {
+
+  }
+
   @Override public void onMeasurementStart () {
 
   }
