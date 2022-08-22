@@ -141,6 +141,7 @@ When the permissions are all set up, you can implement the FibriCheck component 
     onMovementDetected={() => console.log('movement detected')}
     onHeartBeat={(heartRate) => console.log(`current heart rate: ${heartRate}`)}
     onTimeRemaining={(seconds) => console.log(`time remaining: ${seconds}`)}
+    onMeasurementError={(error) => console.log(`measurement error occured: ${error}`)}
     onMeasurementProcessed={(data) =>
         console.log('measurement processed and ready to send!');
     }
@@ -199,6 +200,10 @@ export const FindYourLens = () => {
 ```
 
 Asking the camera permissions is of course also necessary, but out of scope for this snippet
+
+### Not catching all measurement errors
+
+Because the measurement will halt when a measurement error occurs, all measurement errors need to be catched. So don't forget your `onMeasurementError` Listener
 
 ### Not using Hermes
 

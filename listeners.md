@@ -163,6 +163,27 @@ This event will fire when the recording is complete. The [Post Processing](liste
 />
 ```
 
+### onMeasurementError
+
+This event will fire when a measurement error occurs. The measurement will halt upon such an error, so it's best to handle them accordingly.
+
+\
+Possible values of the error are:&#x20;
+
+```typescript
+export enum MeasurementError {
+  BrokenAccSensor = 'BROKEN_ACC_SENSOR' // happens on a broken acc sensor on iOS -> can be fixed by rebooting
+}
+```
+
+```tsx
+<RNFibriCheckView
+    ...
+    onMeasurementError={(event) => ...your code here...}
+    ...
+/>
+```
+
 ## After the recording
 
 these events can be thrown when the recording phase has ended.&#x20;
