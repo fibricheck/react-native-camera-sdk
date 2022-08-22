@@ -179,7 +179,7 @@ export enum MeasurementError {
 ```tsx
 <RNFibriCheckView
     ...
-    onMeasurementError={(event) => ...your code here...}
+    onMeasurementError={(message: MeasurementError) => ...your code here...}
     ...
 />
 ```
