@@ -154,11 +154,11 @@ public abstract class FibriChecker implements CameraListener {
         fibriListener.onFingerDetected();
       }
 
-      @Override public void onFingerRemoved() {
+      @Override public void onFingerRemoved(double y, double v, double stdDevY) {
 
         if (fingerDetectionExpiryTime != 0) {
           event = Event.FINGER_REMOVED;
-          fibriListener.onFingerRemoved();
+          fibriListener.onFingerRemoved(y, v, stdDevY);
         }
       }
 

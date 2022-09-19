@@ -140,8 +140,11 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
         reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_FINGER_DETECTED, event);
       }
 
-      @Override public void onFingerRemoved() {
+      @Override public void onFingerRemoved(double y, double v, double stdDevY) {
         WritableMap event = Arguments.createMap();
+        event.putDouble("y", y);
+        event.putDouble("v", v);
+        event.putDouble("stdDevY", stdDevY);
         ReactContext reactContext = (ReactContext) linearLayout.getContext();
         reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_FINGER_REMOVED, event);
       }

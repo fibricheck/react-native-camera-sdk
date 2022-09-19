@@ -26,7 +26,7 @@ type FibriCheckViewProps = typeof FibriCheckView.defaultProps & {
   pulseDetectionExpiryTime?: number;
   waitForStartRecordingSignal?: boolean;
   onFingerDetected?: () => void;
-  onFingerRemoved?: () => void;
+  onFingerRemoved?: (data?: { y: number; v: number; stdDevY: number; }) => void;
   onFingerDetectionTimeExpired?: () => void;
   onCalibrationReady?: () => void;
   onHeartBeat?: (heartRate: number) => void;
