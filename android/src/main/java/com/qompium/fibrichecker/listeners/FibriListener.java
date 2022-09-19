@@ -8,7 +8,7 @@ public class FibriListener implements IFibriListener {
 
   }
 
-  @Override public void onFingerRemoved () {
+  @Override public void onFingerRemoved (double y, double v, double stdDevY) {
 
   }
 

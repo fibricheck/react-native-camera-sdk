@@ -750,10 +750,10 @@
     platform-specific "^1.1.0"
     ts-toolbelt "^9.6.0"
 
-"@fibricheck/react-native-sdk@^0.0.14":
-  version "0.0.14"
-  resolved "https://npm.pkg.github.com/download/@fibricheck/react-native-sdk/0.0.14/04ad84f8e76ce32030d76df625ff722efd76462d8c845b98ffa90593b704080e#8dc109d088e55f8374c8d06d38565fcdb43ec6e0"
-  integrity sha512-F9M+2Q7ekPtTU+cZ7pCQbT+kTtAvw4VzOzdNR64ZqDYYfmUNdL3Q35IeRvaQ0uMItyH0MmIzk1FIfy8u4SucTQ==
+"@fibricheck/react-native-sdk@^0.0.15":
+  version "0.0.15"
+  resolved "https://npm.pkg.github.com/download/@fibricheck/react-native-sdk/0.0.15/d7ff6e4fd49676c3116b7096c8531b5e546bb50e#d7ff6e4fd49676c3116b7096c8531b5e546bb50e"
+  integrity sha512-faDbMiXs8iCxOCtW5sRY5ekHmfM7Kaf/5uGB1TlNif2dkKnw2B6xuhJoxLonB39MAZpw3a+7ViYAoXcth0H7rg==
 
 "@hapi/address@2.x.x":
   version "2.1.4"

@@ -125,10 +125,11 @@
     });
   };
 
-  self.fibrichecker.onFingerRemoved = ^{
+  self.fibrichecker.onFingerRemoved = ^(double y, double v, double stdDevY){
     RCTLogInfo(@"Finger Removed");
+    NSDictionary *data = @{@"y":[NSNumber numberWithFloat:y], @"v":[NSNumber numberWithFloat:v], @"stdDevY":[NSNumber numberWithFloat:stdDevY]};
     dispatch_async(dispatch_get_main_queue(), ^{
-        if(((RNTFibriCheckView*)weakSelf.view).onFingerRemoved != nil) ((RNTFibriCheckView*)weakSelf.view).onFingerRemoved(@{});
+        if(((RNTFibriCheckView*)weakSelf.view).onFingerRemoved != nil) ((RNTFibriCheckView*)weakSelf.view).onFingerRemoved(data);
     });
   };
 

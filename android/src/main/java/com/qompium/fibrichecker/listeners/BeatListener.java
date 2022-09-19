@@ -19,7 +19,7 @@ public class BeatListener {
 
   private static final int patternLength = 21;
 
-  private int minYValue = 45;
+  private int minYValue = 38;
 
   private int maxYValue = 160;
 
@@ -177,7 +177,7 @@ public class BeatListener {
     if (fingerDetected && fingerOffCount >= 4) {
       fingerDetected = false;
       Log.i(TAG,"Finger removed: y/v/stdY: " + yValue + "/" + vValue + "/" + stdDevY);
-      beatEventListener.onFingerRemoved();
+      beatEventListener.onFingerRemoved(yValue, vValue, stdDevY);
     }
 
     if (!fingerDetected && fingerOnCount >= 30) {
