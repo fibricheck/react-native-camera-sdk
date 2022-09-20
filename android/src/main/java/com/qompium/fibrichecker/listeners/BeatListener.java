@@ -19,11 +19,11 @@ public class BeatListener {
 
   private static final int patternLength = 21;
 
-  private int minYValue = 38;
+  private int minYValue = 20;
 
   private int maxYValue = 160;
 
-  private int minVValue = 177;
+  private int minVValue = 135;
 
   private int maxStdYValue = 42;
 
