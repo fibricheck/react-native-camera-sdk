@@ -80,12 +80,12 @@ typedef NS_ENUM(NSInteger, MeasurementControllerEvent) {
 - (void)measurementController:(MeasurementController *)measurementController progressUpdated:(NSUInteger)elapsedTime;
 - (void)measurementController:(MeasurementController *)measurementController heartRateUpdated:(NSUInteger)heartRate;
 - (void)measurementController:(MeasurementController *)measurementController didReceiveMeasurementError:(NSString*)message;
+- (void)measurementController:(MeasurementController *)measurementController didReceiveFingerRemoved:(DataPoint *)datapoint;
 
 - (void)measurementControllerDidStartRecording;
 - (void)measurementControllerDidReceiveError;
 - (void)measurementControllerDidReceiveMovement;
 - (void)measurementControllerDidReceiveFingerDetected;
-- (void)measurementControllerDidReceiveFingerRemoved;
 - (void)measurementControllerDidReceivePulseDetected;
 - (void)measurementControllerDidReceivePulseDetectionTimeout;
 - (void)measurementControllerDidReceiveFingerDetectionTimeout;
