@@ -485,14 +485,6 @@
     });
 }
 
-- (void)notifyDelegateProgressUpdated:(NSUInteger)elapsedTime {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.delegate && [self.delegate respondsToSelector:@selector(measurementController:progressUpdated:)]) {
-            [self.delegate measurementController:self didReceiveFingerRemoved:elapsedTime];
-        }
-    });
-}
-
 - (void)notifyDelegateCalibrationReady {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.delegate && [self.delegate respondsToSelector:@selector(measurementControllerDidReceiveCalibrationReady)]) {
