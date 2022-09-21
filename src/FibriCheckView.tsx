@@ -26,7 +26,7 @@ type FibriCheckViewProps = typeof FibriCheckView.defaultProps & {
   pulseDetectionExpiryTime?: number;
   waitForStartRecordingSignal?: boolean;
   onFingerDetected?: () => void;
-  onFingerRemoved?: () => void;
+  onFingerRemoved?: (data: { y: number; v: number; stdDevY: number; }) => void;
   onFingerDetectionTimeExpired?: () => void;
   onCalibrationReady?: () => void;
   onHeartBeat?: (heartRate: number) => void;
@@ -96,6 +96,7 @@ export default class FibriCheckView extends React.Component<FibriCheckViewProps>
           },
       } : {}),
       ...(this.props.onHeartBeat ? { onHeartBeat: event => this.props.onHeartBeat(event.nativeEvent.heartRate) } : {}),
+      ...(this.props.onFingerRemoved ? { onFingerRemoved: event => this.props.onFingerRemoved(event.nativeEvent) } : {}),
       ...(this.props.onMeasurementError ? { onMeasurementError: event => this.props.onMeasurementError(event.nativeEvent.message) } : {}),
       ...(this.props.onTimeRemaining ? { onTimeRemaining: event => this.props.onTimeRemaining(event.nativeEvent.seconds) } : {}),
     };

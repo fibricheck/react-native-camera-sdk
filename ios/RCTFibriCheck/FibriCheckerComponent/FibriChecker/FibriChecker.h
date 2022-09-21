@@ -43,7 +43,7 @@
 #pragma mark - Callbacks
 
 @property (copy) void (^onFingerDetected)(void);
-@property (copy) void (^onFingerRemoved)(void);
+@property (copy) void (^onFingerRemoved)(double, double, double);
 @property (copy) void (^onHeartBeat)(NSUInteger);
 @property (copy) void (^onPulseDetected)(void);
 @property (copy) void (^onCalibrationReady)(void);

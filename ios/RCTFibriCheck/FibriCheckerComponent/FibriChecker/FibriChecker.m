@@ -147,9 +147,9 @@
     }
 }
 
-- (void)measurementControllerDidReceiveFingerRemoved {
+- (void)measurementController:(MeasurementController *)measurementController didReceiveFingerRemoved:(DataPoint *)datapoint {
     if (self.onFingerRemoved != nil) {
-        self.onFingerRemoved();
+        self.onFingerRemoved(datapoint.y, datapoint.v, datapoint.stdDevY);
     }
 }
 

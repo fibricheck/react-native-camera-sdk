@@ -19,13 +19,13 @@ public class BeatListener {
 
   private static final int patternLength = 21;
 
-  private int minYValue = 45;
+  private int minYValue;
 
-  private int maxYValue = 160;
+  private int maxYValue;
 
-  private int minVValue = 177;
+  private int minVValue;
 
-  private int maxStdYValue = 42;
+  private int maxStdDevYValue;
 
   protected double[] pattern;
 
@@ -59,7 +59,7 @@ public class BeatListener {
 
   private long timeSinceLastPulse;
 
-  public BeatListener (int minYValue, int maxYValue, int maxStdYValue, int minVValue) {
+  public BeatListener (int minYValue, int maxYValue, int maxStdDevYValue, int minVValue) {
 
     pattern = new double[] {
         -0.260377750000000, -0.264072118421053, -0.690280657894737, 0.320902447368421, 0.636459210526316, 0.775235157894737, 0.616998750000000,
@@ -74,7 +74,7 @@ public class BeatListener {
 
     this.minYValue = minYValue;
     this.maxYValue = maxYValue;
-    this.maxStdYValue = maxStdYValue;
+    this.maxStdDevYValue = maxStdDevYValue;
     this.minVValue = minVValue;
   }
 
@@ -166,7 +166,7 @@ public class BeatListener {
     // Debug finger values
     // Log.e(TAG, yValue + "/" + vValue + "/" + stdDevY);
 
-    if (yValue > minYValue && yValue < maxYValue && vValue > minVValue && stdDevY <= maxStdYValue) {
+    if (yValue > minYValue && yValue < maxYValue && vValue > minVValue && stdDevY <= maxStdDevYValue) {
       fingerOnCount++;
       fingerOffCount = 0;
     } else {
@@ -176,8 +176,8 @@ public class BeatListener {
 
     if (fingerDetected && fingerOffCount >= 4) {
       fingerDetected = false;
-      Log.i(TAG,"Finger removed: y/v/stdY: " + yValue + "/" + vValue + "/" + stdDevY);
-      beatEventListener.onFingerRemoved();
+      Log.i(TAG,"Finger removed: y/v/stdDevY: " + yValue + "/" + vValue + "/" + stdDevY);
+      beatEventListener.onFingerRemoved(yValue, vValue, stdDevY);
     }
 
     if (!fingerDetected && fingerOnCount >= 30) {

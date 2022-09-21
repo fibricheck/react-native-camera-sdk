@@ -154,11 +154,11 @@ public abstract class FibriChecker implements CameraListener {
         fibriListener.onFingerDetected();
       }
 
-      @Override public void onFingerRemoved() {
+      @Override public void onFingerRemoved(double y, double v, double stdDevY) {
 
         if (fingerDetectionExpiryTime != 0) {
           event = Event.FINGER_REMOVED;
-          fibriListener.onFingerRemoved();
+          fibriListener.onFingerRemoved(y, v, stdDevY);
         }
       }
 
@@ -642,13 +642,13 @@ public abstract class FibriChecker implements CameraListener {
 
     private int fingerDetectionExpiryTime = -1;
 
-    private int minYValue = 45;
+    private int minYValue = 20;
 
-    private int maxYValue = 110;
-
-    private int minVValue = 177;
-
-    private int maxStdDevYValue = 36;
+    private int maxYValue = 160;
+  
+    private int minVValue = 135;
+  
+    private int maxStdDevYValue = 42;  
 
     private boolean waitForStartRecordingSignal = false;
 
