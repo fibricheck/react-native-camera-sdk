@@ -1,0 +1,11 @@
+{
+  "id": "3ZGPH",
+  "name": "Terminate a measurment",
+  "description": "When a measurement has been terminated (early), all resources should be cleaned",
+  "type": "requirement",
+  "origin": "user_need",
+  "keyValues": [],
+  "attachments": [],
+  "testIds": [],
+  "updatedTime": 1680101292130
+}
