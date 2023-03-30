@@ -1,0 +1,13 @@
+{
+  "id": "QC3JP",
+  "name": "The SDK will clear up its resources when not necessary anymore",
+  "description": "When the measurement is done or reset or when the screen is destroyed, the assigned resources will be cleared",
+  "type": "specification",
+  "origin": "user_need",
+  "keyValues": [],
+  "attachments": [],
+  "testIds": [
+    "SY3TN"
+  ],
+  "updatedTime": 1680101255645
+}
