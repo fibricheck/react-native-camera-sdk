@@ -83,6 +83,17 @@ export default class FibriCheckView extends React.Component<FibriCheckViewProps>
     );
   }
 
+  startRecording() {
+    const handle = findNodeHandle(this);
+    // @ts-ignore
+    UIManager.dispatchViewManagerCommand(
+      handle,
+      // @ts-ignore
+      UIManager.FibriCheck.Commands.startRecording,
+      []
+    );
+  }
+
   render() {
     const propsMapped = {
       ...(this.props.onSampleReady ? { onSampleReady: event => this.props.onSampleReady(event.nativeEvent) } : {}),
