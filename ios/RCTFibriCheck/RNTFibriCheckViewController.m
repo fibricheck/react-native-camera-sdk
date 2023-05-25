@@ -58,6 +58,10 @@
     _fibrichecker.stop;
 }
 
+- (void)startRecording {
+    _fibrichecker.startRecording;
+}
+
 // MARK: - UI
 - (void)viewDidLoad {
   [super viewDidLoad];

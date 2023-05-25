@@ -12,6 +12,7 @@
 - (void) fibriCheckViewDidSetFingerDetectionExpiryTime;
 - (void) fibriCheckViewDidSetWaitForStartRecordingSignal;
 - (void) stopCamera;
+- (void) startRecording;
 - (void) drawGraphPoint;
 - (void) addPoint;
 - (void) startMeasurement;

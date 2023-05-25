@@ -45,4 +45,9 @@ RCT_EXPORT_METHOD(resetModule:(nonnull NSNumber*) reactTag)
  self.fibriCheckViewController.stopCamera;
 }
 
+RCT_EXPORT_METHOD(startRecording:(nonnull NSNumber*) reactTag)
+{
+ self.fibriCheckViewController.startRecording;
+}
+
 @end
