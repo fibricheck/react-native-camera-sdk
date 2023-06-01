@@ -13,7 +13,7 @@ import {Platform, StyleSheet, Text, View, FlatList, Button} from 'react-native';
 import {request, PERMISSIONS} from 'react-native-permissions';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 
-import {RNFibriCheckView} from '@fibricheck/react-native-sdk';
+import {RNFibriCheckView} from '@fibricheck/react-native-camera-sdk';
 import {createOAuth2Client} from '@extrahorizon/javascript-sdk';
 import {rqlBuilder} from '@extrahorizon/javascript-sdk';
 
@@ -138,13 +138,13 @@ const App = () => {
             console.log('pulse detection time is expired')
           }
           onMovementDetected={() => console.log('movement detected')}
-          onHeartBeat={(event) => setHeartRate(event.nativeEvent.heartRate)}
-          onTimeRemaining={(event) => console.log(event.nativeEvent)}
-          onMeasurementError={(event) => console.log(event.nativeEvent)}
+          onHeartBeat={(event) => setHeartRate(event.heartRate)}
+          onTimeRemaining={(event) => console.log(event)}
+          onMeasurementError={(event) => console.log(event)}
           onMeasurementProcessed={(event) =>
-            sendMeasurement(event.nativeEvent.measurement)
+            sendMeasurement(event.measurement)
           }
-          onSampleReady={(event) => onSampleReady(event.nativeEvent.ppg)}
+          onSampleReady={(event) => onSampleReady(event.ppg)}
         />
       )}
 
