@@ -135,3 +135,16 @@ When the permissions are all set up, you can implement the FibriCheck component 
 ```
 
 ##
+
+# Update Dependencies
+The React Native SDK depends on the FibriCheck native SDK's for [Android](https://github.com/fibricheck/android-camera-sdk) and [iOS](https://github.com/fibricheck/ios-camera-sdk). 
+
+To update the iOS SDK dependency, change the following line in `ios/react-native-camera-sdk.podspec`:
+```
+  s.dependency 'FibriCheckCameraSDK', '0.1.3'
+```
+
+To update the Android SDK dependency, change the following line in `android/build.gradle`
+```
+    implementation 'com.github.fibricheck:android-camera-sdk:v0.3.2'
+```
