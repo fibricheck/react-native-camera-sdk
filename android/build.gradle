@@ -36,12 +36,12 @@ repositories {
     mavenCentral()
     google()
     jcenter()
-
     maven { url 'https://jitpack.io' }
 }
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation 'com.github.fibricheck:android-camera-sdk:v0.3.2'
     implementation 'com.facebook.react:react-native:+'
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:support-v13:27.1.1'
