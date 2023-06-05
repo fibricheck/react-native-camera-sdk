@@ -1215,10 +1215,10 @@
     ts-toolbelt "^9.6.0"
     typescript-json-decoder "^1.0.10"
 
-"@fibricheck/react-native-camera-sdk@1.3.1-dev.85":
-  version "1.3.1-dev.85"
-  resolved "https://npm.pkg.github.com/download/@fibricheck/react-native-camera-sdk/1.3.1-dev.85/afdc712cb5fb52e1e81cc6673341a1c141235ed3#afdc712cb5fb52e1e81cc6673341a1c141235ed3"
-  integrity sha512-zR1tUCKUt+989TCDzrDRqBj0NYCqwUI4jQaa0yj56Ae6i7MxdNAQYOEoTMTBKe0b9dTLJR1q5mVjbPMWcY9lpw==
+"@fibricheck/react-native-camera-sdk@1.3.1-dev.86":
+  version "1.3.1-dev.86"
+  resolved "https://npm.pkg.github.com/download/@fibricheck/react-native-camera-sdk/1.3.1-dev.86/d94396fd00e8ec4b803da597f2c7926c8beaae6b#d94396fd00e8ec4b803da597f2c7926c8beaae6b"
+  integrity sha512-FSZFgShotUhhh028sV5mDRs4Vi9TRkTB1LlVOwk8B2KxsGw3t94V72jd477CDqOpvc3Wiwvv+QTK5SICABMKHA==
 
 "@hapi/hoek@^9.0.0":
   version "9.3.0"
@@ -5868,6 +5868,11 @@ platform-specific@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/platform-specific/-/platform-specific-1.1.0.tgz#891ad678cbd2864bfce2650e16d36ac9113af833"
   integrity sha512-YWguHhtAcqSLLo5aYLkHkl9ritIrpefvkhKWdb2ToC8FaAF/vXDtMvQYUSRdmhVuGC7S0Q7PBJbQRxIeFEbyfg==
+
+pod-install@^0.1.38:
+  version "0.1.38"
+  resolved "https://registry.yarnpkg.com/pod-install/-/pod-install-0.1.38.tgz#1c16a800a5fc1abea0cafcc0e190f376368c76ab"
+  integrity sha512-NeDWGigjJRriOIKBOvpW2/tK2tYLfyUT7ia6C6L+oarCAhBNP+IGODWdU+GEAqvfsseqOApcFclpXAJTL0UPzA==
 
 posix-character-classes@^0.1.0:
   version "0.1.1"

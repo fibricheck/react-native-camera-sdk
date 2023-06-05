@@ -113,13 +113,7 @@ const App = () => {
   console.log('show', show);
   return (
     <SafeAreaProvider>
-      <Button
-        onPress={() => {
-          console.log('setShow');
-          setShow((value) => !value);
-        }}
-        title={'Toggle'}
-      />
+      
       {camera && show && (
         <RNFibriCheckView
           style={styles.container}
@@ -155,6 +149,13 @@ const App = () => {
           isPulseDetected ? 'Yes' : 'No'
         }`}</Text>
         <Text>{`Measurement Started : ${measurementStarted ? 'Yes' : 'No'}`}</Text>
+        <Button
+        onPress={() => {
+          console.log('setShow');
+          setShow((value) => !value);
+        }}
+        title={'Toggle'}
+      />
         <FlatList
           data={measurements}
           renderItem={renderItem}
