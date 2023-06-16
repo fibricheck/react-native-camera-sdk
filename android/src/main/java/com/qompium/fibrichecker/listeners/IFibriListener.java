@@ -24,7 +24,7 @@ public interface IFibriListener {
 
   void onMeasurementError (String message);
 
-  void onMeasurementStart ();
+  void onMeasurementStart (long timestamp);
 
   void onMovementDetected ();
 

@@ -175,10 +175,11 @@ public class Camera1SurfaceView extends SurfaceView implements SurfaceHolder.Cal
 
   @Override public void onPreviewFrame (final byte[] data, Camera camera) {
 
+    long previewTimestamp = System.currentTimeMillis();
     mCamera.addCallbackBuffer(data);
     QuadrantColor quadrantColor = calculateAverageYUV(data);
 
-    cameraListener.onFrameReceived(quadrantColor.quadrant, quadrantColor.yuvData, SystemClock.uptimeMillis());
+    cameraListener.onFrameReceived(quadrantColor.quadrant, quadrantColor.yuvData, previewTimestamp);
   }
 
   private QuadrantColor calculateAverageYUV (byte[] yuv420sp) {

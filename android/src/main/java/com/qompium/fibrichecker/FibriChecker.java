@@ -256,11 +256,11 @@ public abstract class FibriChecker implements CameraListener {
     fibriListener = listener;
   }
 
-  protected void startMeasurement() {
+  protected void startMeasurement(long startTimestamp) {
 
     measurementData = new MeasurementData();
-    measurementStartTime = SystemClock.uptimeMillis();
-    measurementData.measurementTimestamp = System.currentTimeMillis();
+    measurementStartTime = startTimestamp;
+    measurementData.measurementTimestamp = startTimestamp;
     attempts++;
   }
 
@@ -354,24 +354,25 @@ public abstract class FibriChecker implements CameraListener {
         }
 
         if (previousState != State.RECORDING) {
-          fibriListener.onMeasurementStart();
-          startMeasurement();
           previousState = State.RECORDING;
+          fibriListener.onMeasurementStart(timestamp);
+          startMeasurement(timestamp);
         }
-
-        checkForMeasurementCompletion();
-        checkForMovements();
-        dataPoint = processData(yuvData);
 
         measurementRawList.add(
           new MeasurementRaw(quadrantData, motionData, updateTimer(timestamp)));
+
+        checkForMeasurementCompletion();
+        checkForMovements();
+
+        dataPoint = processData(yuvData);
         fibriListener.onSampleReady(dataPoint, yuvData[0]);
 
         break;
       case FINISHED:
         if (previousState != State.FINISHED) {
-          finishMeasurement();
           fibriListener.onMeasurementFinished();
+          finishMeasurement();
           previousState = State.FINISHED;
         }
 
@@ -477,7 +478,7 @@ public abstract class FibriChecker implements CameraListener {
   private void checkForMeasurementCompletion() {
 
     if (measurementData != null) {
-      if (SystemClock.uptimeMillis() - measurementStartTime > sampleTime * 1000) {
+      if (System.currentTimeMillis() - measurementStartTime > sampleTime * 1000) {
         event = Event.TIMER_ABOVE_SAMPLE_TIME;
       }
     }
