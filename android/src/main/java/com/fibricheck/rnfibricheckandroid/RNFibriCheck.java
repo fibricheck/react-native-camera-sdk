@@ -169,8 +169,9 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
           reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_TIME_REMAINING, event);
       }
 
-      @Override public void onMeasurementFinished() {
+      @Override public void onMeasurementFinished(long timestamp) {
         WritableMap event = Arguments.createMap();
+        event.putDouble("timestamp", (double)timestamp);
         ReactContext reactContext = (ReactContext) linearLayout.getContext();
         reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_MEASUREMENT_FINISHED, event);
       }

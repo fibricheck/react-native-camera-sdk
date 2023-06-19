@@ -28,7 +28,7 @@ public class FibriListener implements IFibriListener {
 
   }
 
-  @Override public void onMeasurementFinished () {
+  @Override public void onMeasurementFinished (long timestamp) {
 
   }
 

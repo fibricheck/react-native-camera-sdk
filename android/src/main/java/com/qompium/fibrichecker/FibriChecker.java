@@ -371,8 +371,8 @@ public abstract class FibriChecker implements CameraListener {
         break;
       case FINISHED:
         if (previousState != State.FINISHED) {
-          fibriListener.onMeasurementFinished();
           finishMeasurement();
+          fibriListener.onMeasurementFinished(timestamp);
           previousState = State.FINISHED;
         }
 
@@ -478,7 +478,7 @@ public abstract class FibriChecker implements CameraListener {
   private void checkForMeasurementCompletion() {
 
     if (measurementData != null) {
-      if (System.currentTimeMillis() - measurementStartTime > sampleTime * 1000) {
+      if (System.currentTimeMillis() - measurementStartTime >= sampleTime * 1000) {
         event = Event.TIMER_ABOVE_SAMPLE_TIME;
       }
     }
