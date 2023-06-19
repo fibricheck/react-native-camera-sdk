@@ -209,7 +209,9 @@
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
     NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
+    long long timestamp = (long long)(currentTime * 1000);
     DataPoint *dp = [self.imageProcessor processImageBuffer:sampleBuffer];
+    
     [self detectFinger:dp];
     switch (_state) {
         case MeasurementControllerStateDetectingFinger:
@@ -221,7 +223,7 @@
                 [self resetState];
                 _fingerDetectionStartTime = currentTime;
 
-                [self notifyDelegateDidChangeState:MeasurementControllerStateDetectingFinger];
+                [self notifyDelegateDidChangeState:MeasurementControllerStateDetectingFinger onTimestamp:timestamp];
                 _previousState = MeasurementControllerStateDetectingFinger;
             }
             [self checkFingerDetectionTimer];
@@ -236,7 +238,7 @@
                 [self.beatListener clear];
                 _pulseDetectionStartTime = currentTime;
 
-                [self notifyDelegateDidChangeState:MeasurementControllerStateDetectingPulse];
+                [self notifyDelegateDidChangeState:MeasurementControllerStateDetectingPulse onTimestamp:timestamp];
                 _previousState = MeasurementControllerStateDetectingPulse;
             }
 
@@ -251,7 +253,7 @@
                 [self setCameraExposureMode:AVCaptureExposureModeLocked];
                 _calibrationStartTime = [[NSDate date] timeIntervalSince1970];
 
-                [self notifyDelegateDidChangeState: MeasurementControllerStateCalibrating];
+                [self notifyDelegateDidChangeState: MeasurementControllerStateCalibrating onTimestamp:timestamp];
                 _previousState = MeasurementControllerStateCalibrating;
             }
 
@@ -269,11 +271,13 @@
                 _recordingStartTime = currentTime;
                 _attempts += 1;
 
-                [self notifyDelegateDidStartRecording];
-                [self notifyDelegateDidChangeState: MeasurementControllerStateRecording];
+                [self notifyDelegateDidStartRecording: timestamp];
+                [self notifyDelegateDidChangeState: MeasurementControllerStateRecording onTimestamp:timestamp];
                 
                 _previousState = MeasurementControllerStateRecording;
             }
+
+            [self checkMeasurementCompletion];
 
             [self collectMotionData:dp];
             dp.tms = (currentTime - self.recordingStartTime) * 1000;
@@ -284,7 +288,6 @@
             if (_beatListener.isPeakDetected && _beatListener.isValidPulse) {
                 [self notifyDelegateHeartRateUpdated:self.beatListener.heartRate];
             }
-            [self checkMeasurementCompletion];
 
             break;
         case MeasurementControllerStateFinished:
@@ -296,7 +299,7 @@
                 self.measurement.skippedPulseDetection = self.skippedPulseDetection;
                 self.measurement.attempts = self.attempts;
 
-                [self notifyDelegateDidChangeState:MeasurementControllerStateFinished];
+                [self notifyDelegateDidChangeState:MeasurementControllerStateFinished onTimestamp:timestamp];
                 _previousState = MeasurementControllerStateFinished;
             }
             break;
@@ -429,29 +432,13 @@
         [self notifyDelegateProgressUpdated:timeRemaining];
     }
 
-    if (elapsedTime > self.sampleTime) {
+    if (elapsedTime >= self.sampleTime) {
         self.event = MeasurementControllerEventTimerAboveSampleTime;
     }
 }
 
 
 #pragma mark - Delegate Management
-
-- (void)notifyDelegateHeartRateUpdated:(NSUInteger)heartRate {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.delegate && [self.delegate respondsToSelector:@selector(measurementController:heartRateUpdated:)]) {
-            [self.delegate measurementController:self heartRateUpdated:heartRate];
-        }
-    });
-}
-
-- (void)notifyDelegateProgressUpdated:(NSUInteger)elapsedTime {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.delegate && [self.delegate respondsToSelector:@selector(measurementController:progressUpdated:)]) {
-            [self.delegate measurementController:self progressUpdated:elapsedTime];
-        }
-    });
-}
 
 - (void)notifyDelegateDidReceiveBrokenAccSensorData {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -461,10 +448,10 @@
     });
 }
 
-- (void)notifyDelegateDidChangeState:(MeasurementControllerState)state {
+- (void)notifyDelegateDidChangeState:(MeasurementControllerState)state onTimestamp:(NSUInteger)timestamp {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.delegate && [self.delegate respondsToSelector:@selector(measurementController: didChangeState:)]) {
-            [self.delegate measurementController:self didChangeState:state];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(measurementController: didChangeState: onTimestamp:)]) {
+            [self.delegate measurementController:self didChangeState:state onTimestamp:timestamp];
         }
     });
 }
@@ -493,10 +480,26 @@
     });
 }
 
-- (void)notifyDelegateDidStartRecording {
+- (void)notifyDelegateDidStartRecording:(NSUInteger)timestamp {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.delegate && [self.delegate respondsToSelector:@selector(measurementControllerDidStartRecording)]) {
-            [self.delegate measurementControllerDidStartRecording];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(measurementController:didStartRecording:)]) {
+            [self.delegate measurementController: self didStartRecording:timestamp];
+        }
+    });
+}
+
+- (void)notifyDelegateHeartRateUpdated:(NSUInteger)heartRate {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.delegate && [self.delegate respondsToSelector:@selector(measurementController:heartRateUpdated:)]) {
+            [self.delegate measurementController:self heartRateUpdated:heartRate];
+        }
+    });
+}
+
+- (void)notifyDelegateProgressUpdated:(NSUInteger)elapsedTime {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.delegate && [self.delegate respondsToSelector:@selector(measurementController:progressUpdated:)]) {
+            [self.delegate measurementController:self progressUpdated:elapsedTime];
         }
     });
 }

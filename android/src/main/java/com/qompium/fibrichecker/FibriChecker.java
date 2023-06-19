@@ -358,11 +358,11 @@ public abstract class FibriChecker implements CameraListener {
           fibriListener.onMeasurementStart(timestamp);
           startMeasurement(timestamp);
         }
+        checkForMeasurementCompletion();
 
         measurementRawList.add(
           new MeasurementRaw(quadrantData, motionData, updateTimer(timestamp)));
 
-        checkForMeasurementCompletion();
         checkForMovements();
 
         dataPoint = processData(yuvData);

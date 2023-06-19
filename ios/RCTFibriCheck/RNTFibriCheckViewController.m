@@ -91,17 +91,19 @@
   RCTLogInfo(@"addListeners");
   __unsafe_unretained typeof(self) weakSelf = self;
 
-  self.fibrichecker.onMeasurementStart = ^{
-    RCTLogInfo(@"Measurement start");
+  self.fibrichecker.onMeasurementStart = ^(NSUInteger timestamp) {
+    RCTLogInfo(@"Measurement started at: %lu", timestamp);
+    NSDictionary *data = @{@"timestamp":[NSNumber numberWithLongLong:timestamp]};
     dispatch_async(dispatch_get_main_queue(), ^{
-        if(((RNTFibriCheckView*)weakSelf.view).onMeasurementStart != nil) ((RNTFibriCheckView*)weakSelf.view).onMeasurementStart(@{});
+        if(((RNTFibriCheckView*)weakSelf.view).onMeasurementStart != nil) ((RNTFibriCheckView*)weakSelf.view).onMeasurementStart(data);
     });
   };
 
-  self.fibrichecker.onMeasurementFinished = ^{
-    RCTLogInfo(@"Measurement Finished");
+  self.fibrichecker.onMeasurementFinished = ^(NSUInteger timestamp) {
+    RCTLogInfo(@"Measurement Finished at: %lu", timestamp);
+    NSDictionary *data = @{@"timestamp":[NSNumber numberWithLongLong:timestamp]};
     dispatch_async(dispatch_get_main_queue(), ^{
-        if(((RNTFibriCheckView*)weakSelf.view).onMeasurementFinished != nil) ((RNTFibriCheckView*)weakSelf.view).onMeasurementFinished(@{});
+        if(((RNTFibriCheckView*)weakSelf.view).onMeasurementFinished != nil) ((RNTFibriCheckView*)weakSelf.view).onMeasurementFinished(data);
     });
   };
 
