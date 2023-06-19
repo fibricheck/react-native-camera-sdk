@@ -362,7 +362,6 @@
         [self notifyDelegateDidReceiveMovement];
     }
 }
-}
 
 - (void) collectMotionData: (DataPoint*) dp {
     float accx = self.motionManager.accelerometerData.acceleration.x * self.accelerationFactor;
