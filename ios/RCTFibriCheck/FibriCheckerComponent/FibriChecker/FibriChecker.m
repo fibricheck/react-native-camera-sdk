@@ -96,10 +96,10 @@
 
 #pragma mark - MeasureControllerDelegate
 
-- (void)measurementController:(MeasurementController *)measurementController didChangeState:(MeasurementControllerState)state {
+- (void)measurementController:(MeasurementController *)measurementController didChangeState:(MeasurementControllerState)state onTimestamp:(NSUInteger) timestamp {
     if (state == MeasurementControllerStateFinished) {
         if (self.onMeasurementFinished != nil) {
-            self.onMeasurementFinished();
+            self.onMeasurementFinished(timestamp);
         }
 
         Measurement *measurement = self.measurementController.measurement;
@@ -108,6 +108,12 @@
             self.onMeasurementProcessed(measurement);
             [self.measurementController unloadAll];
         }
+    }
+}
+
+- (void)measurementController:(MeasurementController *)measurementController didStartRecording:(NSUInteger)timestamp {
+    if (self.onMeasurementStart != nil) {
+        self.onMeasurementStart(timestamp);
     }
 }
 
@@ -132,12 +138,6 @@
 - (void)measurementController:(MeasurementController *)measurementController heartRateUpdated:(NSUInteger)heartRate {
     if (self.onHeartBeat != nil) {
         self.onHeartBeat(heartRate);
-    }
-}
-
-- (void)measurementControllerDidStartRecording {
-    if (self.onMeasurementStart != nil) {
-        self.onMeasurementStart();
     }
 }
 

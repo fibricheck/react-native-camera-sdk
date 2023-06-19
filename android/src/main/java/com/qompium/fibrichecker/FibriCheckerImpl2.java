@@ -178,10 +178,12 @@ public class FibriCheckerImpl2 extends FibriChecker {
     this.mOnImageAvailableListener = new ImageReader.OnImageAvailableListener() {
 
       @Override public void onImageAvailable (ImageReader reader) {
+        Image img = reader.acquireLatestImage();
+        long sampleTimestamp = System.currentTimeMillis();
 
-        QuadrantColor quadrantColor = calculateAverageYUV(reader.acquireLatestImage());
+        QuadrantColor quadrantColor = calculateAverageYUV(img);
         if (quadrantColor != null) {
-          onFrameReceived(quadrantColor.quadrant, quadrantColor.yuvData, SystemClock.uptimeMillis());
+          onFrameReceived(quadrantColor.quadrant, quadrantColor.yuvData, sampleTimestamp);
         }
       }
     };

@@ -50,8 +50,8 @@
 @property (copy) void (^onPulseDetectionTimeExpired)(void);
 @property (copy) void (^onFingerDetectionTimeExpired)(void);
 @property (copy) void (^onMovementDetected)(void);
-@property (copy) void (^onMeasurementStart)(void);
-@property (copy) void (^onMeasurementFinished)(void);
+@property (copy) void (^onMeasurementStart)(NSUInteger);
+@property (copy) void (^onMeasurementFinished)(NSUInteger);
 @property (copy) void (^onMeasurementError)(NSString*);
 @property (copy) void (^onMeasurementProcessed)(Measurement*);
 @property (copy) void (^onSampleReady)(double, double);

@@ -77,9 +77,9 @@ public class FibriCheckerImpl1 extends FibriChecker {
     }
   }
 
-  @Override public void onFrameReceived (final Quadrant quadrant, final double[] yuvData, long timeStamp) {
+  @Override public void onFrameReceived (final Quadrant quadrant, final double[] yuvData, long timestamp) {
 
-    handleStates(quadrant, yuvData, getMotionData(), timeStamp);
+    handleStates(quadrant, yuvData, getMotionData(), timestamp);
   }
 
   @Override public void lockExposure () {

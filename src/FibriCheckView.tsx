@@ -30,8 +30,8 @@ type FibriCheckViewProps = typeof FibriCheckView.defaultProps & {
   onFingerDetectionTimeExpired?: () => void;
   onCalibrationReady?: () => void;
   onHeartBeat?: (heartRate: number) => void;
-  onMeasurementFinished?: () => void;
-  onMeasurementStart?: () => void;
+  onMeasurementFinished?: (timestamp: number) => void;
+  onMeasurementStart?: (timestamp: number) => void;
   onTimeRemaining?: (seconds: number) => void;
   onSampleReady?: (data: { ppg: number; raw: number; }) => void;
   onPulseDetected?: () => void;
@@ -83,6 +83,17 @@ export default class FibriCheckView extends React.Component<FibriCheckViewProps>
     );
   }
 
+  startRecording() {
+    const handle = findNodeHandle(this);
+    // @ts-ignore
+    UIManager.dispatchViewManagerCommand(
+      handle,
+      // @ts-ignore
+      UIManager.FibriCheck.Commands.startRecording,
+      []
+    );
+  }
+
   render() {
     const propsMapped = {
       ...(this.props.onSampleReady ? { onSampleReady: event => this.props.onSampleReady(event.nativeEvent) } : {}),
@@ -95,6 +106,8 @@ export default class FibriCheckView extends React.Component<FibriCheckViewProps>
             });
           },
       } : {}),
+      ...(this.props.onMeasurementStart ? { onMeasurementStart: event => this.props.onMeasurementStart(event.nativeEvent.timestamp) } : {}),
+      ...(this.props.onMeasurementFinished ? { onMeasurementFinished: event => this.props.onMeasurementFinished(event.nativeEvent.timestamp) } : {}),
       ...(this.props.onHeartBeat ? { onHeartBeat: event => this.props.onHeartBeat(event.nativeEvent.heartRate) } : {}),
       ...(this.props.onFingerRemoved ? { onFingerRemoved: event => this.props.onFingerRemoved(event.nativeEvent) } : {}),
       ...(this.props.onMeasurementError ? { onMeasurementError: event => this.props.onMeasurementError(event.nativeEvent.message) } : {}),

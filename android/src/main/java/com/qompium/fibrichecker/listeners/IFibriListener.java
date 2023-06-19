@@ -16,7 +16,7 @@ public interface IFibriListener {
 
   void onFingerDetectionTimeExpired ();
 
-  void onMeasurementFinished ();
+  void onMeasurementFinished (long timestamp);
 
   void timeRemaining (int seconds);
 
@@ -24,7 +24,7 @@ public interface IFibriListener {
 
   void onMeasurementError (String message);
 
-  void onMeasurementStart ();
+  void onMeasurementStart (long timestamp);
 
   void onMovementDetected ();
 

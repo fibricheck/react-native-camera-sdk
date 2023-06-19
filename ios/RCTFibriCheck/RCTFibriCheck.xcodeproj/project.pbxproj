@@ -41,6 +41,8 @@
 		C7B11BD12698723900A3BD77 /* RCTFibriCheckEventEmitter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTFibriCheckEventEmitter.m; sourceTree = "<group>"; };
 		C7B11BD32698723900A3BD77 /* RCTFibriCheckEventEmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTFibriCheckEventEmitter.h; sourceTree = "<group>"; };
 		C7B11BE12698769B00A3BD77 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
+		E926AF272A405CFB0052BE5C /* FibriCheckerComponent */ = {isa = PBXFileReference; lastKnownFileType = text; path = FibriCheckerComponent; sourceTree = SOURCE_ROOT; };
+		E926AF282A405D0B0052BE5C /* Charts */ = {isa = PBXFileReference; lastKnownFileType = text; path = Charts; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +78,8 @@
 		C7B11BD02698723900A3BD77 /* RCTFibriCheck */ = {
 			isa = PBXGroup;
 			children = (
+				E926AF282A405D0B0052BE5C /* Charts */,
+				E926AF272A405CFB0052BE5C /* FibriCheckerComponent */,
 				C72EF70B26A06CF8009C0229 /* RNFibriCheckViewManager.h */,
 				C72EF70D26A06CF9009C0229 /* RNFibriCheckViewManager.m */,
 				C72EF70E26A06CF9009C0229 /* RNTFibriCheckView.h */,
