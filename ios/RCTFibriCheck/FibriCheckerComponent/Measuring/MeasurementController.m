@@ -40,6 +40,9 @@
 @property NSInteger fingerBadCount;
 @property NSInteger fingerGoodCount;
 @property NSInteger previousTime;
+@property NSString* dimensions;
+@property float iso;
+@property float exposure;
 @property float accelerationFactor;
 
 @property MeasurementControllerState state;
@@ -178,11 +181,31 @@
 
     [self.session addOutput:videoOutput];
     [self.session startRunning];
-
+    
+    AVCaptureInput *input = [self.session.inputs objectAtIndex:0];
+    AVCaptureInputPort *port = [input.ports objectAtIndex:0];
+    
+    // Register an observer to get the resolution
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(inputPortFormatDescriptionDidChange:)
+                                                 name:AVCaptureInputPortFormatDescriptionDidChangeNotification
+                                               object:port];
+    
     if (self.flashEnabled && [self.camera isTorchModeSupported:AVCaptureTorchModeOn]) {
         [self.camera lockForConfiguration:nil];
         self.camera.torchMode = AVCaptureTorchModeOn;
         [self.camera unlockForConfiguration];
+    }
+}
+
+- (void)inputPortFormatDescriptionDidChange:(NSNotification *)notification {
+    // Handle the format description change
+    if (self.session.inputs.count > 0) {
+        AVCaptureInput *input = [self.session.inputs objectAtIndex:0];
+        AVCaptureInputPort *port = [input.ports objectAtIndex:0];
+        CMFormatDescriptionRef formatDescription = port.formatDescription;
+        CMVideoDimensions dimensions = CMVideoFormatDescriptionGetDimensions(formatDescription);
+        self.dimensions = [NSString stringWithFormat:@"%dx%d", dimensions.width, dimensions.height];
     }
 }
 
@@ -203,7 +226,14 @@
 
 - (void)setCameraExposureMode:(AVCaptureExposureMode)exposureMode {
     [self.camera lockForConfiguration:nil];
-    [self.camera setExposureMode:exposureMode];
+    [self.camera setExposureMode:AVCaptureExposureModeCustom];
+    
+    self.iso = self.camera.ISO;
+    
+    CMTime currentExposure = self.camera.exposureDuration;
+    self.exposure = CMTimeGetSeconds(currentExposure);
+    
+    [self.camera setExposureModeCustomWithDuration:currentExposure ISO:self.iso completionHandler:nil];
     [self.camera unlockForConfiguration];
 }
 
@@ -292,6 +322,10 @@
             break;
         case MeasurementControllerStateFinished:
             if (_previousState != MeasurementControllerStateFinished) {
+                self.measurement.technical_details[@"camera_resolution"] = self.dimensions;
+                self.measurement.technical_details[@"camera_iso"] = [NSNumber numberWithFloat: self.iso];
+                // convert to nanoseconds to be comform w/ the Android values
+                self.measurement.technical_details[@"camera_exposure_time"] = [NSNumber numberWithFloat: self.exposure*1000000000.0];
                 self.measurement.startTime = self.recordingStartTime;
                 self.measurement.heartRate = self.beatListener.heartRate;
                 self.measurement.skippedMovementDetection = self.skippedMovementDetection;
