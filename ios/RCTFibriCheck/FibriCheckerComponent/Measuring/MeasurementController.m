@@ -228,7 +228,11 @@
     [self.camera lockForConfiguration:nil];
     [self.camera setExposureMode:AVCaptureExposureModeCustom];
     
-    self.iso = self.camera.ISO;
+    float maxIso = self.camera.activeFormat.maxISO;
+    float minIso = self.camera.activeFormat.minISO;
+    
+    self.iso = self.camera.ISO > maxIso ? maxIso : self.camera.ISO;
+    self.iso = self.iso < minIso ? minIso : self.iso;
     
     CMTime currentExposure = self.camera.exposureDuration;
     self.exposure = CMTimeGetSeconds(currentExposure);
