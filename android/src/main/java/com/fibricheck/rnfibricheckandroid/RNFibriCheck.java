@@ -162,7 +162,7 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
         reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_HEARTBEAT, event);
       }
 
-      @Override public void timeRemaining(int seconds) {
+      @Override public void onTimeRemaining(int seconds) {
           WritableMap event = Arguments.createMap();
           event.putInt("seconds", seconds);
           ReactContext reactContext = (ReactContext) linearLayout.getContext();
