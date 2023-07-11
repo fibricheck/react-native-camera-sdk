@@ -330,6 +330,11 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
     fibriChecker.fingerDetectionExpiryTime = fingerDetectionExpiryTime;
   }
 
+  @ReactProp(name = "pulseDetectionExpiryTime")
+  public void setPulseDetectionExpiryTime(View view, int pulseDetectionExpiryTime) {
+    fibriChecker.pulseDetectionExpiryTime = pulseDetectionExpiryTime;
+  }
+
   @ReactProp(name = "flashEnabled")
   public void setFlashEnabled(View view, boolean flashEnabled) {
     fibriChecker.flashEnabled = flashEnabled;

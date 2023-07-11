@@ -10,6 +10,8 @@
 - (void) fibriCheckViewDidSetRotation;
 - (void) fibriCheckViewDidSetMovementDetection;
 - (void) fibriCheckViewDidSetFingerDetectionExpiryTime;
+- (void) fibriCheckViewDidSetPulseDetectionExpiryTime;
+
 - (void) fibriCheckViewDidSetWaitForStartRecordingSignal;
 - (void) stopCamera;
 - (void) drawGraphPoint;
@@ -34,6 +36,7 @@
 @property (nonatomic) BOOL rotationEnabled;
 @property (nonatomic) BOOL movementDetectionEnabled;
 @property (nonatomic) NSInteger *fingerDetectionExpiryTime;
+@property (nonatomic) NSInteger *pulseDetectionExpiryTime;
 @property (nonatomic) NSInteger *waitForStartRecordingSignal;
 @property (nonatomic) BOOL drawGraph;
 
