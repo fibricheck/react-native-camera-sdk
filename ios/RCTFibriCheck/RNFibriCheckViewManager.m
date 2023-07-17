@@ -27,6 +27,8 @@ RCT_EXPORT_VIEW_PROPERTY(accEnabled, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(rotationEnabled, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(movementDetectionEnabled, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(fingerDetectionExpiryTime, NSInteger);
+RCT_EXPORT_VIEW_PROPERTY(pulseDetectionExpiryTime, NSInteger);
+
 RCT_EXPORT_VIEW_PROPERTY(waitForStartRecordingSignal, NSInteger);
 
 RCT_EXPORT_VIEW_PROPERTY(drawGraph, BOOL);

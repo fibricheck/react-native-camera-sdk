@@ -49,6 +49,11 @@
     _fibrichecker.fingerDetectionExpiryTime = fingerDetectionExpiryTime;
 }
 
+- (void)fibriCheckViewDidSetPulseDetectionExpiryTime {
+    NSInteger pulseDetectionExpiryTime = ((RNTFibriCheckView*)self.view).pulseDetectionExpiryTime;
+    _fibrichecker.pulseDetectionExpiryTime = pulseDetectionExpiryTime;
+}
+
 - (void)fibriCheckViewDidSetWaitForStartRecordingSignal {
     NSInteger waitForStartRecordingSignal = ((RNTFibriCheckView*)self.view).waitForStartRecordingSignal;
     _fibrichecker.waitForStartRecordingSignal = waitForStartRecordingSignal;

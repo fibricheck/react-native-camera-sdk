@@ -162,7 +162,7 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
         reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_HEARTBEAT, event);
       }
 
-      @Override public void timeRemaining(int seconds) {
+      @Override public void onTimeRemaining(int seconds) {
           WritableMap event = Arguments.createMap();
           event.putInt("seconds", seconds);
           ReactContext reactContext = (ReactContext) linearLayout.getContext();
@@ -328,6 +328,11 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   @ReactProp(name = "fingerDetectionExpiryTime")
   public void setFingerDetectionExpiryTime(View view, int fingerDetectionExpiryTime) {
     fibriChecker.fingerDetectionExpiryTime = fingerDetectionExpiryTime;
+  }
+
+  @ReactProp(name = "pulseDetectionExpiryTime")
+  public void setPulseDetectionExpiryTime(View view, int pulseDetectionExpiryTime) {
+    fibriChecker.pulseDetectionExpiryTime = pulseDetectionExpiryTime;
   }
 
   @ReactProp(name = "flashEnabled")

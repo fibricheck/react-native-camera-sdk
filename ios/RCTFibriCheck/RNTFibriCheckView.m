@@ -163,6 +163,11 @@
     [self.delegate fibriCheckViewDidSetFingerDetectionExpiryTime];
 }
 
+- (void)setPulseDetectionExpiryTime:(NSInteger *)pulseDetectionExpiryTime {
+    _pulseDetectionExpiryTime = pulseDetectionExpiryTime;
+    [self.delegate fibriCheckViewDidSetPulseDetectionExpiryTime];
+}
+
 - (void)setWaitForStartRecordingSignal:(NSInteger *)waitForStartRecordingSignal {
     _waitForStartRecordingSignal = waitForStartRecordingSignal;
     [self.delegate fibriCheckViewDidSetWaitForStartRecordingSignal];
