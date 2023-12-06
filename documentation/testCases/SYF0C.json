@@ -1,0 +1,20 @@
+{
+  "id": "SYF0C",
+  "name": "Check if all quadrants contain unique data",
+  "type": "manual",
+  "tier": "Sanity",
+  "planStatus": "Planned",
+  "motivation": "",
+  "testSteps": [
+    "Perform a measurement"
+  ],
+  "expectedResult": "All processed quadrants should contain unique data",
+  "requiredTestEnvironmentIds": [],
+  "keyValues": [],
+  "parentNames": [
+    "Execute a measurement",
+    "Post Processing",
+    "The Processed measurement will contain all the data that was enabled"
+  ],
+  "updatedTime": 1701863651519
+}
