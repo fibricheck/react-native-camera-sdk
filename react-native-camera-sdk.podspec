@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/fibricheck/react-native-camera-sdk.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,swift}"
-  s.dependency 'FibriCheckCameraSDK', '0.1.3'
+  s.dependency 'FibriCheckCameraSDK', '1.0.1'
   s.requires_arc = true
 
   s.dependency "React"
