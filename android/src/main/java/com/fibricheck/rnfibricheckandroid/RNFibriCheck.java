@@ -28,9 +28,9 @@ import com.google.gson.Gson;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
-import com.qompium.fibrichecker.FibriChecker;
-import com.qompium.fibrichecker.listeners.FibriListener;
-import com.qompium.fibrichecker.measurement.MeasurementData;
+import com.qompium.fibricheck.camerasdk.FibriChecker;
+import com.qompium.fibricheck.camerasdk.listeners.FibriListener;
+import com.qompium.fibricheck.camerasdk.measurement.MeasurementData;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
@@ -162,7 +162,7 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
         reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_HEARTBEAT, event);
       }
 
-      @Override public void timeRemaining(int seconds) {
+      @Override public void onTimeRemaining(int seconds) {
           WritableMap event = Arguments.createMap();
           event.putInt("seconds", seconds);
           ReactContext reactContext = (ReactContext) linearLayout.getContext();
@@ -328,6 +328,11 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   @ReactProp(name = "fingerDetectionExpiryTime")
   public void setFingerDetectionExpiryTime(View view, int fingerDetectionExpiryTime) {
     fibriChecker.fingerDetectionExpiryTime = fingerDetectionExpiryTime;
+  }
+
+  @ReactProp(name = "pulseDetectionExpiryTime")
+  public void setPulseDetectionExpiryTime(View view, int pulseDetectionExpiryTime) {
+    fibriChecker.pulseDetectionExpiryTime = pulseDetectionExpiryTime;
   }
 
   @ReactProp(name = "flashEnabled")
