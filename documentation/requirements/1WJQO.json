@@ -1,0 +1,13 @@
+{
+  "id": "1WJQO",
+  "name": "The SDK uses the lowest available resolution",
+  "description": "The SDK uses the lowest available resolution to minimize the processing power needed. From the array of resolutions, the lowest available resolution will be detected.",
+  "type": "specification",
+  "origin": "user_need",
+  "keyValues": [],
+  "attachments": [],
+  "testIds": [
+    "RJPJL"
+  ],
+  "updatedTime": 1724665482136
+}
