@@ -17,6 +17,18 @@ import {RNFibriCheckView} from '@fibricheck/react-native-camera-sdk';
 import {createOAuth2Client} from '@extrahorizon/javascript-sdk';
 import {rqlBuilder} from '@extrahorizon/javascript-sdk';
 
+const credentials = {
+  username: 'hello@fibricheck.com',
+  password: 'P4sswOrd',
+};
+
+const sdk = createOAuth2Client({
+  host: 'https://api.dev.fibricheck.com/',
+  clientId: '8878e7159758c1c87fa21d5a719ead2ec352d136',
+});
+
+const schemaId = '5a6f5d82454b300019e1df14';
+
 const App = () => {
   const [camera, setCamera] = useState(false);
   const [fingerPresent, setFingerPresent] = useState(false);
@@ -26,12 +38,7 @@ const App = () => {
   const [graphData, setGraphData] = useState([]);
   const [domain, setDomain] = useState({minDomain: 0, maxDomain: 50});
   const [measurements, setMeasurements] = useState([]);
-  const schemaId = '5a6f5d82454b300019e1df14';
 
-  const sdk = createOAuth2Client({
-    host: 'https://api.dev.fibricheck.com/',
-    clientId: '8878e7159758c1c87fa21d5a719ead2ec352d136',
-  });
 
   useEffect(() => {
     if (Platform.OS === 'ios') {
@@ -43,7 +50,7 @@ const App = () => {
         setCamera(result === 'granted');
       });
     }
-    authentication();
+    authenticate();
   }, []);
 
   useEffect(() => {
@@ -54,11 +61,8 @@ const App = () => {
     }
   }, [graphData]);
 
-  const authentication = async () => {
-    await sdk.auth.authenticate({
-      password: '7pWYh7dd',
-      username: 'jan.vandertaelen@craftzing.com',
-    });
+  const authenticate = async () => {
+    await sdk.auth.authenticate(credentials);
 
     console.log('sdk.users.health()', await sdk.users.health());
     console.log('sdk.users.me()', await sdk.users.me());
@@ -73,10 +77,6 @@ const App = () => {
   };
 
   const sendMeasurement = async (measurement) => {
-    await sdk.auth.authenticate({
-      password: '7pWYh7dd',
-      username: 'jan.vandertaelen@craftzing.com',
-    });
     const {id} = await sdk.data.documents.create(schemaId, {
       ...JSON.parse(measurement),
       ...require('./extraData.json'),
@@ -110,7 +110,6 @@ const App = () => {
   };
 
   const [show, setShow] = useState(false);
-  console.log('show', show);
   return (
     <SafeAreaProvider>
       
@@ -119,25 +118,26 @@ const App = () => {
           style={styles.container}
           graphBackgroundColor={'#0073ff'}
           flashEnabled={true}
-          onFingerDetected={() => setFingerPresent(true)}
-          onFingerRemoved={() => setFingerPresent(false)}
+          onFingerDetected={() => {setFingerPresent(true); console.log('Finger detected')}}
+          onFingerRemoved={() => {setFingerPresent(false); console.log('Finger removed')}}
           onCalibrationReady={() => console.log('calibration ready')}
           onMeasurementFinished={() => console.log('measurement finished')}
-          onMeasurementStart={() => setMeasurementStarted(true)}
+          onMeasurementStart={() => {setMeasurementStarted(true); console.log('Measurement started')}}
           onFingerDetectionTimeExpired={() =>
             console.log('finger detection time expired')
           }
-          onPulseDetected={() => setIsPulseDetected(true)}
+          onPulseDetected={() => {setIsPulseDetected(true); console.log('Pulse detected')}}
           onPulseDetectionTimeExpired={() =>
             console.log('pulse detection time is expired')
           }
           onMovementDetected={() => console.log('movement detected')}
-          onHeartBeat={(event) => setHeartRate(event.heartRate)}
-          onTimeRemaining={(event) => console.log(event)}
+          onHeartBeat={(event) => {setHeartRate(event.heartRate); console.log(`Heartbeat received: ${event}`)}}
+          onTimeRemaining={(event) => console.log(`Time remaining: ${event}`)}
           onMeasurementError={(event) => console.log(event)}
-          onMeasurementProcessed={(event) =>
-            sendMeasurement(event.measurement)
-          }
+          onMeasurementProcessed={(event) => {
+            console.log('Measurement processed');
+            sendMeasurement(event.measurement);
+          }}
           onSampleReady={(event) => onSampleReady(event.ppg)}
         />
       )}
