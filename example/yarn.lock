@@ -1214,10 +1214,10 @@
     ts-toolbelt "^9.6.0"
     typescript-json-decoder "^1.0.10"
 
-"@fibricheck/react-native-camera-sdk@1.3.1-dev.106":
-  version "1.3.1-dev.106"
-  resolved "https://npm.pkg.github.com/download/@fibricheck/react-native-camera-sdk/1.3.1-dev.106/ddf06c789b07328f0e9d2375efcc6567e170d44e#ddf06c789b07328f0e9d2375efcc6567e170d44e"
-  integrity sha512-H1VRZXQAww3j67Ea8GVF9sX1IxzJgpycidoumDF6k8YRRpVZB3ZPK+gt2EYQH06FSXJCtnwgJJPLQslTrFCfbQ==
+"@fibricheck/react-native-camera-sdk@1.3.2-dev.114":
+  version "1.3.2-dev.114"
+  resolved "https://npm.pkg.github.com/download/@fibricheck/react-native-camera-sdk/1.3.2-dev.114/17a81793e784a7eeaaae193e5216ce962a1093ca#17a81793e784a7eeaaae193e5216ce962a1093ca"
+  integrity sha512-jtdEho3ws7SQ380G2bhKcZ6y08X2RbRhAM46/iJCkkP/6JqRFGNdEP/iVZNSz7lQFxNKuQNbrvxAd0vBAyJ5cQ==
 
 "@hapi/hoek@^9.0.0":
   version "9.3.0"
