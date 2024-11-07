@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.homepage     = "https://github.com/fibricheck/react-native-camera-sdk"
   s.license      = "MIT"
   # s.license    = { :type => "MIT", :file => "FILE_LICENSE" }
-  s.authors      = { "Qompium" => "info@fibricheck.com" }
+  s.authors      = { 'FibriCheck' => 'development@fibricheck.com' }
   s.platforms    = { :ios => "10.0" }
   s.source       = { :git => "https://github.com/fibricheck/react-native-camera-sdk.git", :tag => "#{s.version}" }
 

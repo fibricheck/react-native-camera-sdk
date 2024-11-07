@@ -31,7 +31,7 @@ android {
         targetCompatibility = 1.8
     }
 
-    namespace "com.fibricheck.camerasdk"
+    namespace "com.fibricheck.rncamerasdk"
 }
 
 repositories {
