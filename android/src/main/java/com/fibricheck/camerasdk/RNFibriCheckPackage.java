@@ -1,6 +1,6 @@
 //  Created by react-native-create-bridge
 
-package com.fibricheck.rnfibricheckandroid;
+package com.fibricheck.camerasdk;
 
 import androidx.annotation.NonNull;
 
