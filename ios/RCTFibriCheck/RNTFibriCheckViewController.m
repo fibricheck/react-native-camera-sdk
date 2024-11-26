@@ -70,6 +70,12 @@
   [self addListeners];
 }
 
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    // Clean up resources, remove observers, stop timers, etc.
+    [self.fibrichecker stop];
+}
+
 - (void)startMeasurement {
   NSLog(@"startMeasurement");
   [_fibrichecker startMeasurement];

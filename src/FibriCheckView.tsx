@@ -1,8 +1,6 @@
-import React, { Component, useCallback, useEffect, useRef } from 'react';
+import { Component, useCallback, useRef } from 'react';
 import {
   requireNativeComponent,
-  UIManager,
-  findNodeHandle,
   NativeSyntheticEvent,
   ViewStyle,
   ColorValue,
@@ -11,27 +9,27 @@ import {
 import packageVersion from '../package-version.json';
 import { CameraData, MeasurementError } from './types';
 
-export type SampleReadyEventData = { ppg: number; raw: number; }
+export interface SampleReadyEventData { ppg: number; raw: number; }
 export type SampleReadyEvent = NativeSyntheticEvent<SampleReadyEventData>
 
-export type MeasurementProcessedEventData = { measurement: string }
+export interface MeasurementProcessedEventData { measurement: string; }
 export type MeasurementProcessedEvent = NativeSyntheticEvent<MeasurementProcessedEventData>
 
-export type HeartBeatEventData = { heartRate: number }
+export interface HeartBeatEventData { heartRate: number; }
 export type HeartBeatEvent = NativeSyntheticEvent<HeartBeatEventData>
 
-export type FingerRemovedEventData = { y: number; v: number; stdDevY: number; }
+export interface FingerRemovedEventData { y: number; v: number; stdDevY: number; }
 export type FingerRemovedEvent = NativeSyntheticEvent<FingerRemovedEventData>
 
-export type MeasurementErrorEventData = { message: MeasurementError }
+export interface MeasurementErrorEventData { message: MeasurementError; }
 export type MeasurementErrorEvent = NativeSyntheticEvent<MeasurementErrorEventData>
 
-export type TimeRemainingEventData = { seconds: number }
+export interface TimeRemainingEventData { seconds: number; }
 export type TimeRemainingEvent = NativeSyntheticEvent<TimeRemainingEventData>
 
 export type EmptyEvent = NativeSyntheticEvent<void>
 interface FibriCheckNative {
-  style?: ViewStyle,
+  style?: ViewStyle;
 
   drawGraph: boolean;
   drawBackground: boolean;
@@ -70,7 +68,7 @@ interface FibriCheckNative {
 
 const FibriCheck = requireNativeComponent<FibriCheckNative>('FibriCheck');
 
-type FibriCheckViewProps = {
+interface FibriCheckViewProps {
   style?: ViewStyle;
 
   drawGraph?: boolean;
@@ -82,16 +80,16 @@ type FibriCheckViewProps = {
   movementDetectionEnabled?: boolean;
   rotationEnabled?: boolean;
   waitForStartRecordingSignal?: boolean;
-  
+
   lineColor?: string;
   lineThickness?: number;
 
   graphBackgroundColor?: string;
-  
+
   sampleTime?: number;
   fingerDetectionExpiryTime?: number;
   pulseDetectionExpiryTime?: number;
-  
+
   onSampleReady?: (data: SampleReadyEventData) => void;
   onFingerDetected?: () => void;
   onFingerRemoved?: (data: FingerRemovedEventData) => void;
@@ -106,7 +104,7 @@ type FibriCheckViewProps = {
   onMovementDetected?: () => void;
   onMeasurementProcessed?: (data: CameraData) => void;
   onMeasurementError?: (message: MeasurementError) => void;
-};
+}
 
 const FibriCheckView = ({
   style = {
@@ -131,8 +129,8 @@ const FibriCheckView = ({
 
   sampleTime = 60,
   fingerDetectionExpiryTime = -1,
-  pulseDetectionExpiryTime= 10,
-  
+  pulseDetectionExpiryTime = 10,
+
   onSampleReady,
   onFingerDetected = () => {},
   onFingerRemoved,
@@ -146,7 +144,7 @@ const FibriCheckView = ({
   onPulseDetectionTimeExpired = () => {},
   onMovementDetected = () => {},
   onMeasurementProcessed,
-  onMeasurementError
+  onMeasurementError,
 }: FibriCheckViewProps) => {
   const nativeRef = useRef<Component<FibriCheckNative> & NativeMethods>(null);
 
@@ -176,17 +174,6 @@ const FibriCheckView = ({
   const onTimeRemainingCallback = useCallback((event: TimeRemainingEvent) => {
     onTimeRemaining?.(event.nativeEvent.seconds);
   }, [onTimeRemaining]);
-
-  useEffect(() => {
-    return () => {
-      const handle = findNodeHandle(nativeRef.current);
-      UIManager.dispatchViewManagerCommand(
-        handle,
-        UIManager.getViewManagerConfig('FibriCheck').Commands.resetModule,
-        []
-      );
-    }
-  }, []);
 
   return (
     <FibriCheck
@@ -228,7 +215,7 @@ const FibriCheckView = ({
       onMeasurementError={onMeasurementErrorCallback}
     />
   );
-}
+};
 
 FibriCheckView.versionNumber = packageVersion.version;
 export const versionNumber = packageVersion.version;

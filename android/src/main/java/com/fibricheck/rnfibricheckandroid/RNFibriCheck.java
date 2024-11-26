@@ -44,13 +44,14 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
 
   private static final String TAG = "RNFibriCheck";
 
-  public static final int COMMAND_START_MEASUREMENT = 1;
-
-  public static final int COMMAND_RESET_GRAPH = 2;
-
-  public static final int COMMAND_START_RECORDING = 3;
-
-  private static final int COMMAND_RESET_MODULE = 4;
+  public static final String COMMAND_START_MEASUREMENT_STRING = "startMeasurement";
+  public static final String COMMAND_RESET_GRAPH_STRING = "resetGraph";
+  public static final String COMMAND_START_RECORDING_STRING = "startRecording";
+  private static final String COMMAND_RESET_MODULE_STRING = "resetModule";
+  public static final int COMMAND_START_MEASUREMENT_INT = 1;
+  public static final int COMMAND_RESET_GRAPH_INT = 2;
+  public static final int COMMAND_START_RECORDING_INT = 3;
+  private static final int COMMAND_RESET_MODULE_INT = 4;
 
   private static final int SAMPLE_COUNT = 120;
 
@@ -235,18 +236,16 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   }
 
   @Override public Map<String, Integer> getCommandsMap() {
-
     return MapBuilder.of(
-        "startMeasurement", COMMAND_START_MEASUREMENT,
-        "resetGraph", COMMAND_RESET_GRAPH,
-        "startRecording", COMMAND_START_RECORDING,
-        "resetModule", COMMAND_RESET_MODULE);
+        COMMAND_START_MEASUREMENT_STRING, COMMAND_START_MEASUREMENT_INT,
+        COMMAND_RESET_GRAPH_STRING, COMMAND_RESET_GRAPH_INT,
+        COMMAND_START_RECORDING_STRING, COMMAND_START_RECORDING_INT,
+        COMMAND_RESET_MODULE_STRING, COMMAND_RESET_MODULE_INT);
   }
 
   @Override
   public @Nullable
   Map getExportedCustomDirectEventTypeConstants() {
-
     return MapBuilder.of(
         "onHeartBeat",
         MapBuilder.of("registrationName", "onHeartBeat"),
@@ -256,23 +255,22 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   }
 
   @Override
-  public void receiveCommand(LinearLayout view, int commandType, @Nullable ReadableArray args) {
-
+  public void receiveCommand(LinearLayout view, String commandId, @Nullable ReadableArray args) {
     Assertions.assertNotNull(view);
     Assertions.assertNotNull(args);
-    Log.i(TAG, "Received command: " + commandType);
-    switch (commandType) {
-      case COMMAND_START_MEASUREMENT: {
+    Log.i(TAG, "Received command: " + commandId);
+    switch (commandId) {
+      case COMMAND_START_MEASUREMENT_STRING: {
         Log.i(TAG, "Command Received: start measurement");
         fibriChecker.start();
         break;
       }
-      case COMMAND_START_RECORDING: {
+      case COMMAND_START_RECORDING_STRING: {
         Log.e(TAG, "Command Received: start recording");
         fibriChecker.startRecording();
         break;
       }
-      case COMMAND_RESET_MODULE: {
+      case COMMAND_RESET_MODULE_STRING: {
         Log.e(TAG, "Command Received: reset Module");
         fibriChecker.stop();
         break;
@@ -280,7 +278,7 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
 
       default:
         throw new IllegalArgumentException(
-            String.format("Unsupported command %d received by %s.", commandType,
+            String.format("Unsupported command %d received by %s.", commandId,
                 getClass().getSimpleName()));
     }
   }
@@ -478,5 +476,10 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
           .put(EVENT_MOVEMENT_DETECTED, MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", EVENT_MOVEMENT_DETECTED)))
           .put(EVENT_MEASUREMENT_PROCESSED, MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", EVENT_MEASUREMENT_PROCESSED)))
           .build();
+  }
+
+  @Override
+  public void onDropViewInstance(@NonNull LinearLayout view) {
+    fibriChecker.stop();
   }
 }
