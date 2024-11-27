@@ -13,6 +13,7 @@
   "reactNativePermissionsIOS": [
     "Camera"
   ],
+  "//": "do not install @fibricheck/react-native-camera-sdk as a relative package, many developers have treaded upon this path, beaten and bruised they all returned unsuccesful.",
   "dependencies": {
     "@extrahorizon/javascript-sdk": "^8.4.1",
     "@fibricheck/react-native-camera-sdk": "1.3.5",
