@@ -1625,12 +1625,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fibricheck/react-native-camera-sdk@npm:1.3.4-dev.131":
-  version: 1.3.4-dev.131
-  resolution: "@fibricheck/react-native-camera-sdk@npm:1.3.4-dev.131::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40fibricheck%2Freact-native-camera-sdk%2F1.3.4-dev.131%2Fc47ca318337b3f39198928184b74037d7d544ebd"
+"@fibricheck/react-native-camera-sdk@npm:1.3.4-dev.141":
+  version: 1.3.4-dev.141
+  resolution: "@fibricheck/react-native-camera-sdk@npm:1.3.4-dev.141::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40fibricheck%2Freact-native-camera-sdk%2F1.3.4-dev.141%2Fddc365abc1c1fe49c6b79696be7324304819337c"
   peerDependencies:
     react-native: ">=0.60.0-rc.0 <1.0.x"
-  checksum: 10c0/21a595782d88bcbb14ca1572d1eb1b1ec8e8872d959c8a3678909d6b89813fb5b5e69ed7c9f6b35cc0fe2c5becdb7629c9e6de39912b17e85940307c1bf6f52c
+  checksum: 10c0/6c639e8172de2c3fc1e35c81e36e0413924f846c07df858ac9faf55ef40873e19b5254fd8365e2311294ec7a6d86c3f16de10133697102da0723603a49b4dc6b
   languageName: node
   linkType: hard
 
@@ -4820,7 +4820,7 @@ __metadata:
     "@babel/preset-env": "npm:^7.26.0"
     "@babel/runtime": "npm:^7.26.0"
     "@extrahorizon/javascript-sdk": "npm:^8.4.1"
-    "@fibricheck/react-native-camera-sdk": "npm:1.3.4-dev.131"
+    "@fibricheck/react-native-camera-sdk": "npm:1.3.4-dev.141"
     "@react-native-community/cli": "npm:15.1.2"
     "@react-native-community/cli-platform-android": "npm:15.1.2"
     "@react-native-community/cli-platform-ios": "npm:15.1.2"

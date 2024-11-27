@@ -1,13 +1,22 @@
-import { Component, useCallback, useRef } from 'react';
+import { Component, forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
 import {
   requireNativeComponent,
   NativeSyntheticEvent,
   ViewStyle,
   ColorValue,
   NativeMethods,
+  findNodeHandle,
+  UIManager,
+  registerCallableModule,
 } from 'react-native';
 import packageVersion from '../package-version.json';
 import { CameraData, MeasurementError } from './types';
+
+enum NativeCommand {
+  StartMeasurement = "startMeasurement",
+  StartRecording = "startRecording",
+  ResetModule = "resetModule"
+}
 
 export interface SampleReadyEventData { ppg: number; raw: number; }
 export type SampleReadyEvent = NativeSyntheticEvent<SampleReadyEventData>
@@ -28,6 +37,13 @@ export interface TimeRemainingEventData { seconds: number; }
 export type TimeRemainingEvent = NativeSyntheticEvent<TimeRemainingEventData>
 
 export type EmptyEvent = NativeSyntheticEvent<void>
+
+export interface FibriCheckViewHandle {
+  startMeasurement: () => void
+  startRecording: () => void
+  resetModule: () => void
+}
+
 interface FibriCheckNative {
   style?: ViewStyle;
 
@@ -106,7 +122,7 @@ interface FibriCheckViewProps {
   onMeasurementError?: (message: MeasurementError) => void;
 }
 
-const FibriCheckView = ({
+const FibriCheckView = forwardRef<FibriCheckViewHandle, FibriCheckViewProps>(({
   style = {
     flex: 1,
     backgroundColor: '#ffffff',
@@ -145,35 +161,51 @@ const FibriCheckView = ({
   onMovementDetected = () => {},
   onMeasurementProcessed,
   onMeasurementError,
-}: FibriCheckViewProps) => {
+}: FibriCheckViewProps, ref) => {
   const nativeRef = useRef<Component<FibriCheckNative> & NativeMethods>(null);
-
-  const onSampleReadyCallback = useCallback((event: SampleReadyEvent) => {
+  const onSampleReadyCallback = (event: SampleReadyEvent) => {
     onSampleReady?.(event.nativeEvent);
-  }, [onSampleReady]);
+  }
 
-  const onMeasurementProcessedCallback = useCallback((event: MeasurementProcessedEvent) => {
+  const onMeasurementProcessedCallback =(event: MeasurementProcessedEvent) => {
     onMeasurementProcessed?.({
       ...JSON.parse(event.nativeEvent.measurement),
       measurement_timestamp: Date.now(),
     });
-  }, [onMeasurementProcessed]);
+  };
 
-  const onHeartBeatCallback = useCallback((event: HeartBeatEvent) => {
+  const onHeartBeatCallback = (event: HeartBeatEvent) => {
     onHeartBeat?.(event.nativeEvent.heartRate);
-  }, [onHeartBeat]);
+  }
 
-  const onFingerRemovedCallback = useCallback((event: FingerRemovedEvent) => {
+  const onFingerRemovedCallback = (event: FingerRemovedEvent) => {
     onFingerRemoved?.(event.nativeEvent);
-  }, [onFingerRemoved]);
+  }
 
-  const onMeasurementErrorCallback = useCallback((event: MeasurementErrorEvent) => {
+  const onMeasurementErrorCallback = (event: MeasurementErrorEvent) => {
     onMeasurementError?.(event.nativeEvent.message);
-  }, [onMeasurementError]);
+  }
 
-  const onTimeRemainingCallback = useCallback((event: TimeRemainingEvent) => {
+  const onTimeRemainingCallback = (event: TimeRemainingEvent) => {
     onTimeRemaining?.(event.nativeEvent.seconds);
-  }, [onTimeRemaining]);
+  }
+
+  const sendCommand = (command: NativeCommand) => {
+    const handle = findNodeHandle(nativeRef.current);
+    // @ts-ignore
+    UIManager.dispatchViewManagerCommand(
+      handle,
+      // @ts-ignore
+      command,
+      []
+    );
+  }
+
+  useImperativeHandle(ref, () => ({
+    startMeasurement: () => { sendCommand(NativeCommand.StartMeasurement) },
+    startRecording: () => { sendCommand(NativeCommand.StartRecording) },
+    resetModule: () => { sendCommand(NativeCommand.ResetModule) }
+  }))
 
   return (
     <FibriCheck
@@ -215,9 +247,7 @@ const FibriCheckView = ({
       onMeasurementError={onMeasurementErrorCallback}
     />
   );
-};
+});
 
-FibriCheckView.versionNumber = packageVersion.version;
 export const versionNumber = packageVersion.version;
-
 export default FibriCheckView;

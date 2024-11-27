@@ -29,7 +29,7 @@ import {
 } from '@fibricheck/react-native-camera-sdk';
 import {createOAuth2Client, Document} from '@extrahorizon/javascript-sdk';
 import {rqlBuilder} from '@extrahorizon/javascript-sdk';
-import {SampleReadyEventData} from '@fibricheck/react-native-camera-sdk/build/types/src/FibriCheckView';
+import {FibriCheckViewHandle, SampleReadyEventData} from '@fibricheck/react-native-camera-sdk/build/types/src/FibriCheckView';
 
 const credentials = {
   username: process.env.API_USER ?? '',
@@ -42,17 +42,6 @@ const sdk = createOAuth2Client({
 });
 
 const schemaId = '5a6f5d82454b300019e1df14';
-const maxBufferLength = 100;
-
-interface GraphPoint {
-  x: number;
-  y: number;
-}
-
-interface Domain {
-  min: number;
-  max: number;
-}
 
 function renderDocument({
   item: {status, data, creationTimestamp},
@@ -75,23 +64,19 @@ const App = () => {
   const [hasMeasurementStarted, setMeasurementStarted] = useState(false);
   const [heartRate, setHeartRate] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(60);
-  const [domain, setDomain] = useState<Domain>({min: 0, max: 0});
   const [measurements, setMeasurements] = useState<Document[]>([]);
-  const graphData = useRef<GraphPoint[]>([]);
   const userIdRef = useRef('');
+  const fibriViewRef = useRef<FibriCheckViewHandle>(null)
 
-  const retrieveDocuments = useCallback(async () => {
+  const retrieveMeasurements = async () => {
     setLoadingMeasurements(true);
     const rql = rqlBuilder().limit(100).eq('creatorId', userIdRef.current).sort('-creationTimestamp').build();
     const {data} = await sdk.data.documents.find(schemaId, {rql});
-    data.sort(
-      (a, b) => b.creationTimestamp.getTime() - a.creationTimestamp.getTime(),
-    );
     setMeasurements(data);
     setLoadingMeasurements(false);
-  }, []);
+  }
 
-  const authenticate = useCallback(async () => {
+  const authenticate = async () => {
     console.log('authenticate');
     console.log(await sdk.auth.authenticate(credentials));
 
@@ -100,10 +85,10 @@ const App = () => {
     console.log('sdk.users.health()', await sdk.users.health());
     console.log('sdk.users.me()', user);
 
-    await retrieveDocuments();
-  }, [retrieveDocuments]);
+    await retrieveMeasurements();
+  }
 
-  const requestCameraPermissions = useCallback(() => {
+  const requestCameraPermissions = () => {
     if (Platform.OS === 'ios') {
       request(PERMISSIONS.IOS.CAMERA).then(result => {
         setCameraPermission(result === 'granted');
@@ -113,11 +98,9 @@ const App = () => {
         setCameraPermission(result === 'granted');
       });
     }
-  }, []);
+  }
 
-  const sendMeasurement = useCallback(
-    async (measurement: CameraData) => {
-      console.log('sendMeasurement');
+  const sendMeasurement = async (measurement: CameraData) => {
       try {
         const result = await sdk.data.documents.create(schemaId, {
           ...measurement,
@@ -125,53 +108,25 @@ const App = () => {
           measurement_timestamp: new Date().getTime(),
         });
 
+        // Refresh measurement list after creation
+        retrieveMeasurements();
+
         console.log(`measurement created ${result.id}`);
       }
       catch (error) {
+        console.warn(`measurement creation error`)
         console.warn(error);
       }
 
-      retrieveDocuments();
-    },
-    [retrieveDocuments],
-  );
+      
+    };
 
-  const updateDomain = useCallback(() => {
-    console.log('updateDomain');
-    if (graphData.current.length === 0) {
-      return;
-    }
-
-    const lastPoint = graphData.current[graphData.current.length - 1];
-    if (lastPoint.x < 50) {
-      return;
-    }
-
-    setDomain({
-      min: domain.min + 1,
-      max: domain.max + 1,
-    });
-  }, [domain]);
-
-  const onSampleReady = useCallback(
-    (event: SampleReadyEventData) => {
-      console.log('onSampleReady');
-      const data = graphData.current;
-      const newX = data.length > 0 ? data[data.length - 1].x + 1 : 0;
-      data.push({
-        x: newX,
-        y: event.ppg,
-      });
-      graphData.current = data.slice(-maxBufferLength);
-      updateDomain();
-    },
-    [updateDomain],
-  );
+  const onSampleReady = (event: SampleReadyEventData) => { /* Stub */ }
 
   useEffect(() => {
     requestCameraPermissions();
     authenticate();
-  }, [authenticate, requestCameraPermissions]);
+  }, []);
 
   return (
     <SafeAreaProvider style={styles.root}>
@@ -180,6 +135,7 @@ const App = () => {
         <View style={styles.fibricontainer}>
           {hasCameraPermission && isFibriViewVisisble && (
             <RNFibriCheckView
+              ref={fibriViewRef}
               style={styles.fibricontainer}
               graphBackgroundColor={'#0073ff'}
               flashEnabled={true}
@@ -216,10 +172,9 @@ const App = () => {
             />
           )}
         </View>
-        <View style={styles.button}>
+        <View>
           <Button
             onPress={() => {
-              console.log('setFibriViewVisiblee');
               setFibriViewVisible(value => !value);
             }}
             color="#1E8D95"
@@ -242,24 +197,43 @@ const App = () => {
             hasMeasurementStarted ? 'Yes' : 'No'
           }`}</Text>
         </View>
-
-
+        <View style={[styles.row, styles.buttonRow]}>
+        <View style={styles.commandButton}>
+          <Button
+            onPress={() => {
+              fibriViewRef.current?.startMeasurement()
+            }}
+            color="#1E8D95"
+            title={'Start'}
+          />
+          </View>
+          <View style={styles.commandButton}>
+          <Button
+            onPress={() => {
+              fibriViewRef.current?.resetModule()
+            }}
+            color="#1E8D95"
+            title={'Reset'}
+          />
+          </View>
+          <View style={styles.commandButton}>
+          <Button
+            onPress={() => {
+              fibriViewRef.current?.startRecording()
+            }}
+            color="#1E8D95"
+            title={'Record'}
+          />
+          </View>
+        </View>
 
         <FlatList
           style={styles.list}
           data={measurements}
           renderItem={renderDocument}
           keyExtractor={item => item.id}
-          refreshControl={<RefreshControl refreshing={isLoadingMeasurements} onRefresh={retrieveDocuments} />}
+          refreshControl={<RefreshControl refreshing={isLoadingMeasurements} onRefresh={retrieveMeasurements} />}
         />
-        <View style={styles.button}>
-          <Button
-            title={'Retrieve'}
-            onPress={retrieveDocuments}
-            color="#1E8D95"
-          />
-        </View>
-
       </View>
       </SafeAreaView>
     </SafeAreaProvider>
@@ -277,15 +251,20 @@ const styles = StyleSheet.create({
   flex: {
     flex: 1,
   },
-  button: {
-    borderRadius: 32,
-    overflow: 'hidden',
-  },
   row: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    gap: 2
+  },
+  buttonRow: {
+    marginTop: 8
+  },
+  commandButton: {
+    borderRadius: 32,
+    overflow: "hidden",
+    width: 86
   },
   fibricontainer: {
     flex: 1,

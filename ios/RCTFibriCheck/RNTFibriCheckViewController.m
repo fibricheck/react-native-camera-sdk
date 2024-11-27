@@ -59,8 +59,19 @@
     _fibrichecker.waitForStartRecordingSignal = waitForStartRecordingSignal;
 }
 
+- (void)startMeasurement {
+  NSLog(@"startMeasurement");
+  [_fibrichecker startMeasurement];
+}
+
+- (void)startRecording {
+  NSLog(@"startRecording");
+  _fibrichecker.startRecording;
+}
+
 - (void)stopCamera {
-    _fibrichecker.stop;
+  NSLog(@"stopCamera");
+  _fibrichecker.stop;
 }
 
 // MARK: - UI
@@ -74,11 +85,6 @@
     [super viewDidDisappear:animated];
     // Clean up resources, remove observers, stop timers, etc.
     [self.fibrichecker stop];
-}
-
-- (void)startMeasurement {
-  NSLog(@"startMeasurement");
-  [_fibrichecker startMeasurement];
 }
 
 - (void)loadView {
