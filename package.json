@@ -43,7 +43,7 @@
     "react-native": ">=0.60.0-rc.0 <1.0.x"
   },
   "devDependencies": {
-    "@brent_rb/npm-version-suffix": "^1.0.0",
+    "@fibricheck/npm-version-suffix": "^1.0.0",
     "@qompium/eslint-config-q-react": "^1.5.1",
     "@react-native/babel-preset": "^0.76.3",
     "@types/react": "^18.3.12",

@@ -1054,20 +1054,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@brent_rb/npm-version-suffix@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "@brent_rb/npm-version-suffix@npm:1.0.0"
-  dependencies:
-    escape-string-regexp: "npm:^5.0.0"
-    execa: "npm:^9.5.1"
-    replace-in-file: "npm:^8.2.0"
-  bin:
-    add-suffix: bin/run-add-suffix.js
-    remove-suffix: bin/run-remove-suffix.js
-  checksum: 10c0/41926e704de699a5532ad9cb7de5acbf38359407aa09758a931ff0fd08854b905dda7768706833bbc68fea7f7c4e44b90be0520c7b5128d1b278a0b75f78b72f
-  languageName: node
-  linkType: hard
-
 "@eslint-community/eslint-utils@npm:^4.2.0, @eslint-community/eslint-utils@npm:^4.4.0":
   version: 4.4.1
   resolution: "@eslint-community/eslint-utils@npm:4.4.1"
@@ -1144,11 +1130,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fibricheck/npm-version-suffix@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@fibricheck/npm-version-suffix@npm:1.0.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40fibricheck%2Fnpm-version-suffix%2F1.0.0%2F11396005486f37df748b24a5ab67cbd9d7e4b063"
+  dependencies:
+    escape-string-regexp: "npm:^5.0.0"
+    execa: "npm:^9.5.1"
+    replace-in-file: "npm:^8.2.0"
+  bin:
+    add-suffix: bin/run-add-suffix.js
+    remove-suffix: bin/run-remove-suffix.js
+  checksum: 10c0/dff15023ba4943ee91a25a7e85e6913e36ff6b727465037ee088e8234429dda33d184e9494f51b3abf4f769c67c4257929fdfd3d8ee3efdf825dae05c3199f3f
+  languageName: node
+  linkType: hard
+
 "@fibricheck/react-native-camera-sdk@workspace:.":
   version: 0.0.0-use.local
   resolution: "@fibricheck/react-native-camera-sdk@workspace:."
   dependencies:
-    "@brent_rb/npm-version-suffix": "npm:^1.0.0"
+    "@fibricheck/npm-version-suffix": "npm:^1.0.0"
     "@qompium/eslint-config-q-react": "npm:^1.5.1"
     "@react-native/babel-preset": "npm:^0.76.3"
     "@types/react": "npm:^18.3.12"
