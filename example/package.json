@@ -16,7 +16,7 @@
   "dependencies": {
     "@dpwiese/react-native-canvas-charts": "^0.0.4",
     "@extrahorizon/javascript-sdk": "^7.3.0",
-    "@fibricheck/react-native-camera-sdk": "1.3.2-dev.114",
+    "@fibricheck/react-native-camera-sdk": "1.3.4-dev.124",
     "react": "^18.2.0",
     "react-native": "0.71.8",
     "react-native-charts-wrapper": "^0.5.11",
