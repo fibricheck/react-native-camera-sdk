@@ -13,12 +13,11 @@ buildscript {
 apply plugin: 'com.android.library'
 
 android {
-    namespace 'com.fibricheck.rnfibricheckandroid'
+    namespace "com.fibricheck.rncamerasdk"
     compileSdkVersion 34
     buildToolsVersion "34.0.0"
 
     defaultConfig {
-        applicationId 'com.fibricheck.rnfibricheckandroid'
         minSdkVersion 24
         targetSdkVersion 34
         versionCode 2
@@ -43,7 +42,5 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'com.github.fibricheck:android-camera-sdk:v1.0.1'
     implementation 'com.facebook.react:react-native:+'
-    implementation 'androidx.appcompat:appcompat:1.7.0'
-    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
-    implementation 'com.google.code.gson:gson:+'
+    implementation 'com.google.code.gson:gson:2.11.0'
 }
