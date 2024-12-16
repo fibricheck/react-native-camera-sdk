@@ -8,7 +8,7 @@
  * https://github.com/facebook/react-native
  */
 
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Platform,
   StyleSheet,
@@ -25,11 +25,15 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 import {
   CameraData,
+  RNFibriCheckVersion,
   RNFibriCheckView,
 } from '@fibricheck/react-native-camera-sdk';
 import {createOAuth2Client, Document} from '@extrahorizon/javascript-sdk';
 import {rqlBuilder} from '@extrahorizon/javascript-sdk';
-import {FibriCheckViewHandle, SampleReadyEventData} from '@fibricheck/react-native-camera-sdk/build/types/src/FibriCheckView';
+import {
+  FibriCheckViewHandle,
+  SampleReadyEventData,
+} from '@fibricheck/react-native-camera-sdk/build/types/src/FibriCheckView';
 
 const credentials = {
   username: process.env.API_USER ?? '',
@@ -66,15 +70,19 @@ const App = () => {
   const [timeRemaining, setTimeRemaining] = useState(60);
   const [measurements, setMeasurements] = useState<Document[]>([]);
   const userIdRef = useRef('');
-  const fibriViewRef = useRef<FibriCheckViewHandle>(null)
+  const fibriViewRef = useRef<FibriCheckViewHandle>(null);
 
   const retrieveMeasurements = async () => {
     setLoadingMeasurements(true);
-    const rql = rqlBuilder().limit(100).eq('creatorId', userIdRef.current).sort('-creationTimestamp').build();
+    const rql = rqlBuilder()
+      .limit(100)
+      .eq('creatorId', userIdRef.current)
+      .sort('-creationTimestamp')
+      .build();
     const {data} = await sdk.data.documents.find(schemaId, {rql});
     setMeasurements(data);
     setLoadingMeasurements(false);
-  }
+  };
 
   const authenticate = async () => {
     console.log('authenticate');
@@ -86,7 +94,7 @@ const App = () => {
     console.log('sdk.users.me()', user);
 
     await retrieveMeasurements();
-  }
+  };
 
   const requestCameraPermissions = () => {
     if (Platform.OS === 'ios') {
@@ -98,30 +106,35 @@ const App = () => {
         setCameraPermission(result === 'granted');
       });
     }
-  }
+  };
 
   const sendMeasurement = async (measurement: CameraData) => {
-      try {
-        const result = await sdk.data.documents.create(schemaId, {
-          ...measurement,
-          ...require('./extraData.json'),
-          measurement_timestamp: new Date().getTime(),
-        });
+    const versionDeprecated = RNFibriCheckView.versionNumber
+    const versionNew = RNFibriCheckVersion
+    
+    try {
+      const result = await sdk.data.documents.create(schemaId, {
+        ...measurement,
+        ...require('./extraData.json'),
+        measurement_timestamp: new Date().getTime(),
+        app: {
+          camera_sdk_version: versionNew,
+        }
+      });
 
-        // Refresh measurement list after creation
-        retrieveMeasurements();
+      // Refresh measurement list after creation
+      retrieveMeasurements();
 
-        console.log(`measurement created ${result.id}`);
-      }
-      catch (error) {
-        console.warn(`measurement creation error`)
-        console.warn(error);
-      }
+      console.log(`measurement created ${result.id}`);
+    } catch (error) {
+      console.warn(`measurement creation error`);
+      console.warn(error);
+    }
+  };
 
-      
-    };
-
-  const onSampleReady = (event: SampleReadyEventData) => { /* Stub */ }
+  const onSampleReady = (event: SampleReadyEventData) => {
+    /* Stub */
+  };
 
   useEffect(() => {
     requestCameraPermissions();
@@ -131,110 +144,117 @@ const App = () => {
   return (
     <SafeAreaProvider style={styles.root}>
       <SafeAreaView style={styles.flex}>
-      <View style={[styles.fibricontainer, styles.fibriview]}>
-        <View style={styles.fibricontainer}>
-          {hasCameraPermission && isFibriViewVisisble && (
-            <RNFibriCheckView
-              ref={fibriViewRef}
-              style={styles.fibricontainer}
-              graphBackgroundColor={'#0073ff'}
-              flashEnabled={true}
-              onFingerDetected={() => {
-                setFingerPresent(true);
-                console.log('Finger detected');
+        <View style={[styles.fibricontainer, styles.fibriview]}>
+          <View style={styles.fibricontainer}>
+            {hasCameraPermission && isFibriViewVisisble && (
+              <RNFibriCheckView
+                ref={fibriViewRef}
+                style={styles.fibricontainer}
+                graphBackgroundColor={'#0073ff'}
+                flashEnabled={true}
+                onFingerDetected={() => {
+                  setFingerPresent(true);
+                  console.log('Finger detected');
+                }}
+                onFingerRemoved={() => {
+                  setFingerPresent(false);
+                  console.log('Finger removed');
+                }}
+                onCalibrationReady={() => console.log('calibration ready')}
+                onMeasurementFinished={() =>
+                  console.log('measurement finished')
+                }
+                onMeasurementStart={() => {
+                  setMeasurementStarted(true);
+                  console.log('Measurement started');
+                }}
+                onFingerDetectionTimeExpired={() =>
+                  console.log('finger detection time expired')
+                }
+                onPulseDetected={() => {
+                  setIsPulseDetected(true);
+                  console.log('Pulse detected');
+                }}
+                onPulseDetectionTimeExpired={() =>
+                  console.log('pulse detection time is expired')
+                }
+                onMovementDetected={() => console.log('movement detected')}
+                onHeartBeat={setHeartRate}
+                onTimeRemaining={setTimeRemaining}
+                onMeasurementError={event => console.log(event)}
+                onMeasurementProcessed={sendMeasurement}
+                onSampleReady={onSampleReady}
+              />
+            )}
+          </View>
+          <View>
+            <Button
+              onPress={() => {
+                setFibriViewVisible(value => !value);
               }}
-              onFingerRemoved={() => {
-                setFingerPresent(false);
-                console.log('Finger removed');
-              }}
-              onCalibrationReady={() => console.log('calibration ready')}
-              onMeasurementFinished={() => console.log('measurement finished')}
-              onMeasurementStart={() => {
-                setMeasurementStarted(true);
-                console.log('Measurement started');
-              }}
-              onFingerDetectionTimeExpired={() =>
-                console.log('finger detection time expired')
-              }
-              onPulseDetected={() => {
-                setIsPulseDetected(true);
-                console.log('Pulse detected');
-              }}
-              onPulseDetectionTimeExpired={() =>
-                console.log('pulse detection time is expired')
-              }
-              onMovementDetected={() => console.log('movement detected')}
-              onHeartBeat={setHeartRate}
-              onTimeRemaining={setTimeRemaining}
-              onMeasurementError={event => console.log(event)}
-              onMeasurementProcessed={sendMeasurement}
-              onSampleReady={onSampleReady}
+              color="#1E8D95"
+              title={'Toggle'}
             />
-          )}
-        </View>
-        <View>
-          <Button
-            onPress={() => {
-              setFibriViewVisible(value => !value);
-            }}
-            color="#1E8D95"
-            title={'Toggle'}
-          />
-        </View>
-      </View>
-
-      <View style={styles.container}>
-        <View style={styles.row}>
-          <Text>{`Heartrate : ${heartRate}`}</Text>
-          <Text>{`Time Remaining: ${timeRemaining}`}</Text>
-        </View>
-        <View style={styles.row}>
-          <Text>{`Finger present : ${isFingerPresent ? 'Yes' : 'No'}`}</Text>
-          <Text>{`Pulse detected : ${isPulseDetected ? 'Yes' : 'No'}`}</Text>
-        </View>
-        <View style={styles.row}>
-          <Text>{`Measurement Started : ${
-            hasMeasurementStarted ? 'Yes' : 'No'
-          }`}</Text>
-        </View>
-        <View style={[styles.row, styles.buttonRow]}>
-        <View style={styles.commandButton}>
-          <Button
-            onPress={() => {
-              fibriViewRef.current?.startMeasurement()
-            }}
-            color="#1E8D95"
-            title={'Start'}
-          />
-          </View>
-          <View style={styles.commandButton}>
-          <Button
-            onPress={() => {
-              fibriViewRef.current?.resetModule()
-            }}
-            color="#1E8D95"
-            title={'Reset'}
-          />
-          </View>
-          <View style={styles.commandButton}>
-          <Button
-            onPress={() => {
-              fibriViewRef.current?.startRecording()
-            }}
-            color="#1E8D95"
-            title={'Record'}
-          />
           </View>
         </View>
 
-        <FlatList
-          style={styles.list}
-          data={measurements}
-          renderItem={renderDocument}
-          keyExtractor={item => item.id}
-          refreshControl={<RefreshControl refreshing={isLoadingMeasurements} onRefresh={retrieveMeasurements} />}
-        />
-      </View>
+        <View style={styles.container}>
+          <View style={styles.row}>
+            <Text>{`Heartrate : ${heartRate}`}</Text>
+            <Text>{`Time Remaining: ${timeRemaining}`}</Text>
+          </View>
+          <View style={styles.row}>
+            <Text>{`Finger present : ${isFingerPresent ? 'Yes' : 'No'}`}</Text>
+            <Text>{`Pulse detected : ${isPulseDetected ? 'Yes' : 'No'}`}</Text>
+          </View>
+          <View style={styles.row}>
+            <Text>{`Measurement Started : ${
+              hasMeasurementStarted ? 'Yes' : 'No'
+            }`}</Text>
+          </View>
+          <View style={[styles.row, styles.buttonRow]}>
+            <View style={styles.commandButton}>
+              <Button
+                onPress={() => {
+                  fibriViewRef.current?.startMeasurement();
+                }}
+                color="#1E8D95"
+                title={'Start'}
+              />
+            </View>
+            <View style={styles.commandButton}>
+              <Button
+                onPress={() => {
+                  fibriViewRef.current?.resetModule();
+                }}
+                color="#1E8D95"
+                title={'Reset'}
+              />
+            </View>
+            <View style={styles.commandButton}>
+              <Button
+                onPress={() => {
+                  fibriViewRef.current?.startRecording();
+                }}
+                color="#1E8D95"
+                title={'Record'}
+              />
+            </View>
+          </View>
+
+          <FlatList
+            style={styles.list}
+            data={measurements}
+            renderItem={renderDocument}
+            keyExtractor={item => item.id}
+            refreshControl={
+              <RefreshControl
+                refreshing={isLoadingMeasurements}
+                onRefresh={retrieveMeasurements}
+              />
+            }
+          />
+        </View>
       </SafeAreaView>
     </SafeAreaProvider>
   );
@@ -256,15 +276,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 2
+    gap: 2,
   },
   buttonRow: {
-    marginTop: 8
+    marginTop: 8,
   },
   commandButton: {
     borderRadius: 32,
-    overflow: "hidden",
-    width: 86
+    overflow: 'hidden',
+    width: 86,
   },
   fibricontainer: {
     flex: 1,

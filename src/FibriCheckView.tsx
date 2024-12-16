@@ -1,4 +1,4 @@
-import { Component, forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
+import { Component, forwardRef, useImperativeHandle, useRef } from 'react';
 import {
   requireNativeComponent,
   NativeSyntheticEvent,
@@ -7,7 +7,6 @@ import {
   NativeMethods,
   findNodeHandle,
   UIManager,
-  registerCallableModule,
 } from 'react-native';
 import packageVersion from '../package-version.json';
 import { CameraData, MeasurementError } from './types';
@@ -122,7 +121,7 @@ interface FibriCheckViewProps {
   onMeasurementError?: (message: MeasurementError) => void;
 }
 
-const FibriCheckView = forwardRef<FibriCheckViewHandle, FibriCheckViewProps>(({
+const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheckViewProps>(({
   style = {
     flex: 1,
     backgroundColor: '#ffffff',
@@ -247,7 +246,12 @@ const FibriCheckView = forwardRef<FibriCheckViewHandle, FibriCheckViewProps>(({
       onMeasurementError={onMeasurementErrorCallback}
     />
   );
-});
+}), {
+  /**
+   * @deprecated Will be removed in favor of the new import RNFibriCheckVersion
+   */
+  versionNumber: packageVersion.version
+})
 
 export const versionNumber = packageVersion.version;
 export default FibriCheckView;
