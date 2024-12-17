@@ -17,6 +17,8 @@ jobs:
           node-version: 20
           registry-url: https://npm.pkg.github.com/
           scope: '@fibricheck'
+      - name: Enable Corepack
+        run: corepack enable
       - run: yarn install
 
   publish:
