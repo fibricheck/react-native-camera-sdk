@@ -22,7 +22,7 @@ jobs:
       - name: Prepare npmrc
         run: |
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PACKAGES_FULL_READ_ACCESS_TOKEN }}" > .npmrc
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_PACKAGES_FULL_READ_ACCESS_TOKEN }}" >> .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_PACKAGES_PUBLISHER_TOKEN }}" >> .npmrc
           echo "@fibricheck:registry=https://npm.pkg.github.com" >> .npmrc
       - run: yarn install
 
@@ -47,7 +47,7 @@ jobs:
       - name: Prepare npmrc
         run: |
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PACKAGES_FULL_READ_ACCESS_TOKEN }}" > .npmrc
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_PACKAGES_FULL_READ_ACCESS_TOKEN }}" >> .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_PACKAGES_PUBLISHER_TOKEN }}" >> .npmrc
           echo "@fibricheck:registry=https://npm.pkg.github.com" >> .npmrc
       - run: yarn install
       - run: yarn build
