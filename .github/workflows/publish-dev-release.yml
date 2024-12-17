@@ -19,6 +19,11 @@ jobs:
           scope: '@fibricheck'
       - name: Enable Corepack
         run: corepack enable
+      - name: Prepare npmrc
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PACKAGES_FULL_READ_ACCESS_TOKEN }}" > .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_PACKAGES_FULL_READ_ACCESS_TOKEN }}" >> .npmrc
+          echo "@fibricheck:registry=https://npm.pkg.github.com" >> .npmrc
       - run: yarn install
   publish:
     needs: build
@@ -31,6 +36,13 @@ jobs:
           node-version: 20
           registry-url: https://npm.pkg.github.com/
           scope: '@fibricheck'
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Prepare npmrc
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PACKAGES_FULL_READ_ACCESS_TOKEN }}" > .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_PACKAGES_FULL_READ_ACCESS_TOKEN }}" >> .npmrc
+          echo "@fibricheck:registry=https://npm.pkg.github.com" >> .npmrc
       - run: yarn install
       - run: yarn build
       - run: yarn add-suffix
