@@ -1,5 +1,6 @@
 {
   "include": ["src/**/*"],
+  "exclude": ["example"],
   "compilerOptions": {
     "skipLibCheck": true,
     "target": "es5",
@@ -14,6 +15,7 @@
     "declarationDir": "build/types",
     "allowSyntheticDefaultImports": true,    
     "baseUrl": "./",
+    "types": ["node"],
     "paths": {
       "*": ["node_modules/*", "types/*"]
     },

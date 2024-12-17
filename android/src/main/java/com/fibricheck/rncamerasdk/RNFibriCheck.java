@@ -15,15 +15,16 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.google.gson.Gson;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
@@ -33,24 +34,23 @@ import com.qompium.fibricheck.camerasdk.listeners.FibriListener;
 import com.qompium.fibricheck.camerasdk.measurement.MeasurementData;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.facebook.react.uimanager.events.RCTEventEmitter;
 
 
 public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   public static final String REACT_CLASS = "FibriCheck";
-
   private static final String TAG = "RNFibriCheck";
+  private static final int SURFACE_ID = 0;
 
-  public static final int COMMAND_START_MEASUREMENT = 1;
-
-  public static final int COMMAND_RESET_GRAPH = 2;
-
-  public static final int COMMAND_START_RECORDING = 3;
-
-  private static final int COMMAND_RESET_MODULE = 4;
+  private static final String COMMAND_START_MEASUREMENT_STRING = "startMeasurement";
+  private static final String COMMAND_START_RECORDING_STRING = "startRecording";
+  private static final String COMMAND_RESET_MODULE_STRING = "resetModule";
+  private static final int COMMAND_START_MEASUREMENT_INT = 1;
+  private static final int COMMAND_START_RECORDING_INT = 2;
+  private static final int COMMAND_RESET_MODULE_INT = 3;
 
   private static final int SAMPLE_COUNT = 120;
 
@@ -84,7 +84,6 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   private static final String EVENT_MEASUREMENT_ERROR = "onMeasurementError";
 
   public Activity getActivity(Context context) {
-
     if (context == null) {
       return null;
     } else if (context instanceof ContextWrapper) {
@@ -98,18 +97,28 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
     return null;
   }
 
-
+  @NonNull
   @Override
   public String getName() {
-
     // Tell React the name of the module
     // https://facebook.github.io/react-native/docs/native-components-android.html#1-create-the-viewmanager-subclass
     return REACT_CLASS;
   }
 
-  @Override
-  public LinearLayout createViewInstance(ThemedReactContext context) {
+  private void sendEvent(String eventName,
+                         @Nullable WritableMap params) {
+    ReactContext reactContext = (ReactContext) linearLayout.getContext();
+    int reactTag = linearLayout.getId();
 
+    reactContext
+            // TODO: RCTEventEmitter is deprecated but info about a replacement is scarce
+            .getJSModule(RCTEventEmitter.class)
+            .receiveEvent(reactTag, eventName, params);
+  }
+
+  @NonNull
+  @Override
+  public LinearLayout createViewInstance(@NonNull ThemedReactContext context) {
     Log.i(TAG, "Creating View instance");
 
     linearLayout = new LinearLayout(context);
@@ -130,14 +139,12 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
         WritableMap event = Arguments.createMap();
         event.putDouble("ppg", ppg);
         event.putDouble("raw", raw);
-        ReactContext reactContext = (ReactContext) linearLayout.getContext();
-        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_SAMPLE_READY, event);
+        sendEvent(EVENT_SAMPLE_READY, event);
       }
 
       @Override public void onFingerDetected() {
         WritableMap event = Arguments.createMap();
-        ReactContext reactContext = (ReactContext) linearLayout.getContext();
-        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_FINGER_DETECTED, event);
+        sendEvent(EVENT_FINGER_DETECTED, event);
       }
 
       @Override public void onFingerRemoved(double y, double v, double stdDevY) {
@@ -145,77 +152,66 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
         event.putDouble("y", y);
         event.putDouble("v", v);
         event.putDouble("stdDevY", stdDevY);
-        ReactContext reactContext = (ReactContext) linearLayout.getContext();
-        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_FINGER_REMOVED, event);
+        sendEvent(EVENT_FINGER_REMOVED, event);
       }
 
       @Override public void onCalibrationReady() {
         WritableMap event = Arguments.createMap();
-        ReactContext reactContext = (ReactContext) linearLayout.getContext();
-        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_CALIBRATION_READY, event);
+        sendEvent(EVENT_CALIBRATION_READY, event);
       }
 
       @Override public void onHeartBeat(int value) {
         WritableMap event = Arguments.createMap();
         event.putInt("heartRate", value);
-        ReactContext reactContext = (ReactContext) linearLayout.getContext();
-        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_HEARTBEAT, event);
+        sendEvent(EVENT_HEARTBEAT, event);
       }
 
       @Override public void onTimeRemaining(int seconds) {
           WritableMap event = Arguments.createMap();
           event.putInt("seconds", seconds);
-          ReactContext reactContext = (ReactContext) linearLayout.getContext();
-          reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_TIME_REMAINING, event);
+          sendEvent(EVENT_TIME_REMAINING, event);
       }
 
       @Override public void onMeasurementFinished() {
         WritableMap event = Arguments.createMap();
-        ReactContext reactContext = (ReactContext) linearLayout.getContext();
-        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_MEASUREMENT_FINISHED, event);
+        sendEvent(EVENT_MEASUREMENT_FINISHED, event);
       }
 
       @Override public void onMeasurementStart() {
         WritableMap event = Arguments.createMap();
-        ReactContext reactContext = (ReactContext) linearLayout.getContext();
-        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_MEASUREMENT_START, event);
+        sendEvent(EVENT_MEASUREMENT_START, event);
       }
 
       @Override public void onFingerDetectionTimeExpired() {
         WritableMap event = Arguments.createMap();
-        ReactContext reactContext = (ReactContext) linearLayout.getContext();
-        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_FINGER_DETECTION_TIME_EXPIRED, event);
+        sendEvent(EVENT_FINGER_DETECTION_TIME_EXPIRED, event);
       }
 
       @Override public void onPulseDetected() {
         WritableMap event = Arguments.createMap();
-        ReactContext reactContext = (ReactContext) linearLayout.getContext();
-        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_PULSE_DETECTED, event);
+        sendEvent(EVENT_PULSE_DETECTED, event);
       }
 
       @Override public void onPulseDetectionTimeExpired() {
         WritableMap event = Arguments.createMap();
-        ReactContext reactContext = (ReactContext) linearLayout.getContext();
-        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_PULSE_DETECTION_TIME_EXPIRED, event);
+        sendEvent(EVENT_PULSE_DETECTION_TIME_EXPIRED, event);
       }
 
       @Override public void onMovementDetected() {
         WritableMap event = Arguments.createMap();
-        ReactContext reactContext = (ReactContext) linearLayout.getContext();
-        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_MOVEMENT_DETECTED, event);
+        sendEvent(EVENT_MOVEMENT_DETECTED, event);
       }
 
       @Override public void onMeasurementProcessed(MeasurementData measurementData) {
 
         Log.i(TAG, "Measurement processed with Heartbeat: " + measurementData.heartrate);
         WritableMap event = Arguments.createMap();
-        ReactContext reactContext = (ReactContext) linearLayout.getContext();
         try {
           Gson gson = new Gson();
           JSONObject jsonObject = new JSONObject(gson.toJson(measurementData));
           String measurementJson = jsonObject.toString();
           event.putString("measurement", measurementJson);
-          reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_MEASUREMENT_PROCESSED, event);
+          sendEvent(EVENT_MEASUREMENT_PROCESSED, event);
         } catch (JSONException | NullPointerException ex) {
           Log.e(TAG, ex.toString());
         }
@@ -224,8 +220,7 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
        @Override public void onMeasurementError(String message) {
           WritableMap event = Arguments.createMap();
           event.putString("message", message);
-          ReactContext reactContext = (ReactContext) linearLayout.getContext();
-          reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(linearLayout.getId(), EVENT_MEASUREMENT_ERROR, event);
+          sendEvent(EVENT_MEASUREMENT_ERROR, event);
       }
     });
 
@@ -235,58 +230,43 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   }
 
   @Override public Map<String, Integer> getCommandsMap() {
-
-    return MapBuilder.of(
-        "startMeasurement", COMMAND_START_MEASUREMENT,
-        "resetGraph", COMMAND_RESET_GRAPH,
-        "startRecording", COMMAND_START_RECORDING,
-        "resetModule", COMMAND_RESET_MODULE);
+    final Map<String, Integer> returnMap = new HashMap<>();
+    returnMap.put(COMMAND_START_MEASUREMENT_STRING, COMMAND_START_MEASUREMENT_INT);
+    returnMap.put(COMMAND_START_RECORDING_STRING, COMMAND_START_RECORDING_INT);
+    returnMap.put(COMMAND_RESET_MODULE_STRING, COMMAND_RESET_MODULE_INT);
+    return returnMap;
   }
 
   @Override
-  public @Nullable
-  Map getExportedCustomDirectEventTypeConstants() {
-
-    return MapBuilder.of(
-        "onHeartBeat",
-        MapBuilder.of("registrationName", "onHeartBeat"),
-        "onPPG",
-        MapBuilder.of("registrationName", "onPPG")
-    );
-  }
-
-  @Override
-  public void receiveCommand(LinearLayout view, int commandType, @Nullable ReadableArray args) {
-
-    Assertions.assertNotNull(view);
+  public void receiveCommand(@NonNull LinearLayout view, @NonNull String commandId, @Nullable ReadableArray args) {
     Assertions.assertNotNull(args);
-    Log.i(TAG, "Received command: " + commandType);
-    switch (commandType) {
-      case COMMAND_START_MEASUREMENT: {
+
+    Log.i(TAG, "Received command: " + commandId);
+    switch (commandId) {
+      case COMMAND_START_MEASUREMENT_STRING: {
         Log.i(TAG, "Command Received: start measurement");
         fibriChecker.start();
         break;
       }
-      case COMMAND_START_RECORDING: {
-        Log.e(TAG, "Command Received: start recording");
+      case COMMAND_START_RECORDING_STRING: {
+        Log.i(TAG, "Command Received: start recording");
         fibriChecker.startRecording();
         break;
       }
-      case COMMAND_RESET_MODULE: {
-        Log.e(TAG, "Command Received: reset Module");
+      case COMMAND_RESET_MODULE_STRING: {
+        Log.i(TAG, "Command Received: reset Module");
         fibriChecker.stop();
         break;
       }
 
       default:
         throw new IllegalArgumentException(
-            String.format("Unsupported command %d received by %s.", commandType,
-                getClass().getSimpleName()));
+                String.format("Unsupported command %s received by %s.", commandId,
+                        getClass().getSimpleName()));
     }
   }
 
   //region Props Setters
-
   // Set properties from React onto your native component via a setter method
   // https://facebook.github.io/react-native/docs/native-components-android.html#3-expose-view-property-setters-using-reactprop-or-reactpropgroup-annotation
   @ReactProp(name = "drawGraph")
@@ -380,18 +360,16 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
     graphView = new GraphView(context);
     invalidateGraphView(graphView, context);
 
-    Log.e(TAG, "W X H: " + graphView.getWidth() + " x " + graphView.getHeight());
+    Log.i(TAG, "W X H: " + graphView.getWidth() + " x " + graphView.getHeight());
     return graphView;
   }
 
   private void invalidateGraphView(GraphView graphView, Context context) {
-
     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
     graphView.setBackgroundColor(Color.TRANSPARENT);
     params.gravity = Gravity.CENTER_HORIZONTAL;
     graphView.setLayoutParams(params);
     setViewPortOptions(graphView);
-    setRenderOptions(graphView);
     setSeries(graphView, context);
   }
 
@@ -405,23 +383,14 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
     graphView.getViewport().setMaxX(SAMPLE_COUNT);
   }
 
-  private void setRenderOptions(GraphView graphView) {
-
-  }
-
   private void setSeries(GraphView graphView, Context context) {
-    
-    ArrayList<DataPoint> dataPoints = new ArrayList<>();
-
     // fill array wih empty values
     DataPoint[] data = new DataPoint[SAMPLE_COUNT];
     for (int i = 0; i < SAMPLE_COUNT; i++) {
       data[i] = new DataPoint(0, 0);
     }
 
-    this.series = new LineGraphSeries(data);
-
-    series = new LineGraphSeries<>(dataPoints.toArray(new DataPoint[dataPoints.size()]));
+    series = new LineGraphSeries<>(data);
     series.setColor(Color.BLUE);
     series.setThickness(8);
     series.setBackgroundColor(Color.TRANSPARENT);
@@ -462,21 +431,53 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   }
   //endregion
 
+  static private Map<String, Object> getBubbledMap(String event) {
+    final Map<String, Object> returnMap = new HashMap<>();
+    final Map<String, String> bubbleMap = new HashMap<>();
+    bubbleMap.put("bubbled", event);
+    returnMap.put("phasedRegistrationNames", bubbleMap);
+    return returnMap;
+  }
+
   @Override
-  public Map getExportedCustomBubblingEventTypeConstants() {
-      return MapBuilder.builder()
-          .put(EVENT_SAMPLE_READY, MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", EVENT_SAMPLE_READY)))
-          .put(EVENT_FINGER_DETECTED, MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", EVENT_FINGER_DETECTED)))
-          .put(EVENT_FINGER_REMOVED, MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", EVENT_FINGER_REMOVED)))
-          .put(EVENT_CALIBRATION_READY, MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", EVENT_CALIBRATION_READY)))
-          .put(EVENT_TIME_REMAINING, MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", EVENT_TIME_REMAINING)))
-          .put(EVENT_MEASUREMENT_FINISHED, MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", EVENT_MEASUREMENT_FINISHED)))
-          .put(EVENT_MEASUREMENT_START, MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", EVENT_MEASUREMENT_START)))
-          .put(EVENT_FINGER_DETECTION_TIME_EXPIRED, MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", EVENT_FINGER_DETECTION_TIME_EXPIRED)))
-          .put(EVENT_PULSE_DETECTED, MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", EVENT_PULSE_DETECTED)))
-          .put(EVENT_PULSE_DETECTION_TIME_EXPIRED, MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", EVENT_PULSE_DETECTION_TIME_EXPIRED)))
-          .put(EVENT_MOVEMENT_DETECTED, MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", EVENT_MOVEMENT_DETECTED)))
-          .put(EVENT_MEASUREMENT_PROCESSED, MapBuilder.of("phasedRegistrationNames", MapBuilder.of("bubbled", EVENT_MEASUREMENT_PROCESSED)))
-          .build();
+  public @Nullable
+  Map<String, Object> getExportedCustomDirectEventTypeConstants() {
+    final Map<String, Object> returnMap = new HashMap<>();
+    final Map<String, String> heartBeatMap = new HashMap<>();
+    final Map<String, String> ppgMap = new HashMap<>();
+
+    heartBeatMap.put("registrationName", "onHeartBeat");
+    ppgMap.put("registrationName", "onPPG");
+
+    returnMap.put("onHeartBeat", heartBeatMap);
+    returnMap.put("onPPG", ppgMap);
+
+    return returnMap;
+  }
+
+
+  @Override
+  public Map<String, Object> getExportedCustomBubblingEventTypeConstants() {
+    final Map<String, Object> returnMap = new HashMap<>();
+
+    returnMap.put(EVENT_SAMPLE_READY, getBubbledMap(EVENT_SAMPLE_READY));
+    returnMap.put(EVENT_FINGER_DETECTED, getBubbledMap(EVENT_FINGER_DETECTED));
+    returnMap.put(EVENT_FINGER_REMOVED, getBubbledMap(EVENT_FINGER_REMOVED));
+    returnMap.put(EVENT_CALIBRATION_READY, getBubbledMap(EVENT_CALIBRATION_READY));
+    returnMap.put(EVENT_TIME_REMAINING, getBubbledMap(EVENT_TIME_REMAINING));
+    returnMap.put(EVENT_MEASUREMENT_FINISHED, getBubbledMap(EVENT_MEASUREMENT_FINISHED));
+    returnMap.put(EVENT_MEASUREMENT_START, getBubbledMap(EVENT_MEASUREMENT_START));
+    returnMap.put(EVENT_FINGER_DETECTION_TIME_EXPIRED, getBubbledMap(EVENT_FINGER_DETECTION_TIME_EXPIRED));
+    returnMap.put(EVENT_PULSE_DETECTED, getBubbledMap(EVENT_PULSE_DETECTED));
+    returnMap.put(EVENT_PULSE_DETECTION_TIME_EXPIRED, getBubbledMap(EVENT_PULSE_DETECTION_TIME_EXPIRED));
+    returnMap.put(EVENT_MOVEMENT_DETECTED, getBubbledMap(EVENT_MOVEMENT_DETECTED));
+    returnMap.put(EVENT_MEASUREMENT_PROCESSED, getBubbledMap(EVENT_MEASUREMENT_PROCESSED));
+
+    return returnMap;
+  }
+
+  @Override
+  public void onDropViewInstance(@NonNull LinearLayout view) {
+    fibriChecker.stop();
   }
 }
