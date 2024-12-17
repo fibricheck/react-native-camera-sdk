@@ -13,10 +13,12 @@
 - (void) fibriCheckViewDidSetPulseDetectionExpiryTime;
 
 - (void) fibriCheckViewDidSetWaitForStartRecordingSignal;
-- (void) stopCamera;
 - (void) drawGraphPoint;
 - (void) addPoint;
+
 - (void) startMeasurement;
+- (void) startRecording;
+- (void) stopCamera;
 @end
 
 @interface RNTFibriCheckView : UIView {

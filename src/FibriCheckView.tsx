@@ -1,113 +1,257 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-import React from 'react';
+import { Component, forwardRef, useImperativeHandle, useRef } from 'react';
 import {
   requireNativeComponent,
-  UIManager,
+  NativeSyntheticEvent,
+  ViewStyle,
+  ColorValue,
+  NativeMethods,
   findNodeHandle,
+  UIManager,
 } from 'react-native';
 import packageVersion from '../package-version.json';
 import { CameraData, MeasurementError } from './types';
 
-type FibriCheckViewProps = typeof FibriCheckView.defaultProps & {
-  style?: any;
-  graphBackgroundColor?: string;
+enum NativeCommand {
+  StartMeasurement = "startMeasurement",
+  StartRecording = "startRecording",
+  ResetModule = "resetModule"
+}
+
+export interface SampleReadyEventData { ppg: number; raw: number; }
+export type SampleReadyEvent = NativeSyntheticEvent<SampleReadyEventData>
+
+export interface MeasurementProcessedEventData { measurement: string; }
+export type MeasurementProcessedEvent = NativeSyntheticEvent<MeasurementProcessedEventData>
+
+export interface HeartBeatEventData { heartRate: number; }
+export type HeartBeatEvent = NativeSyntheticEvent<HeartBeatEventData>
+
+export interface FingerRemovedEventData { y: number; v: number; stdDevY: number; }
+export type FingerRemovedEvent = NativeSyntheticEvent<FingerRemovedEventData>
+
+export interface MeasurementErrorEventData { message: MeasurementError; }
+export type MeasurementErrorEvent = NativeSyntheticEvent<MeasurementErrorEventData>
+
+export interface TimeRemainingEventData { seconds: number; }
+export type TimeRemainingEvent = NativeSyntheticEvent<TimeRemainingEventData>
+
+export type EmptyEvent = NativeSyntheticEvent<void>
+
+export interface FibriCheckViewHandle {
+  startMeasurement: () => void
+  startRecording: () => void
+  resetModule: () => void
+}
+
+interface FibriCheckNative {
+  style?: ViewStyle;
+
+  drawGraph: boolean;
+  drawBackground: boolean;
+  accEnabled: boolean;
+  flashEnabled: boolean;
+  gravEnabled: boolean;
+  gyroEnabled: boolean;
+  movementDetectionEnabled: boolean;
+  rotationEnabled: boolean;
+  waitForStartRecordingSignal: boolean;
+
+  lineColor: ColorValue;
+  lineThickness: number;
+
+  graphBackgroundColor?: ColorValue;
+
+  sampleTime: number;
+  fingerDetectionExpiryTime: number;
+  pulseDetectionExpiryTime: number;
+
+  onSampleReady: (event: SampleReadyEvent) => void;
+  onFingerDetected: (event: EmptyEvent) => void;
+  onFingerRemoved: (event: FingerRemovedEvent) => void;
+  onCalibrationReady: (event: EmptyEvent) => void;
+  onHeartBeat: (event: HeartBeatEvent) => void;
+  onTimeRemaining: (event: TimeRemainingEvent) => void;
+  onMeasurementFinished: (event: EmptyEvent) => void;
+  onMeasurementStart: (event: EmptyEvent) => void;
+  onFingerDetectionTimeExpired: (event: EmptyEvent) => void;
+  onPulseDetected: (event: EmptyEvent) => void;
+  onPulseDetectionTimeExpired: (event: EmptyEvent) => void;
+  onMovementDetected: (event: EmptyEvent) => void;
+  onMeasurementProcessed: (event: MeasurementProcessedEvent) => void;
+  onMeasurementError: (event: MeasurementErrorEvent) => void;
+}
+
+const FibriCheck = requireNativeComponent<FibriCheckNative>('FibriCheck');
+
+interface FibriCheckViewProps {
+  style?: ViewStyle;
+
   drawGraph?: boolean;
-  lineColor?: string;
-  lineThickness?: number;
   drawBackground?: boolean;
-  sampleTime?: number;
+  accEnabled?: boolean;
   flashEnabled?: boolean;
   gravEnabled?: boolean;
   gyroEnabled?: boolean;
-  accEnabled?: boolean;
-  rotationEnabled?: boolean;
   movementDetectionEnabled?: boolean;
+  rotationEnabled?: boolean;
+  waitForStartRecordingSignal?: boolean;
+
+  lineColor?: string;
+  lineThickness?: number;
+
+  graphBackgroundColor?: string;
+
+  sampleTime?: number;
   fingerDetectionExpiryTime?: number;
   pulseDetectionExpiryTime?: number;
-  waitForStartRecordingSignal?: boolean;
+
+  onSampleReady?: (data: SampleReadyEventData) => void;
   onFingerDetected?: () => void;
-  onFingerRemoved?: (data: { y: number; v: number; stdDevY: number; }) => void;
-  onFingerDetectionTimeExpired?: () => void;
+  onFingerRemoved?: (data: FingerRemovedEventData) => void;
   onCalibrationReady?: () => void;
   onHeartBeat?: (heartRate: number) => void;
+  onTimeRemaining?: (seconds: number) => void;
   onMeasurementFinished?: () => void;
   onMeasurementStart?: () => void;
-  onTimeRemaining?: (seconds: number) => void;
-  onSampleReady?: (data: { ppg: number; raw: number; }) => void;
+  onFingerDetectionTimeExpired?: () => void;
   onPulseDetected?: () => void;
   onPulseDetectionTimeExpired?: () => void;
   onMovementDetected?: () => void;
   onMeasurementProcessed?: (data: CameraData) => void;
   onMeasurementError?: (message: MeasurementError) => void;
-};
+}
 
-export default class FibriCheckView extends React.Component<FibriCheckViewProps> {
-  static propTypes = {};
+const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheckViewProps>(({
+  style = {
+    flex: 1,
+    backgroundColor: '#ffffff',
+  },
 
-  static defaultProps = {
-    style: {
-      flex: 1,
-      backgroundColor: '#ffffff',
-    },
-    drawGraph: true,
-    lineColor: '#63b3a6',
-    lineThickness: 8,
-    drawBackground: true,
-    sampleTime: 60,
-    flashEnabled: true,
-    gravEnabled: false,
-    gyroEnabled: false,
-    accEnabled: false,
-    rotationEnabled: false,
-    movementDetectionEnabled: true,
-    fingerDetectionExpiryTime: -1,
-    pulseDetectionExpiryTime: 10,
-    waitForStartRecordingSignal: false,
-  };
+  drawGraph = true,
+  drawBackground = true,
+  accEnabled = false,
+  flashEnabled = true,
+  gravEnabled = false,
+  gyroEnabled = false,
+  movementDetectionEnabled = true,
+  rotationEnabled = false,
+  waitForStartRecordingSignal = false,
 
-  static versionNumber = packageVersion.version;
+  lineColor = '#63b3a6',
+  lineThickness = 8,
 
-  constructor(props) {
-    console.log('constructor', props);
-    super(props);
+  graphBackgroundColor,
+
+  sampleTime = 60,
+  fingerDetectionExpiryTime = -1,
+  pulseDetectionExpiryTime = 10,
+
+  onSampleReady,
+  onFingerDetected = () => {},
+  onFingerRemoved,
+  onCalibrationReady = () => {},
+  onHeartBeat,
+  onTimeRemaining,
+  onMeasurementFinished = () => {},
+  onMeasurementStart = () => {},
+  onFingerDetectionTimeExpired = () => {},
+  onPulseDetected = () => {},
+  onPulseDetectionTimeExpired = () => {},
+  onMovementDetected = () => {},
+  onMeasurementProcessed,
+  onMeasurementError,
+}: FibriCheckViewProps, ref) => {
+  const nativeRef = useRef<Component<FibriCheckNative> & NativeMethods>(null);
+  const onSampleReadyCallback = (event: SampleReadyEvent) => {
+    onSampleReady?.(event.nativeEvent);
   }
 
-  componentWillUnmount() {
-    const handle = findNodeHandle(this);
+  const onMeasurementProcessedCallback =(event: MeasurementProcessedEvent) => {
+    onMeasurementProcessed?.({
+      ...JSON.parse(event.nativeEvent.measurement),
+      measurement_timestamp: Date.now(),
+    });
+  };
+
+  const onHeartBeatCallback = (event: HeartBeatEvent) => {
+    onHeartBeat?.(event.nativeEvent.heartRate);
+  }
+
+  const onFingerRemovedCallback = (event: FingerRemovedEvent) => {
+    onFingerRemoved?.(event.nativeEvent);
+  }
+
+  const onMeasurementErrorCallback = (event: MeasurementErrorEvent) => {
+    onMeasurementError?.(event.nativeEvent.message);
+  }
+
+  const onTimeRemainingCallback = (event: TimeRemainingEvent) => {
+    onTimeRemaining?.(event.nativeEvent.seconds);
+  }
+
+  const sendCommand = (command: NativeCommand) => {
+    const handle = findNodeHandle(nativeRef.current);
     // @ts-ignore
     UIManager.dispatchViewManagerCommand(
       handle,
       // @ts-ignore
-      UIManager.FibriCheck.Commands.resetModule,
+      command,
       []
     );
   }
 
-  render() {
-    const propsMapped = {
-      ...(this.props.onSampleReady ? { onSampleReady: event => this.props.onSampleReady(event.nativeEvent) } : {}),
-      ...(this.props.onMeasurementProcessed ? {
-        onMeasurementProcessed:
-          event => {
-            this.props.onMeasurementProcessed({
-              ...JSON.parse(event.nativeEvent.measurement),
-              measurement_timestamp: Date.now(),
-            });
-          },
-      } : {}),
-      ...(this.props.onHeartBeat ? { onHeartBeat: event => this.props.onHeartBeat(event.nativeEvent.heartRate) } : {}),
-      ...(this.props.onFingerRemoved ? { onFingerRemoved: event => this.props.onFingerRemoved(event.nativeEvent) } : {}),
-      ...(this.props.onMeasurementError ? { onMeasurementError: event => this.props.onMeasurementError(event.nativeEvent.message) } : {}),
-      ...(this.props.onTimeRemaining ? { onTimeRemaining: event => this.props.onTimeRemaining(event.nativeEvent.seconds) } : {}),
-    };
+  useImperativeHandle(ref, () => ({
+    startMeasurement: () => { sendCommand(NativeCommand.StartMeasurement) },
+    startRecording: () => { sendCommand(NativeCommand.StartRecording) },
+    resetModule: () => { sendCommand(NativeCommand.ResetModule) }
+  }))
 
-    return (
-      <FibriCheck
-        {...this.props}
-        {...propsMapped}
-      />
-    );
-  }
-}
+  return (
+    <FibriCheck
+      ref={nativeRef}
 
-const FibriCheck = requireNativeComponent('FibriCheck', FibriCheckView);
+      style={style}
+      drawGraph={drawGraph}
+      drawBackground={drawBackground}
+      accEnabled={accEnabled}
+      flashEnabled={flashEnabled}
+      gravEnabled={gravEnabled}
+      gyroEnabled={gyroEnabled}
+      movementDetectionEnabled={movementDetectionEnabled}
+      rotationEnabled={rotationEnabled}
+      waitForStartRecordingSignal={waitForStartRecordingSignal}
+
+      lineColor={lineColor}
+      lineThickness={lineThickness}
+
+      graphBackgroundColor={graphBackgroundColor}
+
+      sampleTime={sampleTime}
+      fingerDetectionExpiryTime={fingerDetectionExpiryTime}
+      pulseDetectionExpiryTime={pulseDetectionExpiryTime}
+
+      onSampleReady={onSampleReadyCallback}
+      onFingerDetected={onFingerDetected}
+      onFingerRemoved={onFingerRemovedCallback}
+      onCalibrationReady={onCalibrationReady}
+      onHeartBeat={onHeartBeatCallback}
+      onTimeRemaining={onTimeRemainingCallback}
+      onMeasurementFinished={onMeasurementFinished}
+      onMeasurementStart={onMeasurementStart}
+      onFingerDetectionTimeExpired={onFingerDetectionTimeExpired}
+      onPulseDetected={onPulseDetected}
+      onPulseDetectionTimeExpired={onPulseDetectionTimeExpired}
+      onMovementDetected={onMovementDetected}
+      onMeasurementProcessed={onMeasurementProcessedCallback}
+      onMeasurementError={onMeasurementErrorCallback}
+    />
+  );
+}), {
+  /**
+   * @deprecated Will be removed in favor of the new import RNFibriCheckVersion
+   */
+  versionNumber: packageVersion.version
+})
+
+export const versionNumber = packageVersion.version;
+export default FibriCheckView;
