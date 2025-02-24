@@ -2,10 +2,15 @@
 
 package com.fibricheck.rncamerasdk;
 
-import android.app.Activity;
 import androidx.annotation.Nullable;
-import android.view.ViewGroup;
+
+import android.content.Context;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraManager;
+import android.util.Range;
+
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -63,5 +68,39 @@ public class RNFibriCheckModule extends ReactContextBaseJavaModule {
     reactContext
         .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
         .emit(eventName, params);
+  }
+
+    @ReactMethod
+  public void getIsoRange(Promise promise) {
+    try {
+      CameraManager manager = (CameraManager) reactContext.getSystemService(Context.CAMERA_SERVICE);
+      CameraCharacteristics cameraCharacteristics = manager.getCameraCharacteristics(manager.getCameraIdList()[0]);
+      Range<Integer> isoRange = cameraCharacteristics.get(CameraCharacteristics.SENSOR_INFO_SENSITIVITY_RANGE);
+
+      WritableMap event = Arguments.createMap();
+      event.putInt("min", isoRange.getLower());
+      event.putInt("max", isoRange.getUpper());
+      promise.resolve(event);
+    }
+    catch (Exception e) {
+      promise.reject(e);
+    }
+  }
+
+  @ReactMethod
+  public void getExposureTimeRange(Promise promise) {
+    try {
+      CameraManager manager = (CameraManager) reactContext.getSystemService(Context.CAMERA_SERVICE);
+      CameraCharacteristics cameraCharacteristics = manager.getCameraCharacteristics(manager.getCameraIdList()[0]);
+      Range<Long> isoRange = cameraCharacteristics.get(CameraCharacteristics.SENSOR_INFO_EXPOSURE_TIME_RANGE);
+
+      WritableMap event = Arguments.createMap();
+      event.putLong("min", isoRange.getLower());
+      event.putLong("max", isoRange.getUpper());
+      promise.resolve(event);
+    }
+    catch (Exception e) {
+      promise.reject(e);
+    }
   }
 }

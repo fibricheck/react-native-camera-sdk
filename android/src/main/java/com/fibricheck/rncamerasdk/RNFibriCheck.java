@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.Range;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,9 +49,11 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   private static final String COMMAND_START_MEASUREMENT_STRING = "startMeasurement";
   private static final String COMMAND_START_RECORDING_STRING = "startRecording";
   private static final String COMMAND_RESET_MODULE_STRING = "resetModule";
+  private static final String COMMAND_RESET_AUTO_FOCUS = "resetAutoFocus";
   private static final int COMMAND_START_MEASUREMENT_INT = 1;
   private static final int COMMAND_START_RECORDING_INT = 2;
   private static final int COMMAND_RESET_MODULE_INT = 3;
+  private static final int COMMAND_RESET_AUTO_FOCUS_INT = 4;
 
   private static final int SAMPLE_COUNT = 120;
 
@@ -82,6 +85,8 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   private static final String EVENT_MOVEMENT_DETECTED = "onMovementDetected";
   private static final String EVENT_MEASUREMENT_PROCESSED = "onMeasurementProcessed";
   private static final String EVENT_MEASUREMENT_ERROR = "onMeasurementError";
+  private static final String EVENT_ON_ISO_RANGE = "onIsoRange";
+  private static final String EVENT_ON_EXPOSURE_TIME_RANGE = "onExposureTimeRange";
 
   public Activity getActivity(Context context) {
     if (context == null) {
@@ -236,6 +241,7 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
     returnMap.put(COMMAND_START_MEASUREMENT_STRING, COMMAND_START_MEASUREMENT_INT);
     returnMap.put(COMMAND_START_RECORDING_STRING, COMMAND_START_RECORDING_INT);
     returnMap.put(COMMAND_RESET_MODULE_STRING, COMMAND_RESET_MODULE_INT);
+    returnMap.put(COMMAND_RESET_AUTO_FOCUS, COMMAND_RESET_AUTO_FOCUS_INT);
     return returnMap;
   }
 
@@ -258,6 +264,12 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
       case COMMAND_RESET_MODULE_STRING: {
         Log.i(TAG, "Command Received: reset Module");
         fibriChecker.stop();
+        break;
+      }
+      case COMMAND_RESET_AUTO_FOCUS: {
+        Log.i(TAG, "Command Received: reset Auto Focus");
+        fibriChecker.setManualIso(0);
+        fibriChecker.setManualExposureTime(0);
         break;
       }
 
@@ -345,6 +357,16 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   @ReactProp(name = "waitForStartRecordingSignal")
   public void setWaitForStartRecordingSignal(View view, boolean waitForStartRecordingSignal) {
     fibriChecker.waitForStartRecordingSignal = waitForStartRecordingSignal;
+  }
+
+  @ReactProp(name = "manualIso")
+  public void setManualIso(View view, int manualIso) {
+    fibriChecker.setManualIso(manualIso);
+  }
+
+  @ReactProp(name = "manualExposureTime")
+  public void setManualExposureTime(View view, int manualExposureTime) {
+    fibriChecker.setManualExposureTime(manualExposureTime);
   }
   //endregion
 

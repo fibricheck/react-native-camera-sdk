@@ -7,6 +7,7 @@ import {
   NativeMethods,
   findNodeHandle,
   UIManager,
+  NativeModules,
 } from 'react-native';
 import packageVersion from '../package-version.json';
 import { CameraData, MeasurementError } from './types';
@@ -35,12 +36,15 @@ export type MeasurementErrorEvent = NativeSyntheticEvent<MeasurementErrorEventDa
 export interface TimeRemainingEventData { seconds: number; }
 export type TimeRemainingEvent = NativeSyntheticEvent<TimeRemainingEventData>
 
+export interface NumberRangeData { min: number, max: number; }
+
 export type EmptyEvent = NativeSyntheticEvent<void>
 
 export interface FibriCheckViewHandle {
   startMeasurement: () => void
   startRecording: () => void
   resetModule: () => void
+  resetAutoFocus: () => void
 }
 
 interface FibriCheckNative {
@@ -55,6 +59,8 @@ interface FibriCheckNative {
   movementDetectionEnabled: boolean;
   rotationEnabled: boolean;
   waitForStartRecordingSignal: boolean;
+  manualIso: number;
+  manualExposureTime: number;
 
   lineColor: ColorValue;
   lineThickness: number;
@@ -95,6 +101,8 @@ interface FibriCheckViewProps {
   movementDetectionEnabled?: boolean;
   rotationEnabled?: boolean;
   waitForStartRecordingSignal?: boolean;
+  manualIso?: number;
+  manualExposureTime?: number;
 
   lineColor?: string;
   lineThickness?: number;
@@ -136,6 +144,8 @@ const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheck
   movementDetectionEnabled = true,
   rotationEnabled = false,
   waitForStartRecordingSignal = false,
+  manualIso = 0,
+  manualExposureTime = 0,
 
   lineColor = '#63b3a6',
   lineThickness = 8,
@@ -203,7 +213,8 @@ const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheck
   useImperativeHandle(ref, () => ({
     startMeasurement: () => { sendCommand(NativeCommand.StartMeasurement) },
     startRecording: () => { sendCommand(NativeCommand.StartRecording) },
-    resetModule: () => { sendCommand(NativeCommand.ResetModule) }
+    resetModule: () => { sendCommand(NativeCommand.ResetModule) },
+    resetAutoFocus: () => { sendCommand(NativeCommand.ResetModule) }
   }))
 
   return (
@@ -220,6 +231,8 @@ const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheck
       movementDetectionEnabled={movementDetectionEnabled}
       rotationEnabled={rotationEnabled}
       waitForStartRecordingSignal={waitForStartRecordingSignal}
+      manualIso={manualIso}
+      manualExposureTime={manualExposureTime}
 
       lineColor={lineColor}
       lineThickness={lineThickness}
@@ -252,6 +265,16 @@ const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheck
    */
   versionNumber: packageVersion.version
 })
+
+const { FibriCheck: FibriCheckModule } = NativeModules
+
+export function getIsoRange(): Promise<NumberRangeData> {
+  return FibriCheckModule.getIsoRange();
+}
+
+export function getExposureTimeRange(): Promise<NumberRangeData> {
+  return FibriCheckModule.getExposureTimeRange();
+}
 
 export const versionNumber = packageVersion.version;
 export default FibriCheckView;

@@ -1625,12 +1625,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fibricheck/react-native-camera-sdk@npm:1.3.4-dev.146":
-  version: 1.3.4-dev.146
-  resolution: "@fibricheck/react-native-camera-sdk@npm:1.3.4-dev.146::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40fibricheck%2Freact-native-camera-sdk%2F1.3.4-dev.146%2Faacb011c73b1498c76f966f055cb1985c2240288"
+"@fibricheck/react-native-camera-sdk@npm:1.3.4-dev.159":
+  version: 1.3.4-dev.159
+  resolution: "@fibricheck/react-native-camera-sdk@npm:1.3.4-dev.159::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40fibricheck%2Freact-native-camera-sdk%2F1.3.4-dev.159%2Fd8b4a465fd4fd59f06d8f8b029be07e82e2ebb23"
   peerDependencies:
     react-native: ">=0.60.0-rc.0 <1.0.x"
-  checksum: 10c0/56dd187a71621d85f2b0842ce452a33200d7c4a5b84c0b2355f18ee39d08e12d7a57ee1a8fe9a6a417bef6799d569dee689ae91122c2dcb6623cca9b13d8514b
+  checksum: 10c0/08a6f607ae643b8e6f9a747d765409af141759f2988f3134614c29ea0dbbf96599b0eaa23431c08c6e7a38fdbd2b3437b757ab14209b5f2f6bd6791e22a210e6
   languageName: node
   linkType: hard
 
@@ -2284,6 +2284,13 @@ __metadata:
   bin:
     rnc-cli: build/bin.js
   checksum: 10c0/f2ca7848dd0540e4d53af17f066d745f631fb948e8b1248d3b6dedd38452cbc7fda61e1da07a703191144f6fbfb64b3436d9c885b8a228fec2dc4f439df09820
+  languageName: node
+  linkType: hard
+
+"@react-native-community/slider@npm:^4.5.6":
+  version: 4.5.6
+  resolution: "@react-native-community/slider@npm:4.5.6"
+  checksum: 10c0/6ff9b91b8f9af14fadccad101fc0abc17c864a5d2832483aef8813e67a93ad723053ed033141f71db8f7a128d3b1fdf4dd37f5c093901e7f041380a671090283
   languageName: node
   linkType: hard
 
@@ -4820,10 +4827,11 @@ __metadata:
     "@babel/preset-env": "npm:^7.26.0"
     "@babel/runtime": "npm:^7.26.0"
     "@extrahorizon/javascript-sdk": "npm:^8.4.1"
-    "@fibricheck/react-native-camera-sdk": "npm:1.3.4-dev.146"
+    "@fibricheck/react-native-camera-sdk": "npm:1.3.4-dev.159"
     "@react-native-community/cli": "npm:15.1.2"
     "@react-native-community/cli-platform-android": "npm:15.1.2"
     "@react-native-community/cli-platform-ios": "npm:15.1.2"
+    "@react-native-community/slider": "npm:^4.5.6"
     "@react-native/babel-preset": "npm:0.76.3"
     "@react-native/eslint-config": "npm:0.76.3"
     "@react-native/metro-config": "npm:0.76.3"

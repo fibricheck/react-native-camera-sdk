@@ -31,9 +31,12 @@ import {
 import {createOAuth2Client, Document} from '@extrahorizon/javascript-sdk';
 import {rqlBuilder} from '@extrahorizon/javascript-sdk';
 import {
-  FibriCheckViewHandle,
-  SampleReadyEventData,
-} from '@fibricheck/react-native-camera-sdk/build/types/src/FibriCheckView';
+  RNFibriCheckViewHandle,
+  getExposureTimeRange,
+  getIsoRange,
+} from '@fibricheck/react-native-camera-sdk';
+import { SampleReadyEventData } from '@fibricheck/react-native-camera-sdk/build/types/src/FibriCheckView';
+import Slider from '@react-native-community/slider';
 
 const credentials = {
   username: process.env.API_USER ?? '',
@@ -69,8 +72,12 @@ const App = () => {
   const [heartRate, setHeartRate] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(60);
   const [measurements, setMeasurements] = useState<Document[]>([]);
+  const [iso, setIso] = useState<number>(800);
+  const [exposureTime, setExposureTime] = useState<number>(1/200 * 1_000_000_000);
+  const [{ isoMin, isoMax }, setIsoRange] = useState({ isoMin: 100, isoMax: 5600 })
+  const [{ exposureMax, exposureMin }, setExposureRange] = useState({ exposureMin: 10_0000, exposureMax: 1_000_000_000 })
   const userIdRef = useRef('');
-  const fibriViewRef = useRef<FibriCheckViewHandle>(null);
+  const fibriViewRef = useRef<RNFibriCheckViewHandle>(null);
 
   const retrieveMeasurements = async () => {
     setLoadingMeasurements(true);
@@ -139,6 +146,14 @@ const App = () => {
   useEffect(() => {
     requestCameraPermissions();
     authenticate();
+    getIsoRange().then((range) => {
+      setIsoRange({ isoMax: range.max, isoMin: range.min })
+    })
+    getExposureTimeRange().then((range) => {
+      setExposureRange(exposureRange => ({ exposureMax: exposureRange.exposureMax, exposureMin: range.min }))
+    }).catch((error) => {
+      console.warn(error)
+    })
   }, []);
 
   return (
@@ -152,6 +167,8 @@ const App = () => {
                 style={styles.fibricontainer}
                 graphBackgroundColor={'#0073ff'}
                 flashEnabled={true}
+                manualIso={iso}
+                manualExposureTime={exposureTime}
                 onFingerDetected={() => {
                   setFingerPresent(true);
                   console.log('Finger detected');
@@ -240,6 +257,14 @@ const App = () => {
                 title={'Record'}
               />
             </View>
+          </View>
+          <View style={{ marginTop: 16 }}>
+            <Text>ISO: {iso}</Text>
+            <Slider style={{ flex: 1, marginVertical: 16 }} maximumValue={isoMax} minimumValue={isoMin} value={iso} onValueChange={setIso} />
+          </View>
+          <View>
+            <Text>Exposure Time: {exposureTime / 1_000_000_000}s</Text>
+            <Slider style={{ flex: 1, marginVertical: 16 }} maximumValue={exposureMax} minimumValue={exposureMin} value={exposureTime} onValueChange={setExposureTime} />
           </View>
 
           <FlatList
