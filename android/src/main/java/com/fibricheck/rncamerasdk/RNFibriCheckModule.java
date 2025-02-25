@@ -95,8 +95,8 @@ public class RNFibriCheckModule extends ReactContextBaseJavaModule {
       Range<Long> isoRange = cameraCharacteristics.get(CameraCharacteristics.SENSOR_INFO_EXPOSURE_TIME_RANGE);
 
       WritableMap event = Arguments.createMap();
-      event.putLong("min", isoRange.getLower());
-      event.putLong("max", isoRange.getUpper());
+      event.putDouble("min", isoRange.getLower());
+      event.putDouble("max", isoRange.getUpper());
       promise.resolve(event);
     }
     catch (Exception e) {
