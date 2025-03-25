@@ -3,6 +3,4 @@
 
 @interface RNTFibriCheckViewController : UIViewController <FibriCheckViewDelegate>
 
-- (void)startMeasurement;
-
 @end

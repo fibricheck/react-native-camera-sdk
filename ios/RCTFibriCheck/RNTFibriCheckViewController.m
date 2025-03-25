@@ -49,13 +49,29 @@
     _fibrichecker.fingerDetectionExpiryTime = fingerDetectionExpiryTime;
 }
 
+- (void)fibriCheckViewDidSetPulseDetectionExpiryTime {
+    NSInteger pulseDetectionExpiryTime = ((RNTFibriCheckView*)self.view).pulseDetectionExpiryTime;
+    _fibrichecker.pulseDetectionExpiryTime = pulseDetectionExpiryTime;
+}
+
 - (void)fibriCheckViewDidSetWaitForStartRecordingSignal {
     NSInteger waitForStartRecordingSignal = ((RNTFibriCheckView*)self.view).waitForStartRecordingSignal;
     _fibrichecker.waitForStartRecordingSignal = waitForStartRecordingSignal;
 }
 
+- (void)startMeasurement {
+  NSLog(@"startMeasurement");
+  [_fibrichecker startMeasurement];
+}
+
+- (void)startRecording {
+  NSLog(@"startRecording");
+  _fibrichecker.startRecording;
+}
+
 - (void)stopCamera {
-    _fibrichecker.stop;
+  NSLog(@"stopCamera");
+  _fibrichecker.stop;
 }
 
 - (void)startRecording {
@@ -69,9 +85,10 @@
   [self addListeners];
 }
 
-- (void)startMeasurement {
-  NSLog(@"startMeasurement");
-  [_fibrichecker startMeasurement];
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    // Clean up resources, remove observers, stop timers, etc.
+    [self.fibrichecker stop];
 }
 
 - (void)loadView {

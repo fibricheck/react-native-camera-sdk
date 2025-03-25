@@ -27,6 +27,8 @@ RCT_EXPORT_VIEW_PROPERTY(accEnabled, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(rotationEnabled, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(movementDetectionEnabled, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(fingerDetectionExpiryTime, NSInteger);
+RCT_EXPORT_VIEW_PROPERTY(pulseDetectionExpiryTime, NSInteger);
+
 RCT_EXPORT_VIEW_PROPERTY(waitForStartRecordingSignal, NSInteger);
 
 RCT_EXPORT_VIEW_PROPERTY(drawGraph, BOOL);
@@ -40,9 +42,19 @@ RCT_EXPORT_MODULE(FibriCheck)
     return self.fibriCheckViewController.view;
 }
 
+RCT_EXPORT_METHOD(startMeasurement:(nonnull NSNumber*) reactTag)
+{
+    self.fibriCheckViewController.startMeasurement;
+}
+
+RCT_EXPORT_METHOD(startRecording:(nonnull NSNumber*) reactTag)
+{
+    self.fibriCheckViewController.startRecording;
+}
+
 RCT_EXPORT_METHOD(resetModule:(nonnull NSNumber*) reactTag)
 {
- self.fibriCheckViewController.stopCamera;
+    self.fibriCheckViewController.stopCamera;
 }
 
 RCT_EXPORT_METHOD(startRecording:(nonnull NSNumber*) reactTag)

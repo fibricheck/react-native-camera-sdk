@@ -5,36 +5,48 @@ on:
     branches:
       - dev
       - feature/*
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-
+        uses: actions/checkout@v4
       - name: Use Node LTS
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
-          node-version: 14
+          node-version: 22
           registry-url: https://npm.pkg.github.com/
           scope: '@fibricheck'
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Prepare npmrc
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PACKAGES_FULL_READ_ACCESS_TOKEN }}" > .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_PACKAGES_PUBLISHER_TOKEN }}" >> .npmrc
+          echo "@fibricheck:registry=https://npm.pkg.github.com" >> .npmrc
       - run: yarn install
   publish:
     needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-
-      - uses: actions/setup-node@v1
+        uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 14
+          node-version: 22
           registry-url: https://npm.pkg.github.com/
           scope: '@fibricheck'
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Prepare npmrc
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PACKAGES_FULL_READ_ACCESS_TOKEN }}" > .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_PACKAGES_PUBLISHER_TOKEN }}" >> .npmrc
+          echo "@fibricheck:registry=https://npm.pkg.github.com" >> .npmrc
       - run: yarn install
       - run: yarn build
-      - run: yarn add-suffix
+      - run: SUFFIX=dev yarn remove-suffix
+      - run: SUFFIX=dev yarn add-suffix
       - name: Extract version
         id: extract_version
         uses: Saionaro/extract-package-version@v1.0.6
@@ -43,6 +55,6 @@ jobs:
       - run: git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com" && git config --global user.name "$GITHUB_ACTOR"
       - run: git tag -a v${{steps.extract_version.outputs.version}} -m "Tagging v${{steps.extract_version.outputs.version}}"
       - run: git push --tags && git push
-      - run: yarn publish --registry https://npm.pkg.github.com/
+      - run: yarn publish --registry https://npm.pkg.github.com/ --tag dev
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}

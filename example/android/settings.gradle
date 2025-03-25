@@ -1,5 +1,6 @@
-rootProject.name = 'example'
-include ':@fibricheck_react-native-sdk'
-project(':@fibricheck_react-native-sdk').projectDir = new File(rootProject.projectDir, '../node_modules/@fibricheck/react-native-sdk/android')
-apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
+pluginManagement { includeBuild("../node_modules/@react-native/gradle-plugin") }
+plugins { id("com.facebook.react.settings") }
+extensions.configure(com.facebook.react.ReactSettingsExtension){ ex -> ex.autolinkLibrariesFromCommand() }
+rootProject.name = 'FibriCheck RN Example'
 include ':app'
+includeBuild('../node_modules/@react-native/gradle-plugin')
