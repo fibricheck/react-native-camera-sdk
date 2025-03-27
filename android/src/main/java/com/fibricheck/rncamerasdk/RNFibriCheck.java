@@ -9,6 +9,8 @@ import android.graphics.Color;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Range;
@@ -17,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.facebook.common.util.Hex;
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
@@ -26,16 +29,24 @@ import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
+import com.fibricheck.rncamerasdk.extensions.CameraSettingsInfoKt;
 import com.google.gson.Gson;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.qompium.fibricheck.camerasdk.FibriChecker;
+import com.qompium.fibricheck.camerasdk.FibriCheckerImpl2;
 import com.qompium.fibricheck.camerasdk.listeners.FibriListener;
+import com.qompium.fibricheck.camerasdk.listeners.RawDataListener;
 import com.qompium.fibricheck.camerasdk.measurement.MeasurementData;
+import com.qompium.fibricheck.camerasdk.models.CameraSettings;
+import com.qompium.fibricheck.camerasdk.models.CameraSettingsInfo;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,26 +61,33 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   private static final String COMMAND_START_RECORDING_STRING = "startRecording";
   private static final String COMMAND_RESET_MODULE_STRING = "resetModule";
   private static final String COMMAND_RESET_AUTO_FOCUS = "resetAutoFocus";
+  private static final String COMMAND_START_RAW_DATA = "startRawData";
+  private static final String COMMAND_STOP_RAW_DATA = "stopRawData";
+  private static final String COMMAND_GET_CAMERA_INFO = "getCameraInfo";
   private static final int COMMAND_START_MEASUREMENT_INT = 1;
   private static final int COMMAND_START_RECORDING_INT = 2;
   private static final int COMMAND_RESET_MODULE_INT = 3;
   private static final int COMMAND_RESET_AUTO_FOCUS_INT = 4;
+  private static final int COMMAND_START_RAW_DATA_INT = 5;
+  private static final int COMMAND_STOP_RAW_DATA_INT = 6;
+  private static final int COMMAND_GET_CAMERA_INFO_INT = 7;
 
   private static final int SAMPLE_COUNT = 120;
-
   public boolean drawGraphPoints = false;
 
   private LineGraphSeries<DataPoint> series;
-
   private ArrayList<Double> valueSR;
-
   private int xValue = 0;
 
   private GraphView graphView;
-
   private LinearLayout linearLayout;
 
   private FibriChecker fibriChecker;
+  private CameraSettings fibriSettings = new CameraSettings();
+
+  private String whiteBalanceMode = "auto";
+  private ArrayList<Float> whiteBalanceGains = null;
+  private int whiteBalanceTemperature = 5000;
 
   private static final String EVENT_SAMPLE_READY = "onSampleReady";
   private static final String EVENT_FINGER_DETECTED = "onFingerDetected";
@@ -85,8 +103,8 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   private static final String EVENT_MOVEMENT_DETECTED = "onMovementDetected";
   private static final String EVENT_MEASUREMENT_PROCESSED = "onMeasurementProcessed";
   private static final String EVENT_MEASUREMENT_ERROR = "onMeasurementError";
-  private static final String EVENT_ON_ISO_RANGE = "onIsoRange";
-  private static final String EVENT_ON_EXPOSURE_TIME_RANGE = "onExposureTimeRange";
+  private static final String EVENT_ON_CAMERA_INFO = "onCameraInfo";
+  private static final String EVENT_ON_RAW_DATA = "onRawData";
 
   public Activity getActivity(Context context) {
     if (context == null) {
@@ -116,9 +134,9 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
     int reactTag = linearLayout.getId();
 
     reactContext
-            // TODO: RCTEventEmitter is deprecated but info about a replacement is scarce
-            .getJSModule(RCTEventEmitter.class)
-            .receiveEvent(reactTag, eventName, params);
+        // TODO: RCTEventEmitter is deprecated but info about a replacement is scarce
+        .getJSModule(RCTEventEmitter.class)
+        .receiveEvent(reactTag, eventName, params);
   }
 
   @NonNull
@@ -136,7 +154,6 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
 
     fibriChecker = new FibriChecker.FibriBuilder(context.getCurrentActivity(), linearLayout).build();
     fibriChecker.setFibriListener(new FibriListener() {
-
       @Override public void onSampleReady(final double ppg, double raw) {
         if (drawGraphPoints) {
           addGraphData(ppg);
@@ -172,9 +189,9 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
       }
 
       @Override public void onTimeRemaining(int seconds) {
-          WritableMap event = Arguments.createMap();
-          event.putInt("seconds", seconds);
-          sendEvent(EVENT_TIME_REMAINING, event);
+        WritableMap event = Arguments.createMap();
+        event.putInt("seconds", seconds);
+        sendEvent(EVENT_TIME_REMAINING, event);
       }
 
       @Override public void onMeasurementFinished(long timestamp) {
@@ -224,10 +241,10 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
         }
       }
 
-       @Override public void onMeasurementError(String message) {
-          WritableMap event = Arguments.createMap();
-          event.putString("message", message);
-          sendEvent(EVENT_MEASUREMENT_ERROR, event);
+      @Override public void onMeasurementError(String message) {
+        WritableMap event = Arguments.createMap();
+        event.putString("message", message);
+        sendEvent(EVENT_MEASUREMENT_ERROR, event);
       }
     });
 
@@ -242,6 +259,9 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
     returnMap.put(COMMAND_START_RECORDING_STRING, COMMAND_START_RECORDING_INT);
     returnMap.put(COMMAND_RESET_MODULE_STRING, COMMAND_RESET_MODULE_INT);
     returnMap.put(COMMAND_RESET_AUTO_FOCUS, COMMAND_RESET_AUTO_FOCUS_INT);
+    returnMap.put(COMMAND_START_RAW_DATA, COMMAND_START_RAW_DATA_INT);
+    returnMap.put(COMMAND_STOP_RAW_DATA, COMMAND_STOP_RAW_DATA_INT);
+    returnMap.put(COMMAND_GET_CAMERA_INFO, COMMAND_GET_CAMERA_INFO_INT);
     return returnMap;
   }
 
@@ -272,11 +292,41 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
         fibriChecker.setManualExposureTime(0);
         break;
       }
+      case COMMAND_START_RAW_DATA: {
+        if (fibriChecker instanceof FibriCheckerImpl2) {
+          FibriCheckerImpl2 impl = (FibriCheckerImpl2) fibriChecker;
+          impl.setRawDataListener(new RawDataListener() {
+            @Override
+            public void onNewData(@NonNull byte[] bytes, @NonNull Map<String, String> map) {
+              WritableMap cameraData = Arguments.createMap();
+              map.forEach(cameraData::putString);
+
+              WritableMap event = Arguments.createMap();
+              event.putMap("cameraData", cameraData);
+              event.putString("image", Base64.encodeToString(bytes, Base64.DEFAULT));
+
+              sendEvent(EVENT_ON_RAW_DATA, event);
+            }
+          });
+        }
+        break;
+      }
+      case COMMAND_STOP_RAW_DATA: {
+        if (fibriChecker instanceof FibriCheckerImpl2) {
+          FibriCheckerImpl2 impl = (FibriCheckerImpl2) fibriChecker;
+          impl.setRawDataListener(null);
+        }
+        break;
+      }
+      case COMMAND_GET_CAMERA_INFO: {
+        sendCameraInfo();
+        break;
+      }
 
       default:
         throw new IllegalArgumentException(
-                String.format("Unsupported command %s received by %s.", commandId,
-                        getClass().getSimpleName()));
+            String.format("Unsupported command %s received by %s.", commandId,
+                getClass().getSimpleName()));
     }
   }
 
@@ -295,17 +345,17 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
 
   @ReactProp(name = "lineColor")
   public void setLineColor(View view, String lineColor) {
-     series.setColor(Color.parseColor(lineColor));
+    series.setColor(Color.parseColor(lineColor));
   }
 
   @ReactProp(name = "lineThickness")
   public void setLineThickness(View view, int lineThickness) {
-     series.setThickness(lineThickness);
+    series.setThickness(lineThickness);
   }
 
   @ReactProp(name = "graphBackgroundColor")
   public void setGraphBackgroundColor(View view, String graphBackgroundColor) {
-     series.setBackgroundColor(Color.parseColor(graphBackgroundColor));
+    series.setBackgroundColor(Color.parseColor(graphBackgroundColor));
   }
 
   @ReactProp(name = "sampleTime")
@@ -359,14 +409,79 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
     fibriChecker.waitForStartRecordingSignal = waitForStartRecordingSignal;
   }
 
+  @ReactProp(name = "manualExposureEnabled")
+  public void setManualExposureEnabled(View view, boolean enabled) {
+    fibriSettings.setManualExposureEnabled(enabled);
+    fibriChecker.setCameraSettings(fibriSettings);
+  }
+
   @ReactProp(name = "manualIso")
   public void setManualIso(View view, int manualIso) {
-    fibriChecker.setManualIso(manualIso);
+    fibriSettings.setManualIsoValue(manualIso);
+    fibriChecker.setCameraSettings(fibriSettings);
   }
 
   @ReactProp(name = "manualExposureTime")
   public void setManualExposureTime(View view, int manualExposureTime) {
-    fibriChecker.setManualExposureTime(manualExposureTime);
+    fibriSettings.setManualExposureTime(manualExposureTime);
+    fibriChecker.setCameraSettings(fibriSettings);
+  }
+
+  @ReactProp(name = "manualFocusEnabled")
+  public void setManualFocusEnabled(View view, boolean enabled) {
+    fibriSettings.setManualFocusEnabled(enabled);
+    fibriChecker.setCameraSettings(fibriSettings);
+  }
+
+  @ReactProp(name = "manualFocus")
+  public void setManualExposureTime(View view, float manualFocus) {
+    fibriSettings.setManualFocus(manualFocus);
+    fibriChecker.setCameraSettings(fibriSettings);
+  }
+
+  @ReactProp(name = "whiteBalanceMode")
+  public void setWhiteBalanceMode(View view, String mode) {
+    this.whiteBalanceMode = mode;
+    fibriSettings.setManualWhiteBalanceEnabled(!mode.equals("auto"));
+
+    if (mode.equals("temperature")) {
+      fibriSettings.setManualWhiteBalance(CameraSettings.Companion.whiteBalanceToGains(this.whiteBalanceTemperature));
+    }
+    else if (mode.equals("gains")) {
+      fibriSettings.setManualWhiteBalance(this.whiteBalanceGains);
+    }
+
+    fibriChecker.setCameraSettings(fibriSettings);
+  }
+
+  @ReactProp(name = "manualWhiteBalance")
+  public void setManualWhiteBalance(View view, int manualWhiteBalance) {
+    this.whiteBalanceTemperature = manualWhiteBalance;
+    if (!this.whiteBalanceMode.equals("temperature"))  {
+      return;
+    }
+    fibriSettings.setManualWhiteBalance(CameraSettings.Companion.whiteBalanceToGains(manualWhiteBalance));
+    fibriChecker.setCameraSettings(fibriSettings);
+  }
+
+  @ReactProp(name = "manualGains")
+  public void setManualGains(View view, ReadableArray manualGains) {
+    if (manualGains == null || manualGains.size() == 0) {
+      return;
+    }
+
+    ArrayList<Float> gains = new ArrayList<>();
+    for (int i = 0; i < manualGains.size(); i++) {
+      gains.add((float) manualGains.getDouble(i));
+    }
+
+    this.whiteBalanceGains = gains;
+    if (!this.whiteBalanceMode.equals("gains")) {
+      return;
+    }
+
+    fibriSettings.setManualWhiteBalance(gains);
+    fibriChecker.setCameraSettings(fibriSettings);
   }
   //endregion
 
@@ -496,6 +611,8 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
     returnMap.put(EVENT_PULSE_DETECTION_TIME_EXPIRED, getBubbledMap(EVENT_PULSE_DETECTION_TIME_EXPIRED));
     returnMap.put(EVENT_MOVEMENT_DETECTED, getBubbledMap(EVENT_MOVEMENT_DETECTED));
     returnMap.put(EVENT_MEASUREMENT_PROCESSED, getBubbledMap(EVENT_MEASUREMENT_PROCESSED));
+    returnMap.put(EVENT_ON_RAW_DATA, getBubbledMap(EVENT_ON_RAW_DATA));
+    returnMap.put(EVENT_ON_CAMERA_INFO, getBubbledMap(EVENT_ON_CAMERA_INFO));
 
     return returnMap;
   }
@@ -503,5 +620,10 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   @Override
   public void onDropViewInstance(@NonNull LinearLayout view) {
     fibriChecker.stop();
+  }
+
+  private void sendCameraInfo() {
+    CameraSettingsInfo info = fibriChecker.getCameraInfo();
+    sendEvent(EVENT_ON_CAMERA_INFO, CameraSettingsInfoKt.toWritableMap(info));
   }
 }

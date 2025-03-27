@@ -32,8 +32,6 @@ import {createOAuth2Client, Document} from '@extrahorizon/javascript-sdk';
 import {rqlBuilder} from '@extrahorizon/javascript-sdk';
 import {
   RNFibriCheckViewHandle,
-  getExposureTimeRange,
-  getIsoRange,
 } from '@fibricheck/react-native-camera-sdk';
 import { SampleReadyEventData } from '@fibricheck/react-native-camera-sdk/build/types/src/FibriCheckView';
 import Slider from '@react-native-community/slider';
@@ -146,14 +144,7 @@ const App = () => {
   useEffect(() => {
     requestCameraPermissions();
     authenticate();
-    getIsoRange().then((range) => {
-      setIsoRange({ isoMax: range.max, isoMin: range.min })
-    })
-    getExposureTimeRange().then((range) => {
-      setExposureRange(exposureRange => ({ exposureMax: exposureRange.exposureMax, exposureMin: range.min }))
-    }).catch((error) => {
-      console.warn(error)
-    })
+    setTimeout(() => fibriViewRef.current?.getCameraInfo(), 2000)
   }, []);
 
   return (
@@ -201,6 +192,13 @@ const App = () => {
                 onMeasurementError={event => console.log(event)}
                 onMeasurementProcessed={sendMeasurement}
                 onSampleReady={onSampleReady}
+                onRawData={(image, cameraData) => {
+                  console.log(image)
+                  console.log(cameraData)
+                }}
+                onCameraInfo={(info) => {
+                  console.log(info)
+                }}
               />
             )}
           </View>
@@ -255,6 +253,26 @@ const App = () => {
                 }}
                 color="#1E8D95"
                 title={'Record'}
+              />
+            </View>
+          </View>
+          <View style={[styles.row, styles.buttonRow]}>
+            <View style={styles.commandButton}>
+              <Button
+                onPress={() => {
+                  fibriViewRef.current?.startRawData();
+                }}
+                color="#1E8D95"
+                title={'Start Raw'}
+              />
+            </View>
+            <View style={styles.commandButton}>
+              <Button
+                onPress={() => {
+                  fibriViewRef.current?.stopRawData();
+                }}
+                color="#1E8D95"
+                title={'Stop Raw'}
               />
             </View>
           </View>

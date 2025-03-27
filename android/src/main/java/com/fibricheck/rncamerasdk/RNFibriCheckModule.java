@@ -4,13 +4,6 @@ package com.fibricheck.rncamerasdk;
 
 import androidx.annotation.Nullable;
 
-import android.content.Context;
-import android.hardware.camera2.CameraCharacteristics;
-import android.hardware.camera2.CameraManager;
-import android.util.Range;
-
-import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -19,6 +12,15 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import java.util.HashMap;
 import java.util.Map;
+import android.content.Context;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraManager;
+import android.util.Range;
+
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Promise;
+import com.fibricheck.rncamerasdk.extensions.CameraSettingsInfoKt;
+import com.qompium.fibricheck.camerasdk.models.CameraSettingsInfo;
 
 public class RNFibriCheckModule extends ReactContextBaseJavaModule {
   public static final String REACT_CLASS = "FibriCheck";
@@ -70,33 +72,13 @@ public class RNFibriCheckModule extends ReactContextBaseJavaModule {
         .emit(eventName, params);
   }
 
-    @ReactMethod
-  public void getIsoRange(Promise promise) {
-    try {
-      CameraManager manager = (CameraManager) reactContext.getSystemService(Context.CAMERA_SERVICE);
-      CameraCharacteristics cameraCharacteristics = manager.getCameraCharacteristics(manager.getCameraIdList()[0]);
-      Range<Integer> isoRange = cameraCharacteristics.get(CameraCharacteristics.SENSOR_INFO_SENSITIVITY_RANGE);
-
-      WritableMap event = Arguments.createMap();
-      event.putInt("min", isoRange.getLower());
-      event.putInt("max", isoRange.getUpper());
-      promise.resolve(event);
-    }
-    catch (Exception e) {
-      promise.reject(e);
-    }
-  }
-
   @ReactMethod
-  public void getExposureTimeRange(Promise promise) {
+  public void getCameraInfo(Promise promise) {
     try {
       CameraManager manager = (CameraManager) reactContext.getSystemService(Context.CAMERA_SERVICE);
       CameraCharacteristics cameraCharacteristics = manager.getCameraCharacteristics(manager.getCameraIdList()[0]);
-      Range<Long> isoRange = cameraCharacteristics.get(CameraCharacteristics.SENSOR_INFO_EXPOSURE_TIME_RANGE);
-
-      WritableMap event = Arguments.createMap();
-      event.putDouble("min", isoRange.getLower());
-      event.putDouble("max", isoRange.getUpper());
+      CameraSettingsInfo info = CameraSettingsInfo.Companion.from(cameraCharacteristics);
+      WritableMap event = CameraSettingsInfoKt.toWritableMap(info);
       promise.resolve(event);
     }
     catch (Exception e) {

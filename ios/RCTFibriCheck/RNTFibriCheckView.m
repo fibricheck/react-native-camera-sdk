@@ -173,6 +173,38 @@
     [self.delegate fibriCheckViewDidSetWaitForStartRecordingSignal];
 }
 
+- (void)setManualExposureEnabled:(BOOL)manualExposureEnabled {
+    _manualExposureEnabled = manualExposureEnabled;
+}
+
+- (void)setManualIso:(NSInteger *)manualIso {
+    _manualIso = manualIso;
+}
+
+- (void)setManualExposureTime:(NSInteger *)manualExposureTime {
+    _manualExposureTime = manualExposureTime;
+}
+
+- (void) setManualFocusEnabled:(BOOL)manualFocusEnabled {
+    _manualFocusEnabled = manualFocusEnabled;
+}
+
+- (void) setManualFocus:(NSNumber *)manualFocus {
+    _manualFocus = manualFocus;
+}
+
+- (void) setWhiteBalanceMode:(NSString *)whiteBalanceMode {
+    _whiteBalanceMode = whiteBalanceMode;
+}
+
+- (void) setManualWhiteBalance:(NSInteger *)manualWhiteBalance {
+    _manualWhiteBalance = manualWhiteBalance;
+}
+
+- (void) setManualGains:(NSArray<NSNumber *> *)manualGains {
+    _manualGains = manualGains;
+}
+
 - (void)dealloc {
   self.points = nil;
 }

@@ -1,7 +1,7 @@
 {
   "name": "@fibricheck/react-native-camera-sdk",
   "title": "React Native Fibricheck",
-  "version": "1.3.4",
+  "version": "1.3.4-fda.1",
   "description": "React Native FibriCheck",
   "main": "build/src/index.js",
   "types": "build/types/src/index.d.ts",
@@ -19,7 +19,8 @@
     "lint": "eslint src/**/*.{ts,tsx}",
     "lint-fix": "yarn lint --quiet --fix",
     "prepublish": "sh ./scripts/get_version.sh",
-    "publish:dev": "yarn publish --tag dev"
+    "publish:dev": "yarn publish --tag dev",
+    "dev": "SUFFIX=dev yarn remove-suffix; SUFFIX=dev yarn add-suffix; yarn build && yarn publish --tag dev; SUFFIX=dev yarn remove-suffix"
   },
   "files": [
     "build",
@@ -51,7 +52,6 @@
     "@typescript-eslint/eslint-plugin": "^8.16.0",
     "@typescript-eslint/parser": "^8.16.0",
     "eslint": "^9.15.0",
-    "react-native": "^0.76.3",
     "typescript": "^5.7.2"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"

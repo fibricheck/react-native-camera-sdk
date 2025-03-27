@@ -1,5 +1,6 @@
-
 buildscript {
+    def kotlin_version = rootProject.ext.has('kotlinVersion') ? rootProject.ext.get('kotlinVersion') : '2.1.0'
+ 
     repositories {
         google()
         jcenter()
@@ -7,10 +8,12 @@ buildscript {
 
     dependencies {
         classpath("com.android.tools.build:gradle:8.7.3")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
     }
 }
 
 apply plugin: 'com.android.library'
+apply plugin: 'org.jetbrains.kotlin.android'
 
 android {
     namespace "com.fibricheck.rncamerasdk"
@@ -26,13 +29,16 @@ android {
         abortOnError false
     }
     compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     repositories {
         flatDir {
             dirs 'libs'
         }
+    }
+    kotlinOptions {
+        jvmTarget = '17'
     }
 }
 

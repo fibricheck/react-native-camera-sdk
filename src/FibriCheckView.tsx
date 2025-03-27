@@ -15,8 +15,13 @@ import { CameraData, MeasurementError } from './types';
 enum NativeCommand {
   StartMeasurement = "startMeasurement",
   StartRecording = "startRecording",
-  ResetModule = "resetModule"
+  ResetModule = "resetModule",
+  StartRawData = "startRawData",
+  StopRawData = "stopRawData",
+  GetCameraInfo = "getCameraInfo"
 }
+
+const ONE_SECOND_NANOS = 1_000_000_000
 
 export interface SampleReadyEventData { ppg: number; raw: number; }
 export type SampleReadyEvent = NativeSyntheticEvent<SampleReadyEventData>
@@ -36,15 +41,39 @@ export type MeasurementErrorEvent = NativeSyntheticEvent<MeasurementErrorEventDa
 export interface TimeRemainingEventData { seconds: number; }
 export type TimeRemainingEvent = NativeSyntheticEvent<TimeRemainingEventData>
 
-export interface NumberRangeData { min: number, max: number; }
+export interface CameraSettingsInfo {
+  isoRange: [number, number];
+  exposureTimeRange: [number, number];
+  focusRange: [number, number];
+  hardwareLevel: number;
+  hasManualPostProcessing: boolean;
+}
+
+export type CameraSettingsInfoEvent = NativeSyntheticEvent<CameraSettingsInfo>
+export interface RawDataEventData {
+  image: string,
+  cameraData: {
+    [key: string]: string
+  }
+}
+export type RawDataEvent = NativeSyntheticEvent<RawDataEventData>
 
 export type EmptyEvent = NativeSyntheticEvent<void>
 
-export interface FibriCheckViewHandle {
+export enum WhiteBalanceMode {
+  Auto = "auto",
+  Temperature = "temperature",
+  Gains = "gains"
+}
+
+export interface RNFibriCheckViewHandle {
   startMeasurement: () => void
   startRecording: () => void
   resetModule: () => void
   resetAutoFocus: () => void
+  startRawData: () => void
+  stopRawData: () => void
+  getCameraInfo: () => void
 }
 
 interface FibriCheckNative {
@@ -59,8 +88,17 @@ interface FibriCheckNative {
   movementDetectionEnabled: boolean;
   rotationEnabled: boolean;
   waitForStartRecordingSignal: boolean;
+
+  manualExposureEnabled: boolean;
   manualIso: number;
   manualExposureTime: number;
+
+  manualFocusEnabled: boolean;
+  manualFocus: number;
+
+  whiteBalanceMode: WhiteBalanceMode;
+  manualWhiteBalance: number;
+  manualGains?: number[];
 
   lineColor: ColorValue;
   lineThickness: number;
@@ -85,6 +123,8 @@ interface FibriCheckNative {
   onMovementDetected: (event: EmptyEvent) => void;
   onMeasurementProcessed: (event: MeasurementProcessedEvent) => void;
   onMeasurementError: (event: MeasurementErrorEvent) => void;
+  onRawData: (event: RawDataEvent) => void;
+  onCameraInfo: (event: CameraSettingsInfoEvent) => void;
 }
 
 const FibriCheck = requireNativeComponent<FibriCheckNative>('FibriCheck');
@@ -101,8 +141,17 @@ interface FibriCheckViewProps {
   movementDetectionEnabled?: boolean;
   rotationEnabled?: boolean;
   waitForStartRecordingSignal?: boolean;
+
+  manualExposureEnabled?: boolean;
   manualIso?: number;
   manualExposureTime?: number;
+
+  manualFocusEnabled?: boolean;
+  manualFocus?: number;
+
+  whiteBalanceMode?: WhiteBalanceMode;
+  manualWhiteBalance?: number;
+  manualGains?: number[];
 
   lineColor?: string;
   lineThickness?: number;
@@ -127,9 +176,11 @@ interface FibriCheckViewProps {
   onMovementDetected?: () => void;
   onMeasurementProcessed?: (data: CameraData) => void;
   onMeasurementError?: (message: MeasurementError) => void;
+  onRawData?: (imageBase64: string, cameraData: { [key: string]: string } ) => void;
+  onCameraInfo?: (cameraSettingsInfo: CameraSettingsInfo) => void;
 }
 
-const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheckViewProps>(({
+export const RNFibriCheckView = Object.assign(forwardRef<RNFibriCheckViewHandle, FibriCheckViewProps>(({
   style = {
     flex: 1,
     backgroundColor: '#ffffff',
@@ -144,8 +195,17 @@ const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheck
   movementDetectionEnabled = true,
   rotationEnabled = false,
   waitForStartRecordingSignal = false,
-  manualIso = 0,
-  manualExposureTime = 0,
+
+  manualExposureEnabled = false,
+  manualIso = 100,
+  manualExposureTime = ONE_SECOND_NANOS / 150,
+
+  manualFocusEnabled = false,
+  manualFocus = 0,
+
+  whiteBalanceMode = WhiteBalanceMode.Auto,
+  manualWhiteBalance = 5000,
+  manualGains,
 
   lineColor = '#63b3a6',
   lineThickness = 8,
@@ -170,6 +230,8 @@ const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheck
   onMovementDetected = () => {},
   onMeasurementProcessed,
   onMeasurementError,
+  onCameraInfo,
+  onRawData
 }: FibriCheckViewProps, ref) => {
   const nativeRef = useRef<Component<FibriCheckNative> & NativeMethods>(null);
   const onSampleReadyCallback = (event: SampleReadyEvent) => {
@@ -199,6 +261,14 @@ const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheck
     onTimeRemaining?.(event.nativeEvent.seconds);
   }
 
+  const onCameraInfoCallback = (event: CameraSettingsInfoEvent) => {
+    onCameraInfo?.(event.nativeEvent);
+  }
+
+  const onRawDataCallback = (event: RawDataEvent) => {
+    onRawData?.(event.nativeEvent.image, event.nativeEvent.cameraData);
+  }
+
   const sendCommand = (command: NativeCommand) => {
     const handle = findNodeHandle(nativeRef.current);
     // @ts-ignore
@@ -214,7 +284,10 @@ const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheck
     startMeasurement: () => { sendCommand(NativeCommand.StartMeasurement) },
     startRecording: () => { sendCommand(NativeCommand.StartRecording) },
     resetModule: () => { sendCommand(NativeCommand.ResetModule) },
-    resetAutoFocus: () => { sendCommand(NativeCommand.ResetModule) }
+    resetAutoFocus: () => { sendCommand(NativeCommand.ResetModule) },
+    startRawData: () => { sendCommand(NativeCommand.StartRawData) },
+    stopRawData: () => { sendCommand(NativeCommand.StopRawData) },
+    getCameraInfo: () => { sendCommand(NativeCommand.GetCameraInfo ) }
   }))
 
   return (
@@ -231,8 +304,17 @@ const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheck
       movementDetectionEnabled={movementDetectionEnabled}
       rotationEnabled={rotationEnabled}
       waitForStartRecordingSignal={waitForStartRecordingSignal}
+
+      manualExposureEnabled={manualExposureEnabled}
       manualIso={manualIso}
       manualExposureTime={manualExposureTime}
+
+      manualFocusEnabled={manualFocusEnabled}
+      manualFocus={manualFocus}
+
+      whiteBalanceMode={whiteBalanceMode}
+      manualWhiteBalance={manualWhiteBalance}
+      manualGains={manualGains}
 
       lineColor={lineColor}
       lineThickness={lineThickness}
@@ -257,6 +339,8 @@ const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheck
       onMovementDetected={onMovementDetected}
       onMeasurementProcessed={onMeasurementProcessedCallback}
       onMeasurementError={onMeasurementErrorCallback}
+      onCameraInfo={onCameraInfoCallback}
+      onRawData={onRawDataCallback}
     />
   );
 }), {
@@ -268,13 +352,8 @@ const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheck
 
 const { FibriCheck: FibriCheckModule } = NativeModules
 
-export function getIsoRange(): Promise<NumberRangeData> {
-  return FibriCheckModule.getIsoRange();
+export function getCameraInfo(): Promise<CameraSettingsInfo> {
+  return FibriCheckModule.getCameraInfo();
 }
 
-export function getExposureTimeRange(): Promise<NumberRangeData> {
-  return FibriCheckModule.getExposureTimeRange();
-}
-
-export const versionNumber = packageVersion.version;
-export default FibriCheckView;
+export const RNFibriCheckVersion = packageVersion.version;

@@ -18,6 +18,8 @@ RCT_EXPORT_VIEW_PROPERTY(onPulseDetectionTimeExpired, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onFingerDetectionTimeExpired, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onHeartBeat, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onTimeRemaining, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onRawData, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onCameraInfo, RCTBubblingEventBlock)
 
 RCT_EXPORT_VIEW_PROPERTY(sampleTime, NSInteger);
 RCT_EXPORT_VIEW_PROPERTY(flashEnabled, BOOL);
@@ -29,6 +31,15 @@ RCT_EXPORT_VIEW_PROPERTY(movementDetectionEnabled, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(fingerDetectionExpiryTime, NSInteger);
 RCT_EXPORT_VIEW_PROPERTY(pulseDetectionExpiryTime, NSInteger);
 
+RCT_EXPORT_VIEW_PROPERTY(manualExposureEnabled, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(manualIso, NSInteger);
+RCT_EXPORT_VIEW_PROPERTY(manualExposureTime, NSInteger);
+RCT_EXPORT_VIEW_PROPERTY(manualFocusEnabled, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(manualFocus, NSNumber);
+RCT_EXPORT_VIEW_PROPERTY(whiteBalanceMode, NSString);
+RCT_EXPORT_VIEW_PROPERTY(manualWhiteBalance, NSInteger);
+RCT_EXPORT_VIEW_PROPERTY(manualGains, NSArray);
+
 RCT_EXPORT_VIEW_PROPERTY(waitForStartRecordingSignal, NSInteger);
 
 RCT_EXPORT_VIEW_PROPERTY(drawGraph, BOOL);
@@ -38,28 +49,35 @@ RCT_EXPORT_VIEW_PROPERTY(graphBackgroundColor, NSString);
 
 RCT_EXPORT_MODULE(FibriCheck)
 - (UIView *)view {
-    self.fibriCheckViewController = [[RNTFibriCheckViewController alloc] init];
-    return self.fibriCheckViewController.view;
+  self.fibriCheckViewController = [[RNTFibriCheckViewController alloc] init];
+  return self.fibriCheckViewController.view;
 }
 
-RCT_EXPORT_METHOD(startMeasurement:(nonnull NSNumber*) reactTag)
-{
-    self.fibriCheckViewController.startMeasurement;
+RCT_EXPORT_METHOD(startMeasurement : (nonnull NSNumber *)reactTag) {
+  [self.fibriCheckViewController startMeasurement];
 }
 
-RCT_EXPORT_METHOD(startRecording:(nonnull NSNumber*) reactTag)
-{
-    self.fibriCheckViewController.startRecording;
+RCT_EXPORT_METHOD(resetModule : (nonnull NSNumber *)reactTag) {
+  [self.fibriCheckViewController stopCamera];
 }
 
-RCT_EXPORT_METHOD(resetModule:(nonnull NSNumber*) reactTag)
-{
-    self.fibriCheckViewController.stopCamera;
+RCT_EXPORT_METHOD(startRecording : (nonnull NSNumber *)reactTag) {
+  [self.fibriCheckViewController startRecording];
 }
 
-RCT_EXPORT_METHOD(startRecording:(nonnull NSNumber*) reactTag)
-{
- self.fibriCheckViewController.startRecording;
+RCT_EXPORT_METHOD(startRawData : (nonnull NSNumber *)reactTag) {
+  [self.fibriCheckViewController startRawData];
+}
+
+RCT_EXPORT_METHOD(stopRawData : (nonnull NSNumber *)reactTag) {
+  [self.fibriCheckViewController stopRawData];
+}
+
+RCT_EXPORT_METHOD(getCameraInfo: (RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject) {
+    NSLog(@"Stub getCameraInfo called");
+    NSDictionary *dictionary = @{};
+    resolve(dictionary);
 }
 
 @end

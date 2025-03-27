@@ -1,1 +1,2 @@
-jq -n --arg version $(npm view . version) '{"version":$version}' > package-version.json
+#!/bin/sh
+version="$(yarn version -v)"; echo "{ \"version\":\"$version\" }" > package-version.json
