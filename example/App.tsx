@@ -201,6 +201,10 @@ const App = () => {
                 onMeasurementError={event => console.log(event)}
                 onMeasurementProcessed={sendMeasurement}
                 onSampleReady={onSampleReady}
+                onRawData={(image, cameraData) => {
+                  console.log(image)
+                  console.log(cameraData)
+                }}
               />
             )}
           </View>
@@ -255,6 +259,26 @@ const App = () => {
                 }}
                 color="#1E8D95"
                 title={'Record'}
+              />
+            </View>
+          </View>
+          <View style={[styles.row, styles.buttonRow]}>
+            <View style={styles.commandButton}>
+              <Button
+                onPress={() => {
+                  fibriViewRef.current?.startRawData();
+                }}
+                color="#1E8D95"
+                title={'Start Raw'}
+              />
+            </View>
+            <View style={styles.commandButton}>
+              <Button
+                onPress={() => {
+                  fibriViewRef.current?.stopRawData();
+                }}
+                color="#1E8D95"
+                title={'Stop Raw'}
               />
             </View>
           </View>

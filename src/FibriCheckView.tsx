@@ -15,7 +15,9 @@ import { CameraData, MeasurementError } from './types';
 enum NativeCommand {
   StartMeasurement = "startMeasurement",
   StartRecording = "startRecording",
-  ResetModule = "resetModule"
+  ResetModule = "resetModule",
+  StartRawData = "startRawData",
+  StopRawData = "stopRawData"
 }
 
 export interface SampleReadyEventData { ppg: number; raw: number; }
@@ -38,6 +40,14 @@ export type TimeRemainingEvent = NativeSyntheticEvent<TimeRemainingEventData>
 
 export interface NumberRangeData { min: number, max: number; }
 
+export interface RawDataEventData {
+  image: string,
+  cameraData: {
+    [key: string]: string
+  }
+}
+export type RawDataEvent = NativeSyntheticEvent<RawDataEventData>
+
 export type EmptyEvent = NativeSyntheticEvent<void>
 
 export interface FibriCheckViewHandle {
@@ -45,6 +55,8 @@ export interface FibriCheckViewHandle {
   startRecording: () => void
   resetModule: () => void
   resetAutoFocus: () => void
+  startRawData: () => void
+  stopRawData: () => void
 }
 
 interface FibriCheckNative {
@@ -85,6 +97,7 @@ interface FibriCheckNative {
   onMovementDetected: (event: EmptyEvent) => void;
   onMeasurementProcessed: (event: MeasurementProcessedEvent) => void;
   onMeasurementError: (event: MeasurementErrorEvent) => void;
+  onRawData: (event: RawDataEvent) => void;
 }
 
 const FibriCheck = requireNativeComponent<FibriCheckNative>('FibriCheck');
@@ -127,6 +140,7 @@ interface FibriCheckViewProps {
   onMovementDetected?: () => void;
   onMeasurementProcessed?: (data: CameraData) => void;
   onMeasurementError?: (message: MeasurementError) => void;
+  onRawData?: (imageBase64: string, cameraData: { [key: string]: string } ) => void;
 }
 
 const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheckViewProps>(({
@@ -170,6 +184,7 @@ const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheck
   onMovementDetected = () => {},
   onMeasurementProcessed,
   onMeasurementError,
+  onRawData
 }: FibriCheckViewProps, ref) => {
   const nativeRef = useRef<Component<FibriCheckNative> & NativeMethods>(null);
   const onSampleReadyCallback = (event: SampleReadyEvent) => {
@@ -199,6 +214,10 @@ const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheck
     onTimeRemaining?.(event.nativeEvent.seconds);
   }
 
+  const onRawDataCallback = (event: RawDataEvent) => {
+    onRawData?.(event.nativeEvent.image, event.nativeEvent.cameraData);
+  }
+
   const sendCommand = (command: NativeCommand) => {
     const handle = findNodeHandle(nativeRef.current);
     // @ts-ignore
@@ -214,7 +233,9 @@ const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheck
     startMeasurement: () => { sendCommand(NativeCommand.StartMeasurement) },
     startRecording: () => { sendCommand(NativeCommand.StartRecording) },
     resetModule: () => { sendCommand(NativeCommand.ResetModule) },
-    resetAutoFocus: () => { sendCommand(NativeCommand.ResetModule) }
+    resetAutoFocus: () => { sendCommand(NativeCommand.ResetModule) },
+    startRawData: () => { sendCommand(NativeCommand.StartRawData) },
+    stopRawData: () => { sendCommand(NativeCommand.StopRawData) }
   }))
 
   return (
@@ -257,6 +278,7 @@ const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheck
       onMovementDetected={onMovementDetected}
       onMeasurementProcessed={onMeasurementProcessedCallback}
       onMeasurementError={onMeasurementErrorCallback}
+      onRawData={onRawDataCallback}
     />
   );
 }), {
