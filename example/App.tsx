@@ -32,8 +32,6 @@ import {createOAuth2Client, Document} from '@extrahorizon/javascript-sdk';
 import {rqlBuilder} from '@extrahorizon/javascript-sdk';
 import {
   RNFibriCheckViewHandle,
-  getExposureTimeRange,
-  getIsoRange,
 } from '@fibricheck/react-native-camera-sdk';
 import { SampleReadyEventData } from '@fibricheck/react-native-camera-sdk/build/types/src/FibriCheckView';
 import Slider from '@react-native-community/slider';
@@ -146,14 +144,6 @@ const App = () => {
   useEffect(() => {
     requestCameraPermissions();
     authenticate();
-    getIsoRange().then((range) => {
-      setIsoRange({ isoMax: range.max, isoMin: range.min })
-    })
-    getExposureTimeRange().then((range) => {
-      setExposureRange(exposureRange => ({ exposureMax: exposureRange.exposureMax, exposureMin: range.min }))
-    }).catch((error) => {
-      console.warn(error)
-    })
   }, []);
 
   return (

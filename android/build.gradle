@@ -1,5 +1,8 @@
 
 buildscript {
+    ext {
+        kotlin_version = '2.1.10'
+    }
     repositories {
         google()
         jcenter()
@@ -7,10 +10,12 @@ buildscript {
 
     dependencies {
         classpath("com.android.tools.build:gradle:8.7.3")
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.10"
     }
 }
 
 apply plugin: 'com.android.library'
+apply plugin: 'org.jetbrains.kotlin.android'
 
 android {
     namespace "com.fibricheck.rncamerasdk"
@@ -33,6 +38,9 @@ android {
         flatDir {
             dirs 'libs'
         }
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
 }
 
