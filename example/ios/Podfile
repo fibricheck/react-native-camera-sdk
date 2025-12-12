@@ -1,4 +1,4 @@
-# pod 'FibriCheckCameraSDK', :git => 'https://github.com/fibricheck/ios-camera-sdk.git', :tag => 'v1.0.2'
+pod 'FibriCheckCameraSDK', :git => 'https://github.com/fibricheck/ios-camera-sdk.git', :tag => 'v1.1.0-hdr.1'
 
 def node_require(script)
   # Resolve script with node to allow for hoisting
