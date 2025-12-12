@@ -11,6 +11,7 @@
 - (void) fibriCheckViewDidSetMovementDetection;
 - (void) fibriCheckViewDidSetFingerDetectionExpiryTime;
 - (void) fibriCheckViewDidSetPulseDetectionExpiryTime;
+- (void) fibriCheckViewDidSetCameraSettings;
 
 - (void) fibriCheckViewDidSetWaitForStartRecordingSignal;
 - (void) drawGraphPoint;
@@ -47,6 +48,7 @@
 @property (weak, nonatomic) UIColor *lineColor;
 @property (weak, nonatomic) UIColor *graphBackgroundColor;
 @property (nonatomic) NSInteger lineThickness;
+@property (nonatomic, copy) NSDictionary *cameraSettings;
 
 @property (nonatomic, copy) RCTBubblingEventBlock onFingerDetected;
 @property (nonatomic, copy) RCTBubblingEventBlock onFingerRemoved;

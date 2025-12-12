@@ -34,6 +34,49 @@ import {
   FibriCheckViewHandle,
   SampleReadyEventData,
 } from '@fibricheck/react-native-camera-sdk/build/types/src/FibriCheckView';
+import RNFS from 'react-native-fs';
+import Share from "react-native-share";
+
+/**
+ * Saves a JSON object to a file in the app's document directory.
+ *
+ * @param {string} filename - Name of the file you want to write (e.g. "debug.json")
+ * @param {object} data - Your JSON object
+ * @returns {Promise<string>} The full path to the written file
+ */
+export async function saveJsonToFile(filename: string, data: object) {
+  try {
+    // Convert data to a pretty JSON string
+    const jsonString = JSON.stringify(data, null, 2);
+
+    // Choose a platform-safe directory
+    const path = `${RNFS.DocumentDirectoryPath}/${filename}`;
+
+    // Write file (overwrites if exists)
+    await RNFS.writeFile(path, jsonString, 'utf8');
+
+    console.log(`JSON saved successfully at: ${path}`);
+    // Create file:// URL for sharing
+    const url = `file://${path}`;
+
+    // Share options
+    const options = {
+      title: "Share JSON File",
+      url,
+      type: "application/json",
+      failOnCancel: false,
+    };
+
+    // Open share sheet
+    await Share.open(options);
+
+    console.log("Shared file:", url);
+    return path;
+  } catch (err) {
+    console.error('Error saving JSON:', err);
+    throw err;
+  }
+}
 
 const credentials = {
   username: process.env.API_USER ?? '',
@@ -113,6 +156,7 @@ const App = () => {
     const versionNew = RNFibriCheckVersion
     
     try {
+      await saveJsonToFile(`measurement-${Date.now()}.json`, measurement);
       const result = await sdk.data.documents.create(schemaId, {
         ...measurement,
         ...require('./extraData.json'),
@@ -121,6 +165,8 @@ const App = () => {
           camera_sdk_version: versionNew,
         }
       });
+
+     
 
       // Refresh measurement list after creation
       retrieveMeasurements();
@@ -184,6 +230,17 @@ const App = () => {
                 onMeasurementError={event => console.log(event)}
                 onMeasurementProcessed={sendMeasurement}
                 onSampleReady={onSampleReady}
+                cameraSettings={{
+                  whiteBalanceMode: 'manual-rgb',
+                  focusMode: 'locked',
+                  exposureMode: 'auto',
+                  whiteBalanceRgb: [1, 1, 1],
+
+                  logExposure: true,
+                  logFocus: true,
+                  logWhiteBalance: true
+                }}
+                sampleTime={35}
               />
             )}
           </View>

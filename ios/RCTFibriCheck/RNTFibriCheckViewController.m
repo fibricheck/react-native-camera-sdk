@@ -2,6 +2,7 @@
 #import <React/RCTLog.h>
 #import "RCTFibriCheckEventEmitter.h"
 #import "FibriCheckerComponent.h"
+#import "CameraSettings.h"
 
 @interface RNTFibriCheckViewController ()
 @property (nonatomic, strong) FibriChecker *fibrichecker;
@@ -59,6 +60,74 @@
     _fibrichecker.waitForStartRecordingSignal = waitForStartRecordingSignal;
 }
 
+- (void)fibriCheckViewDidSetCameraSettings {
+    NSDictionary* settings = ((RNTFibriCheckView*)self.view).cameraSettings;
+    CameraSettingsInput* input = [[CameraSettingsInput alloc] initWithValues:
+                                  CameraModeLocked manualIso:0 manualExposureTime:0
+                                whiteBalanceMode:WhiteBalanceModeAuto manualWhiteBalanceRgb: (RgbColor) { .r = 1.0, .g = 1.0, .b = 1.0 } manualWhiteBalanceKelvin:5000
+                               focusMode:CameraModeAuto manualFocus:0.0 logExposure:NO logWhiteBalance:NO logFocus:NO];
+
+    
+    
+    if (settings == nil) {
+       return;
+   }
+
+   if (settings[@"exposureMode"]) {
+       CameraSettingMode exposureMode = [self toCameraSettingMode:settings[@"exposureMode"] defaultValue:CameraModeLocked];
+       input.exposureMode = exposureMode;
+   }
+
+   if (settings[@"iso"]) {
+       input.manualIso = [settings[@"iso"] unsignedIntegerValue];
+   }
+
+   if (settings[@"exposureTime"]) {
+       input.manualExposureTime = [settings[@"exposureTime"] unsignedIntegerValue];
+   }
+
+   if (settings[@"logExposure"]) {
+       input.logExposure = [settings[@"logExposure"] boolValue];
+   }
+
+   if (settings[@"focusMode"]) {
+       CameraSettingMode focusMode = [self toCameraSettingMode:settings[@"focusMode"] defaultValue:CameraModeAuto];
+       input.focusMode = focusMode;
+   }
+
+   if (settings[@"focus"]) {
+       input.manualFocus = [settings[@"focus"] doubleValue];
+   }
+
+   if (settings[@"logFocus"]) {
+       input.logFocus = [settings[@"logFocus"] boolValue];
+   }
+
+   if (settings[@"whiteBalanceMode"]) {
+       WhiteBalanceMode whiteBalanceMode = [self toWhiteBalanceMode:settings[@"whiteBalanceMode"] defaultValue:WhiteBalanceModeAuto];
+       input.whiteBalanceMode = whiteBalanceMode;
+   }
+
+   if (settings[@"whiteBalanceRgb"]) {
+       NSArray *rgb = settings[@"whiteBalanceRgb"];
+       RgbColor rgbColor;
+       rgbColor.r = [rgb[0] doubleValue];
+       rgbColor.g = [rgb[1] doubleValue];
+       rgbColor.b = [rgb[2] doubleValue];
+       input.manualWhiteBalanceRgb = rgbColor;
+   }
+
+   if (settings[@"whiteBalanceKelvin"]) {
+       input.manualWhiteBalanceKelvin = [settings[@"whiteBalanceKelvin"] unsignedIntegerValue];
+   }
+
+   if (settings[@"logWhiteBalance"]) {
+       input.logWhiteBalance = [settings[@"logWhiteBalance"] boolValue];
+   }
+
+   [_fibrichecker setCameraSettings:input];
+}
+
 - (void)startMeasurement {
   NSLog(@"startMeasurement");
   [_fibrichecker startMeasurement];
@@ -66,12 +135,12 @@
 
 - (void)startRecording {
   NSLog(@"startRecording");
-  _fibrichecker.startRecording;
+  [_fibrichecker startRecording];
 }
 
 - (void)stopCamera {
   NSLog(@"stopCamera");
-  _fibrichecker.stop;
+  [_fibrichecker stop];
 }
 
 // MARK: - UI
@@ -209,5 +278,44 @@
     });
   };
 }
+
+
+// MARK: - Helper Methods
+- (CameraSettingMode)toCameraSettingMode:(NSString *)mode defaultValue:(CameraSettingMode)defaultValue {
+    if (mode == nil) {
+        return defaultValue;
+    }
+
+    if ([mode isEqualToString:@"auto"]) {
+        return CameraModeAuto;
+    } else if ([mode isEqualToString:@"locked"]) {
+        return CameraModeLocked;
+    } else if ([mode isEqualToString:@"manual"]) {
+        return CameraModeManual;
+    }
+
+    NSLog(@"Invalid camera setting mode %@", mode);
+    return defaultValue;
+}
+
+- (WhiteBalanceMode)toWhiteBalanceMode:(NSString *)mode defaultValue:(WhiteBalanceMode)defaultValue {
+    if (mode == nil) {
+        return defaultValue;
+    }
+
+    if ([mode isEqualToString:@"auto"]) {
+        return WhiteBalanceModeAuto;
+    } else if ([mode isEqualToString:@"locked"]) {
+        return WhiteBalanceModeLocked;
+    } else if ([mode isEqualToString:@"manual-rgb"]) {
+        return WhiteBalanceModeManualRgb;
+    } else if ([mode isEqualToString:@"manual-kelvin"]) {
+        return WhiteBalanceModeManualKelvin;
+    }
+
+    NSLog(@"Invalid white balance mode %@", mode);
+    return defaultValue;
+}
+
 
 @end

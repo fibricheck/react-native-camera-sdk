@@ -177,5 +177,9 @@
   self.points = nil;
 }
 
+- (void)setCameraSettings:(NSDictionary *)cameraSettings {
+    _cameraSettings = cameraSettings;
+    [self.delegate fibriCheckViewDidSetCameraSettings];
+}
 
 @end
