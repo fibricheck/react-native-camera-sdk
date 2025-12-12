@@ -40,7 +40,7 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'com.github.fibricheck:android-camera-sdk:v1.0.2'
+    implementation 'com.github.fibricheck:android-camera-sdk:dev-370dc2c89e-1'
     implementation 'com.facebook.react:react-native:+'
     implementation 'com.google.code.gson:gson:2.11.0'
 }
