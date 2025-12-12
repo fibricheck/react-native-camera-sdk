@@ -65,6 +65,8 @@ interface FibriCheckNative {
   fingerDetectionExpiryTime: number;
   pulseDetectionExpiryTime: number;
 
+  cameraSettings?: CameraSettings;
+
   onSampleReady: (event: SampleReadyEvent) => void;
   onFingerDetected: (event: EmptyEvent) => void;
   onFingerRemoved: (event: FingerRemovedEvent) => void;
@@ -105,6 +107,8 @@ interface FibriCheckViewProps {
   fingerDetectionExpiryTime?: number;
   pulseDetectionExpiryTime?: number;
 
+  cameraSettings?: CameraSettings;
+
   onSampleReady?: (data: SampleReadyEventData) => void;
   onFingerDetected?: () => void;
   onFingerRemoved?: (data: FingerRemovedEventData) => void;
@@ -119,6 +123,25 @@ interface FibriCheckViewProps {
   onMovementDetected?: () => void;
   onMeasurementProcessed?: (data: CameraData) => void;
   onMeasurementError?: (message: MeasurementError) => void;
+}
+
+type CameraSettingsMode = 'auto' | 'locked' | 'manual'
+type WhiteBalanceMode = 'auto' | 'locked' | 'manual-rgb' | 'manual-kelvin'
+
+interface CameraSettings {
+  exposureMode?: CameraSettingsMode;
+  focusMode?: CameraSettingsMode;
+  whiteBalanceMode?: WhiteBalanceMode;
+
+  iso?: number;
+  exposureTime?: number;
+  focus?: number;
+  whiteBalanceRgb?: [number, number, number];
+  whiteBalanceKelvin?: number;
+
+  logExposure?: boolean;
+  logFocus?: boolean;
+  logWhiteBalance?: boolean;
 }
 
 const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheckViewProps>(({
@@ -145,6 +168,8 @@ const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheck
   sampleTime = 60,
   fingerDetectionExpiryTime = -1,
   pulseDetectionExpiryTime = 10,
+
+  cameraSettings,
 
   onSampleReady,
   onFingerDetected = () => {},
@@ -229,6 +254,8 @@ const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheck
       sampleTime={sampleTime}
       fingerDetectionExpiryTime={fingerDetectionExpiryTime}
       pulseDetectionExpiryTime={pulseDetectionExpiryTime}
+
+      cameraSettings={cameraSettings}
 
       onSampleReady={onSampleReadyCallback}
       onFingerDetected={onFingerDetected}
