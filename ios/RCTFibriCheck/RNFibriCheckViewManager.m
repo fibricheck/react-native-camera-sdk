@@ -35,6 +35,7 @@ RCT_EXPORT_VIEW_PROPERTY(drawGraph, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(lineColor, NSString);
 RCT_EXPORT_VIEW_PROPERTY(lineThickness, NSInteger);
 RCT_EXPORT_VIEW_PROPERTY(graphBackgroundColor, NSString);
+RCT_EXPORT_VIEW_PROPERTY(cameraSettings, NSDictionary);
 
 RCT_EXPORT_MODULE(FibriCheck)
 - (UIView *)view {
