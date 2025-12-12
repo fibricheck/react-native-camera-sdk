@@ -21,6 +21,7 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -32,10 +33,16 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import com.qompium.fibricheck.camerasdk.FibriChecker;
 import com.qompium.fibricheck.camerasdk.listeners.FibriListener;
 import com.qompium.fibricheck.camerasdk.measurement.MeasurementData;
+import com.qompium.fibricheck.camerasdk.measurement.Vec3f;
+import com.qompium.fibricheck.camerasdk.models.CameraSettingMode;
+import com.qompium.fibricheck.camerasdk.models.CameraSettingsInput;
+import com.qompium.fibricheck.camerasdk.models.WhiteBalanceMode;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,7 +50,6 @@ import org.json.JSONObject;
 public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   public static final String REACT_CLASS = "FibriCheck";
   private static final String TAG = "RNFibriCheck";
-  private static final int SURFACE_ID = 0;
 
   private static final String COMMAND_START_MEASUREMENT_STRING = "startMeasurement";
   private static final String COMMAND_START_RECORDING_STRING = "startRecording";
@@ -53,20 +59,15 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   private static final int COMMAND_RESET_MODULE_INT = 3;
 
   private static final int SAMPLE_COUNT = 120;
-
   public boolean drawGraphPoints = false;
-
   private LineGraphSeries<DataPoint> series;
-
   private ArrayList<Double> valueSR;
-
   private int xValue = 0;
 
   private GraphView graphView;
-
   private LinearLayout linearLayout;
-
   private FibriChecker fibriChecker;
+  private CameraSettingsInput cameraSettings;
 
   private static final String EVENT_SAMPLE_READY = "onSampleReady";
   private static final String EVENT_FINGER_DETECTED = "onFingerDetected";
@@ -129,7 +130,9 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
     graphView = createGraphView(context);
     linearLayout.addView(graphView);
 
+    cameraSettings = new CameraSettingsInput();
     fibriChecker = new FibriChecker.FibriBuilder(context.getCurrentActivity(), linearLayout).build();
+    fibriChecker.setCameraSettings(cameraSettings);
     fibriChecker.setFibriListener(new FibriListener() {
 
       @Override public void onSampleReady(final double ppg, double raw) {
@@ -172,12 +175,12 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
           sendEvent(EVENT_TIME_REMAINING, event);
       }
 
-      @Override public void onMeasurementFinished() {
+      @Override public void onMeasurementFinished(long timestamp) {
         WritableMap event = Arguments.createMap();
         sendEvent(EVENT_MEASUREMENT_FINISHED, event);
       }
 
-      @Override public void onMeasurementStart() {
+      @Override public void onMeasurementStart(long timestamp) {
         WritableMap event = Arguments.createMap();
         sendEvent(EVENT_MEASUREMENT_START, event);
       }
@@ -344,6 +347,69 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   public void setWaitForStartRecordingSignal(View view, boolean waitForStartRecordingSignal) {
     fibriChecker.waitForStartRecordingSignal = waitForStartRecordingSignal;
   }
+
+  @ReactProp(name = "cameraSettings")
+  public void setCameraSettings(View view, ReadableMap map) {
+    if (map == null) {
+      return;
+    }
+
+    if (map.hasKey("exposureMode")) {
+      CameraSettingMode exposureMode = toCameraSettingMode(map.getString("exposureMode"), CameraSettingMode.Locked);
+      cameraSettings.setExposureMode(exposureMode);
+    }
+
+    if (map.hasKey("iso")) {
+      cameraSettings.setManualIsoValue(map.getInt("iso"));
+    }
+
+    if (map.hasKey("exposureTime")) {
+      cameraSettings.setManualExposureTime((long) map.getInt("exposureTime"));
+    }
+
+    if (map.hasKey("logExposure")) {
+      cameraSettings.setLogExposure(map.getBoolean("logExposure"));
+    }
+
+    if (map.hasKey("focusMode")) {
+      CameraSettingMode focusMode = toCameraSettingMode(map.getString("focusMode"), CameraSettingMode.Auto);
+      cameraSettings.setFocusMode(focusMode);
+    }
+
+    if (map.hasKey("focus")) {
+      cameraSettings.setManualFocusValue((float) map.getDouble("focus"));
+    }
+
+    if (map.hasKey("logFocus")) {
+      cameraSettings.setLogFocus(map.getBoolean("logFocus"));
+    }
+
+    if (map.hasKey("whiteBalanceMode")) {
+      WhiteBalanceMode whiteBalanceMode = toWhiteBalanceMode(map.getString("whiteBalanceMode"), WhiteBalanceMode.Auto);
+      cameraSettings.setWhiteBalanceMode(whiteBalanceMode);
+    }
+
+    if (map.hasKey("whiteBalanceRgb")) {
+      ReadableArray whiteBalanceRgb = map.getArray("whiteBalanceRgb");
+      float r, g, b;
+      r = (float) whiteBalanceRgb.getDouble(0);
+      g = (float) whiteBalanceRgb.getDouble(1);
+      b = (float) whiteBalanceRgb.getDouble(2);
+
+      cameraSettings.setManualWhiteBalanceRgb(new Vec3f(r, g, b));
+    }
+
+    if (map.hasKey("whiteBalanceKelvin")) {
+      cameraSettings.setManualWhiteBalanceKelvin(map.getInt("whiteBalanceKelvin"));
+    }
+
+    if (map.hasKey("logWhiteBalance")) {
+      cameraSettings.setLogWhiteBalance(map.getBoolean("logWhiteBalance"));
+    }
+
+
+    fibriChecker.setCameraSettings(cameraSettings);
+  }
   //endregion
 
   @Override
@@ -479,5 +545,43 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   @Override
   public void onDropViewInstance(@NonNull LinearLayout view) {
     fibriChecker.stop();
+  }
+
+  public static CameraSettingMode toCameraSettingMode(String mode, CameraSettingMode defaultValue) {
+    if (mode == null) {
+      return defaultValue;
+    }
+
+    switch (mode) {
+        case "auto":
+            return CameraSettingMode.Auto;
+        case "locked":
+            return CameraSettingMode.Locked;
+        case "manual":
+            return CameraSettingMode.Manual;
+    }
+
+    Log.e(TAG, "Invalid camera setting mode " + mode);
+    return defaultValue;
+  }
+
+  public static WhiteBalanceMode toWhiteBalanceMode(String mode, WhiteBalanceMode defaultValue) {
+    if (mode == null) {
+      return defaultValue;
+    }
+
+    switch (mode) {
+      case "auto":
+        return WhiteBalanceMode.Auto;
+      case "locked":
+        return WhiteBalanceMode.Locked;
+      case "manual-rgb":
+        return WhiteBalanceMode.ManualRgb;
+      case "manual-kelvin":
+        return WhiteBalanceMode.ManualKelvin;
+    }
+
+    Log.e(TAG, "Invalid white balance mode " + mode);
+    return defaultValue;
   }
 }
