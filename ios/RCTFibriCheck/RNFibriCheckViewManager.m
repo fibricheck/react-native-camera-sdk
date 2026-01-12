@@ -18,6 +18,7 @@ RCT_EXPORT_VIEW_PROPERTY(onPulseDetectionTimeExpired, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onFingerDetectionTimeExpired, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onHeartBeat, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onTimeRemaining, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onRawData, RCTBubblingEventBlock);
 
 RCT_EXPORT_VIEW_PROPERTY(sampleTime, NSInteger);
 RCT_EXPORT_VIEW_PROPERTY(flashEnabled, BOOL);

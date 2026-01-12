@@ -64,6 +64,7 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onFingerDetectionTimeExpired;
 @property (nonatomic, copy) RCTBubblingEventBlock onHeartBeat;
 @property (nonatomic, copy) RCTBubblingEventBlock onTimeRemaining;
+@property (nonatomic, copy) RCTBubblingEventBlock onRawData;
 
 /*!
  *  Contains all the points currently displayed on the chart

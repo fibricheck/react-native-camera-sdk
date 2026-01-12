@@ -64,8 +64,11 @@
     NSDictionary* settings = ((RNTFibriCheckView*)self.view).cameraSettings;
     CameraSettingsInput* input = [[CameraSettingsInput alloc] initWithValues:
                                   CameraModeLocked manualIso:0 manualExposureTime:0
-                                whiteBalanceMode:WhiteBalanceModeAuto manualWhiteBalanceRgb: (RgbColor) { .r = 1.0, .g = 1.0, .b = 1.0 } manualWhiteBalanceKelvin:5000
-                               focusMode:CameraModeAuto manualFocus:0.0 logExposure:NO logWhiteBalance:NO logFocus:NO];
+                                  whiteBalanceMode:WhiteBalanceModeAuto manualWhiteBalanceRgb: (RgbColor) { .r = 1.0, .g = 1.0, .b = 1.0 }  manualWhiteBalanceKelvin:5000
+                                  focusMode:CameraModeAuto manualFocus:0.0
+                                  rawDataEnabled: NO
+                                  logExposure:NO logWhiteBalance:NO logFocus:NO
+    ];
 
     
     
@@ -124,6 +127,14 @@
    if (settings[@"logWhiteBalance"]) {
        input.logWhiteBalance = [settings[@"logWhiteBalance"] boolValue];
    }
+    
+    if (settings[@"rawDataEnabled"]) {
+        RCTLogInfo(@"Raw data in settings");
+        input.rawDataEnabled = [settings[@"rawDataEnabled"] boolValue];
+    }
+    else {
+        RCTLogInfo(@"No raw data in settings");
+    }
 
    [_fibrichecker setCameraSettings:input];
 }
@@ -277,6 +288,19 @@
         if(((RNTFibriCheckView*)weakSelf.view).onMeasurementError != nil) ((RNTFibriCheckView*)weakSelf.view).onMeasurementError(data);
     });
   };
+    
+    self.fibrichecker.onRawData = ^(NSData * _Nonnull rawData, NSDictionary<NSString *,NSString *> * _Nonnull metaData) {
+        NSString *imageB64 = [rawData base64EncodedStringWithOptions:0];
+        
+        NSDictionary* data = @{
+            @"image": imageB64,
+            @"cameraData": metaData
+        };
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(((RNTFibriCheckView*)weakSelf.view).onRawData != nil) ((RNTFibriCheckView*)weakSelf.view).onRawData(data);
+        });
+    };
 }
 
 

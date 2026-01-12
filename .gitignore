@@ -42,3 +42,4 @@ buck-out/
 *.keystore
 .yarn
 .npmrc
+mise.toml

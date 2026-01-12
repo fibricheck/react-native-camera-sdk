@@ -224,6 +224,17 @@ const App = () => {
                 onPulseDetectionTimeExpired={() =>
                   console.log('pulse detection time is expired')
                 }
+                onRawData={(image, metadata) => {
+                  if (Platform.OS === 'ios') {
+                    const hdr = metadata['isHdrEnabled']
+                    const focus = metadata['lensPosition']
+                    const exposureTime = metadata['exposureTime']
+                    const iso = metadata['iso']
+                    const whiteBalance = metadata['whiteBalanceGains']
+
+                    console.log(`HDR: ${hdr}, ISO: ${iso}, Exposure: ${exposureTime}, Focus: ${focus}, White Balance: ${whiteBalance}`)
+                  }
+                }}
                 onMovementDetected={() => console.log('movement detected')}
                 onHeartBeat={setHeartRate}
                 onTimeRemaining={setTimeRemaining}
@@ -231,10 +242,11 @@ const App = () => {
                 onMeasurementProcessed={sendMeasurement}
                 onSampleReady={onSampleReady}
                 cameraSettings={{
-                  whiteBalanceMode: 'manual-rgb',
-                  focusMode: 'locked',
+                  whiteBalanceMode: 'auto',
+                  focusMode: 'auto',
                   exposureMode: 'auto',
                   whiteBalanceRgb: [1, 1, 1],
+                  rawDataEnabled: true,
 
                   logExposure: true,
                   logFocus: true,

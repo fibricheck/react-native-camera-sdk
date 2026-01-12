@@ -7,7 +7,7 @@
  RCT_EXPORT_MODULE();
 
  - (NSArray<NSString *> *)supportedEvents {
-   return @[@"heartBeat", @"sampleReady", @"onFingerDetected", @"pulseDetected", @"calibrationReady", @"measurementStart", @"measurementFinished", @"measurementProcessed", @"fingerRemoved", @"timeRemaining"];
+   return @[@"heartBeat", @"sampleReady", @"onFingerDetected", @"pulseDetected", @"calibrationReady", @"measurementStart", @"measurementFinished", @"measurementProcessed", @"fingerRemoved", @"timeRemaining", @"rawData"];
  }
 
  - (void)startObserving {
