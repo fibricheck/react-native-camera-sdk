@@ -292,6 +292,10 @@
     self.fibrichecker.onRawData = ^(NSData * _Nonnull rawData, NSDictionary<NSString *,NSString *> * _Nonnull metaData) {
         NSString *imageB64 = [rawData base64EncodedStringWithOptions:0];
         
+        if (imageB64 == nil || metaData == nil) {
+            return;
+        }
+
         NSDictionary* data = @{
             @"image": imageB64,
             @"cameraData": metaData

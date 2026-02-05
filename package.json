@@ -20,7 +20,7 @@
     "lint-fix": "yarn lint --quiet --fix",
     "prepublish": "sh ./scripts/get_version.sh",
     "publish:dev": "yarn publish --tag dev",
-    "dev": "SUFFIX=dev yarn remove-suffix; SUFFIX=dev yarn add-suffix; yarn build && yarn publish --tag dev; SUFFIX=dev yarn remove-suffix"
+    "dev": "SUFFIX=fda yarn remove-suffix; SUFFIX=fda yarn add-suffix; yarn build && yarn publish --tag fda; SUFFIX=fda yarn remove-suffix"
   },
   "files": [
     "build",

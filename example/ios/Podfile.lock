@@ -1630,7 +1630,7 @@ DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
-  - FibriCheckCameraSDK (from `https://github.com/fibricheck/ios-camera-sdk.git`, tag `v1.1.0-fda`)
+  - FibriCheckCameraSDK (from `https://github.com/fibricheck/ios-camera-sdk.git`, tag `v1.1.1-fda`)
   - fmt (from `../node_modules/react-native/third-party-podspecs/fmt.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
@@ -1712,7 +1712,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/FBLazyVector"
   FibriCheckCameraSDK:
     :git: https://github.com/fibricheck/ios-camera-sdk.git
-    :tag: v1.1.0-fda
+    :tag: v1.1.1-fda
   fmt:
     :podspec: "../node_modules/react-native/third-party-podspecs/fmt.podspec"
   glog:
@@ -1848,7 +1848,7 @@ EXTERNAL SOURCES:
 CHECKOUT OPTIONS:
   FibriCheckCameraSDK:
     :git: https://github.com/fibricheck/ios-camera-sdk.git
-    :tag: v1.1.0-fda
+    :tag: v1.1.1-fda
 
 SPEC CHECKSUMS:
   boost: 1dca942403ed9342f98334bf4c3621f011aa7946
@@ -1922,6 +1922,6 @@ SPEC CHECKSUMS:
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 3deb2471faa9916c8a82dda2a22d3fba2620ad37
 
-PODFILE CHECKSUM: b2f7c843f1e342c5bf541b6d8e468cb06d043165
+PODFILE CHECKSUM: a026c12030b83a268d22f9dd11143cd9a581defa
 
 COCOAPODS: 1.15.2

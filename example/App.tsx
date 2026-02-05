@@ -102,6 +102,8 @@ function renderDocument({
   );
 }
 
+let lastLog = -1;
+
 const App = () => {
   const [isFibriViewVisisble, setFibriViewVisible] = useState(false);
   const [isFingerPresent, setFingerPresent] = useState(false);
@@ -225,6 +227,12 @@ const App = () => {
                   console.log('pulse detection time is expired')
                 }
                 onRawData={(image, metadata) => {
+                  const delta = Date.now() - lastLog
+                  if (delta < 1000) {
+                    return;
+                  }
+                  lastLog = Date.now()
+
                   if (Platform.OS === 'ios') {
                     const hdr = metadata['isHdrEnabled']
                     const focus = metadata['lensPosition']
@@ -232,7 +240,7 @@ const App = () => {
                     const iso = metadata['iso']
                     const whiteBalance = metadata['whiteBalanceGains']
 
-                    console.log(`HDR: ${hdr}, ISO: ${iso}, Exposure: ${exposureTime}, Focus: ${focus}, White Balance: ${whiteBalance}`)
+                    console.log(`Image bytes: ${image.length} HDR: ${hdr}, ISO: ${iso}, Exposure: ${exposureTime}, Focus: ${focus}, White Balance: ${whiteBalance}`)
                   }
                 }}
                 onMovementDetected={() => console.log('movement detected')}
