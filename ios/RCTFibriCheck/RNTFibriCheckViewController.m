@@ -1,11 +1,13 @@
 #import "RNTFibriCheckViewController.h"
 #import <React/RCTLog.h>
+#import <AVFoundation/AVFoundation.h>
 #import "RCTFibriCheckEventEmitter.h"
 #import "FibriCheckerComponent.h"
 #import "CameraSettings.h"
 
 @interface RNTFibriCheckViewController ()
 @property (nonatomic, strong) FibriChecker *fibrichecker;
+@property (nonatomic, strong) AVCaptureVideoPreviewLayer *previewLayer;
 @end
 
 @implementation RNTFibriCheckViewController
@@ -139,6 +141,33 @@
    [_fibrichecker setCameraSettings:input];
 }
 
+- (void)fibriCheckViewDidSetPreview {
+    BOOL preview = ((RNTFibriCheckView*)self.view).preview;
+    if (preview) {
+        [self addPreviewLayer];
+        [_fibrichecker startPreview];
+    } else {
+        [self removePreviewLayer];
+    }
+}
+
+- (void)addPreviewLayer {
+    if (!self.previewLayer) {
+        return;
+    }
+
+    [self removePreviewLayer];
+    [self.view.layer insertSublayer:self.previewLayer atIndex:0];
+    [self.view setNeedsDisplay];
+}
+
+- (void)removePreviewLayer {
+    if (self.previewLayer) {
+        [self.previewLayer removeFromSuperlayer];
+        [self.view setNeedsDisplay];
+    }
+}
+
 - (void)startMeasurement {
   NSLog(@"startMeasurement");
   [_fibrichecker startMeasurement];
@@ -158,12 +187,24 @@
 - (void)viewDidLoad {
   [super viewDidLoad];
   self.fibrichecker = [FibriChecker new];
+    AVCaptureVideoPreviewLayer *layer = [AVCaptureVideoPreviewLayer layerWithSession:_fibrichecker.captureSession];
+    layer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+    layer.frame = self.view.bounds;
+    self.previewLayer = layer;
   [self addListeners];
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    if (self.previewLayer) {
+        self.previewLayer.frame = self.view.bounds;
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     // Clean up resources, remove observers, stop timers, etc.
+    [self removePreviewLayer];
     [self.fibrichecker stop];
 }
 

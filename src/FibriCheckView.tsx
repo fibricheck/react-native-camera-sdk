@@ -49,6 +49,7 @@ export interface FibriCheckViewHandle {
 interface FibriCheckNative {
   style?: ViewStyle;
 
+  preview: boolean;
   drawGraph: boolean;
   drawBackground: boolean;
   accEnabled: boolean;
@@ -92,6 +93,7 @@ const FibriCheck = requireNativeComponent<FibriCheckNative>('FibriCheck');
 interface FibriCheckViewProps {
   style?: ViewStyle;
 
+  preview?: boolean;
   drawGraph?: boolean;
   drawBackground?: boolean;
   accEnabled?: boolean;
@@ -157,6 +159,7 @@ const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheck
     backgroundColor: '#ffffff',
   },
 
+  preview = false,
   drawGraph = true,
   drawBackground = true,
   accEnabled = false,
@@ -248,6 +251,7 @@ const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheck
       ref={nativeRef}
 
       style={style}
+      preview={preview}
       drawGraph={drawGraph}
       drawBackground={drawBackground}
       accEnabled={accEnabled}

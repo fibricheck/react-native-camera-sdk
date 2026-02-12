@@ -9,7 +9,11 @@
 }
 
 - (void)didSetProps:(NSArray<NSString *> *)changedProps {
-    [self.delegate startMeasurement];
+  [self.delegate fibriCheckViewDidSetPreview];
+  if (self.preview) {
+    return;
+  }
+  [self.delegate startMeasurement];
 }
 
 - (id)initWithFrame:(CGRect)frame {
@@ -23,6 +27,9 @@
 }
 
 - (void)drawRect:(CGRect)rect {
+  if (self.preview) {
+    return;
+  }
   if(self.graphBackgroundColor) {
     [self drawGraphArea];
   }
@@ -121,6 +128,10 @@
   if (delta == 0 ) {
     delta = 1;
   }
+}
+
+- (void)setPreview:(BOOL)preview {
+    _preview = preview;
 }
 
 - (void)setSampleTime:(NSInteger *)sampleTime {

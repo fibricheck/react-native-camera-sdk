@@ -19,6 +19,7 @@ import {
   ListRenderItemInfo,
   RefreshControl,
   SafeAreaView,
+  Switch,
 } from 'react-native';
 import {request, PERMISSIONS} from 'react-native-permissions';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
@@ -114,6 +115,7 @@ const App = () => {
   const [heartRate, setHeartRate] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(60);
   const [measurements, setMeasurements] = useState<Document[]>([]);
+  const [previewEnabled, setPreviewEnabled] = useState(false);
   const userIdRef = useRef('');
   const fibriViewRef = useRef<FibriCheckViewHandle>(null);
 
@@ -261,6 +263,7 @@ const App = () => {
                   logWhiteBalance: true
                 }}
                 sampleTime={35}
+                preview={previewEnabled}
               />
             )}
           </View>
@@ -317,6 +320,11 @@ const App = () => {
                 title={'Record'}
               />
             </View>
+          </View>
+
+          <View style={styles.row}>
+            <Switch value={previewEnabled} onChange={(e) => setPreviewEnabled(e.nativeEvent.value)} />
+            <Text>Preview Enabled</Text>
           </View>
 
           <FlatList

@@ -2,7 +2,7 @@ PODS:
   - boost (1.84.0)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.76.3)
-  - FibriCheckCameraSDK (1.0.2)
+  - FibriCheckCameraSDK (1.1.1)
   - fmt (9.1.0)
   - glog (0.3.5)
   - hermes-engine (0.76.3):
@@ -1243,10 +1243,10 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-camera-sdk (1.4.0-fda.2):
-    - FibriCheckCameraSDK (= 1.0.2)
+  - react-native-camera-sdk (1.4.0-fda.12):
+    - FibriCheckCameraSDK (= 1.1.1)
     - React
-  - react-native-safe-area-context (4.14.0):
+  - react-native-safe-area-context (4.14.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1259,8 +1259,8 @@ PODS:
     - React-featureflags
     - React-graphics
     - React-ImageManager
-    - react-native-safe-area-context/common (= 4.14.0)
-    - react-native-safe-area-context/fabric (= 4.14.0)
+    - react-native-safe-area-context/common (= 4.14.1)
+    - react-native-safe-area-context/fabric (= 4.14.1)
     - React-NativeModulesApple
     - React-RCTFabric
     - React-rendererdebug
@@ -1269,7 +1269,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-safe-area-context/common (4.14.0):
+  - react-native-safe-area-context/common (4.14.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1290,7 +1290,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-safe-area-context/fabric (4.14.0):
+  - react-native-safe-area-context/fabric (4.14.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1581,7 +1581,7 @@ PODS:
     - React-utils (= 0.76.3)
   - RNFS (2.20.0):
     - React-Core
-  - RNPermissions (5.2.0):
+  - RNPermissions (5.4.4):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1602,7 +1602,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNShare (12.2.1):
+  - RNShare (12.2.5):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1630,7 +1630,7 @@ DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
-  - FibriCheckCameraSDK (from `https://github.com/fibricheck/ios-camera-sdk.git`, tag `v1.1.1-fda`)
+  - FibriCheckCameraSDK (from `https://github.com/fibricheck/ios-camera-sdk.git`, tag `v1.1.1-fda5`)
   - fmt (from `../node_modules/react-native/third-party-podspecs/fmt.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
@@ -1712,7 +1712,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/FBLazyVector"
   FibriCheckCameraSDK:
     :git: https://github.com/fibricheck/ios-camera-sdk.git
-    :tag: v1.1.1-fda
+    :tag: v1.1.1-fda5
   fmt:
     :podspec: "../node_modules/react-native/third-party-podspecs/fmt.podspec"
   glog:
@@ -1848,13 +1848,13 @@ EXTERNAL SOURCES:
 CHECKOUT OPTIONS:
   FibriCheckCameraSDK:
     :git: https://github.com/fibricheck/ios-camera-sdk.git
-    :tag: v1.1.1-fda
+    :tag: v1.1.1-fda5
 
 SPEC CHECKSUMS:
   boost: 1dca942403ed9342f98334bf4c3621f011aa7946
   DoubleConversion: f16ae600a246532c4020132d54af21d0ddb2a385
   FBLazyVector: be7314029d6ec6b90f0f75ce1195b8130ed9ac4f
-  FibriCheckCameraSDK: e4945ac98672b3a4d93f8c57efee164213a1cd6f
+  FibriCheckCameraSDK: 7c7178c16151803dce8a0c639a7c919bde53edaf
   fmt: 10c6e61f4be25dc963c36bd73fc7b1705fe975be
   glog: 08b301085f15bcbb6ff8632a8ebaf239aae04e6a
   hermes-engine: 0555a84ea495e8e3b4bde71b597cd87fbb382888
@@ -1887,8 +1887,8 @@ SPEC CHECKSUMS:
   React-logger: 2736a90a3fdaed3dab1e2e9c5a5e9b3be00c287d
   React-Mapbuffer: bd6a2ffbf401f11cfc8b5e8f38acab9fe117620c
   React-microtasksnativemodule: 2fa3b8c7a876b84bd8166f11e07f101929a87f97
-  react-native-camera-sdk: f4128de5a74720e00a1d4afbdbf3c419630a21ad
-  react-native-safe-area-context: 819935871d06a80e963546208027f839aa972a85
+  react-native-camera-sdk: 20d8cf5c36cab501f2f26a1d2629f964e74006ca
+  react-native-safe-area-context: 2985d96d364676d1e2e2d5e77f64860874e31e13
   React-nativeconfig: aeed6e2a8ac02b2df54476afcc7c663416c12bf7
   React-NativeModulesApple: c0783e5e21c71aa2764ac33120abc96208466fa6
   React-perflogger: 2991d4258277af250eb7a2705980ebb3ef9ba85e
@@ -1917,11 +1917,11 @@ SPEC CHECKSUMS:
   ReactCodegen: 5148a0102fc8f0a1f9b05d955da886b44447679d
   ReactCommon: b8485556b596ef2f44f59bc586113bda138fb804
   RNFS: 89de7d7f4c0f6bafa05343c578f61118c8282ed8
-  RNPermissions: cdad5c1472554189671fa1d0df2f601529360ff4
-  RNShare: e5405e41b3791ed6ebe5f7ead4e2af4b1df6e8bf
+  RNPermissions: 118d30871f9e738bb91cf03218f3bc3a60b8cf2b
+  RNShare: 9df29c9a46b6dce5490ebf1950f9fb05ea186543
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 3deb2471faa9916c8a82dda2a22d3fba2620ad37
 
-PODFILE CHECKSUM: a026c12030b83a268d22f9dd11143cd9a581defa
+PODFILE CHECKSUM: b80b366f2b0f5749f019f2cb8c639d6edc98ecd4
 
 COCOAPODS: 1.15.2

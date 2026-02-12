@@ -32,6 +32,7 @@ RCT_EXPORT_VIEW_PROPERTY(pulseDetectionExpiryTime, NSInteger);
 
 RCT_EXPORT_VIEW_PROPERTY(waitForStartRecordingSignal, NSInteger);
 
+RCT_EXPORT_VIEW_PROPERTY(preview, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(drawGraph, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(lineColor, NSString);
 RCT_EXPORT_VIEW_PROPERTY(lineThickness, NSInteger);

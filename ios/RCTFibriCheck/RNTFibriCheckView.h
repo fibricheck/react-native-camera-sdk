@@ -12,6 +12,7 @@
 - (void) fibriCheckViewDidSetFingerDetectionExpiryTime;
 - (void) fibriCheckViewDidSetPulseDetectionExpiryTime;
 - (void) fibriCheckViewDidSetCameraSettings;
+- (void) fibriCheckViewDidSetPreview;
 
 - (void) fibriCheckViewDidSetWaitForStartRecordingSignal;
 - (void) drawGraphPoint;
@@ -41,6 +42,7 @@
 @property (nonatomic) NSInteger *fingerDetectionExpiryTime;
 @property (nonatomic) NSInteger *pulseDetectionExpiryTime;
 @property (nonatomic) NSInteger *waitForStartRecordingSignal;
+@property (nonatomic) BOOL preview;
 @property (nonatomic) BOOL drawGraph;
 
 @property (nonatomic) NSInteger stepIncrement;
