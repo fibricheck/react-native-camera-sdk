@@ -8,6 +8,16 @@
   return self;
 }
 
+- (void)invalidate {
+  [self.delegate stopCamera];
+  self.delegate = nil;
+  self.points = nil;
+}
+
+- (void)dealloc {
+  self.points = nil;
+}
+
 - (void)didSetProps:(NSArray<NSString *> *)changedProps {
   [self.delegate fibriCheckViewDidSetPreview];
   if (self.preview) {
@@ -134,7 +144,7 @@
     _preview = preview;
 }
 
-- (void)setSampleTime:(NSInteger *)sampleTime {
+- (void)setSampleTime:(NSInteger)sampleTime {
     _sampleTime = sampleTime;
     [self.delegate fibriCheckViewDidSetSampleTime];
 }
@@ -169,23 +179,19 @@
     [self.delegate fibriCheckViewDidSetMovementDetection];
 }
 
-- (void)setFingerDetectionExpiryTime:(NSInteger *)fingerDetectionExpiryTime {
+- (void)setFingerDetectionExpiryTime:(NSInteger)fingerDetectionExpiryTime {
     _fingerDetectionExpiryTime = fingerDetectionExpiryTime;
     [self.delegate fibriCheckViewDidSetFingerDetectionExpiryTime];
 }
 
-- (void)setPulseDetectionExpiryTime:(NSInteger *)pulseDetectionExpiryTime {
+- (void)setPulseDetectionExpiryTime:(NSInteger)pulseDetectionExpiryTime {
     _pulseDetectionExpiryTime = pulseDetectionExpiryTime;
     [self.delegate fibriCheckViewDidSetPulseDetectionExpiryTime];
 }
 
-- (void)setWaitForStartRecordingSignal:(NSInteger *)waitForStartRecordingSignal {
+- (void)setWaitForStartRecordingSignal:(NSInteger)waitForStartRecordingSignal {
     _waitForStartRecordingSignal = waitForStartRecordingSignal;
     [self.delegate fibriCheckViewDidSetWaitForStartRecordingSignal];
-}
-
-- (void)dealloc {
-  self.points = nil;
 }
 
 - (void)setCameraSettings:(NSDictionary *)cameraSettings {

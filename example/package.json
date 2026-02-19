@@ -16,7 +16,7 @@
   "//": "do not install @fibricheck/react-native-camera-sdk as a relative package, many developers have treaded upon this path, beaten and bruised they all returned unsuccesful.",
   "dependencies": {
     "@extrahorizon/javascript-sdk": "^8.4.1",
-    "@fibricheck/react-native-camera-sdk": "1.4.0-fda.12",
+    "@fibricheck/react-native-camera-sdk": "1.4.0-fda.13",
     "react": "^18.3.1",
     "react-native": "0.76.3",
     "react-native-fs": "^2.20.0",

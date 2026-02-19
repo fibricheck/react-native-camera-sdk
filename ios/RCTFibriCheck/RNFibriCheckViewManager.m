@@ -41,6 +41,9 @@ RCT_EXPORT_VIEW_PROPERTY(cameraSettings, NSDictionary);
 
 RCT_EXPORT_MODULE(FibriCheck)
 - (UIView *)view {
+    if (self.fibriCheckViewController) {
+        [self.fibriCheckViewController stopCamera];
+    }
     self.fibriCheckViewController = [[RNTFibriCheckViewController alloc] init];
     return self.fibriCheckViewController.view;
 }

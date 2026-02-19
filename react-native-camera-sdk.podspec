@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   # s.license    = { :type => "MIT", :file => "FILE_LICENSE" }
   s.authors      = { 'FibriCheck' => 'development@fibricheck.com' }
   s.platforms    = { :ios => "10.0" }
-  s.source       = { :git => "https://github.com/fibricheck/react-native-camera-sdk.git", :tag => "v1.1.1-fda5" }
+  s.source       = { :git => "https://github.com/fibricheck/react-native-camera-sdk.git", :tag => "v1.1.1-fda8" }
 
   s.source_files = "ios/**/*.{h,m,swift}"
   s.dependency 'FibriCheckCameraSDK', '1.1.1'

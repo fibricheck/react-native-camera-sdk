@@ -1,5 +1,6 @@
 #import <UIKit/UIKit.h>
 #import <React/RCTComponent.h>
+#import <React/RCTBridge.h>
 
 @protocol FibriCheckViewDelegate <NSObject>
 - (void) fibriCheckViewDidSetSampleTime;
@@ -23,7 +24,7 @@
 - (void) stopCamera;
 @end
 
-@interface RNTFibriCheckView : UIView {
+@interface RNTFibriCheckView : UIView <RCTInvalidating> {
   float min;
   float max;
   float delta;
@@ -32,23 +33,23 @@
 
 @property (nonatomic, weak) id<FibriCheckViewDelegate> delegate;
 
-@property (nonatomic) NSInteger *sampleTime;
+@property (nonatomic) NSInteger sampleTime;
 @property (nonatomic) BOOL flashEnabled;
 @property (nonatomic) BOOL gravEnabled;
 @property (nonatomic) BOOL gyroEnabled;
 @property (nonatomic) BOOL accEnabled;
 @property (nonatomic) BOOL rotationEnabled;
 @property (nonatomic) BOOL movementDetectionEnabled;
-@property (nonatomic) NSInteger *fingerDetectionExpiryTime;
-@property (nonatomic) NSInteger *pulseDetectionExpiryTime;
-@property (nonatomic) NSInteger *waitForStartRecordingSignal;
+@property (nonatomic) NSInteger fingerDetectionExpiryTime;
+@property (nonatomic) NSInteger pulseDetectionExpiryTime;
+@property (nonatomic) NSInteger waitForStartRecordingSignal;
 @property (nonatomic) BOOL preview;
 @property (nonatomic) BOOL drawGraph;
 
 @property (nonatomic) NSInteger stepIncrement;
 @property (nonatomic) NSInteger verticalOffset;
-@property (weak, nonatomic) UIColor *lineColor;
-@property (weak, nonatomic) UIColor *graphBackgroundColor;
+@property (nonatomic, copy) NSString *lineColor;
+@property (nonatomic, copy) NSString *graphBackgroundColor;
 @property (nonatomic) NSInteger lineThickness;
 @property (nonatomic, copy) NSDictionary *cameraSettings;
 
@@ -71,7 +72,7 @@
 /*!
  *  Contains all the points currently displayed on the chart
  */
-@property (nonatomic, retain) NSMutableArray *points;
+@property (nonatomic, strong) NSMutableArray *points;
 
 -(void) addPoint:(NSNumber *) newPoint;
 

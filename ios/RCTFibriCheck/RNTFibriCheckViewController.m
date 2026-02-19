@@ -201,11 +201,30 @@
     }
 }
 
+- (void)dealloc {
+    if (self.fibrichecker != nil) {
+        [self.fibrichecker stop];
+    }
+    
+    [self destroy];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [self.fibrichecker stop];
+}
+
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
+    [self destroy];
+}
+
+- (void)destroy {
     // Clean up resources, remove observers, stop timers, etc.
     [self removePreviewLayer];
-    [self.fibrichecker stop];
+    self.previewLayer.session = nil;
+    self.previewLayer = nil;
+    [self removeListeners];
+    self.fibrichecker = nil;
 }
 
 - (void)loadView {
@@ -223,7 +242,7 @@
 
 - (void)addListeners {
   RCTLogInfo(@"addListeners");
-  __unsafe_unretained typeof(self) weakSelf = self;
+  __weak typeof(self) weakSelf = self;
 
   self.fibrichecker.onMeasurementStart = ^{
     RCTLogInfo(@"Measurement start");
@@ -248,7 +267,7 @@
   };
 
   self.fibrichecker.onSampleReady = ^(double ppg, double raw) {
-    BOOL drawGraph = ((RNTFibriCheckView*)self.view).drawGraph;
+    BOOL drawGraph = ((RNTFibriCheckView*)weakSelf.view).drawGraph;
     if(drawGraph) [weakSelf drawGraphPoint:ppg];
     NSDictionary *data = @{@"ppg":[NSNumber numberWithFloat:ppg], @"raw":[NSNumber numberWithFloat:raw]};
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -346,6 +365,26 @@
             if(((RNTFibriCheckView*)weakSelf.view).onRawData != nil) ((RNTFibriCheckView*)weakSelf.view).onRawData(data);
         });
     };
+}
+
+- (void)removeListeners {
+    RCTLogInfo(@"removeListeners");
+
+    self.fibrichecker.onMeasurementStart = nil;
+    self.fibrichecker.onMeasurementFinished = nil;
+    self.fibrichecker.onMeasurementProcessed = nil;
+    self.fibrichecker.onSampleReady = nil;
+    self.fibrichecker.onCalibrationReady = nil;
+    self.fibrichecker.onFingerRemoved = nil;
+    self.fibrichecker.onFingerDetected = nil;
+    self.fibrichecker.onMovementDetected = nil;
+    self.fibrichecker.onPulseDetected = nil;
+    self.fibrichecker.onPulseDetectionTimeExpired = nil;
+    self.fibrichecker.onFingerDetectionTimeExpired = nil;
+    self.fibrichecker.onHeartBeat = nil;
+    self.fibrichecker.onTimeRemaining = nil;
+    self.fibrichecker.onMeasurementError = nil;
+    self.fibrichecker.onRawData = nil;
 }
 
 
