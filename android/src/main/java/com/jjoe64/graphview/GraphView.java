@@ -377,6 +377,9 @@ public class GraphView extends View {
      * Removes all series of the graph.
      */
     public void removeAllSeries() {
+        for (Series s: mSeries) {
+            s.clearReference(this);
+        }
         mSeries.clear();
         onDataChanged(false, false);
     }
@@ -393,6 +396,7 @@ public class GraphView extends View {
      */
     public void removeSeries(Series<?> series) {
         mSeries.remove(series);
+        series.clearReference(this);
         onDataChanged(false, false);
     }
 }

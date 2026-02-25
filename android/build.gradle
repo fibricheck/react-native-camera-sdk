@@ -2,7 +2,7 @@
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
@@ -40,7 +40,7 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'com.github.fibricheck:android-camera-sdk:dev-370dc2c89e-1'
+    implementation 'com.github.fibricheck:android-camera-sdk:a04e0810e885f0ba1de0a6c1150efa6018d4c46e'
     implementation 'com.facebook.react:react-native:+'
     implementation 'com.google.code.gson:gson:2.11.0'
 }

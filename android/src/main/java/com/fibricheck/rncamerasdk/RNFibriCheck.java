@@ -14,17 +14,20 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.UIManager;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.uimanager.UIManagerHelper;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.facebook.react.uimanager.events.Event;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.google.gson.Gson;
 import com.jjoe64.graphview.GraphView;
@@ -43,11 +46,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 
-
-public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
+public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
   public static final String REACT_CLASS = "FibriCheck";
   private static final String TAG = "RNFibriCheck";
 
@@ -59,15 +59,18 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   private static final int COMMAND_RESET_MODULE_INT = 3;
 
   private static final int SAMPLE_COUNT = 120;
-  public boolean drawGraphPoints = false;
-  private LineGraphSeries<DataPoint> series;
-  private ArrayList<Double> valueSR;
-  private int xValue = 0;
+  public static boolean drawGraphPoints = false;
+  private static final LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
+  private static final ArrayList<Double> valueSR = new ArrayList<>();
+  private static int xValue = 0;
+  private static boolean previewEnabled = false;
+  private static boolean started = false;
 
-  private GraphView graphView;
-  private LinearLayout linearLayout;
-  private FibriChecker fibriChecker;
-  private CameraSettingsInput cameraSettings;
+  private static GraphView graphView;
+  private static FrameLayout rootView;
+  private static FrameLayout previewView;
+  private static FibriChecker fibriChecker;
+  private static CameraSettingsInput cameraSettings;
 
   private static final String EVENT_SAMPLE_READY = "onSampleReady";
   private static final String EVENT_FINGER_DETECTED = "onFingerDetected";
@@ -83,6 +86,7 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   private static final String EVENT_MOVEMENT_DETECTED = "onMovementDetected";
   private static final String EVENT_MEASUREMENT_PROCESSED = "onMeasurementProcessed";
   private static final String EVENT_MEASUREMENT_ERROR = "onMeasurementError";
+  private static final String EVENT_RAW_DATA = "onRawData";
 
   public Activity getActivity(Context context) {
     if (context == null) {
@@ -108,33 +112,57 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
 
   private void sendEvent(String eventName,
                          @Nullable WritableMap params) {
-    ReactContext reactContext = (ReactContext) linearLayout.getContext();
-    int reactTag = linearLayout.getId();
+    ReactContext reactContext = (ReactContext) rootView.getContext();
+    int reactTag = rootView.getId();
 
-    reactContext
-            // TODO: RCTEventEmitter is deprecated but info about a replacement is scarce
-            .getJSModule(RCTEventEmitter.class)
-            .receiveEvent(reactTag, eventName, params);
+    UIManagerHelper.getEventDispatcherForReactTag(reactContext, reactTag).dispatchEvent(new Event() {
+      @Override
+      public String getEventName() {
+        return eventName;
+      }
+
+      @Override
+      protected WritableMap getEventData() {
+        return params;
+      }
+    });
   }
 
   @NonNull
   @Override
-  public LinearLayout createViewInstance(@NonNull ThemedReactContext context) {
+  public FrameLayout createViewInstance(@NonNull ThemedReactContext context) {
     Log.i(TAG, "Creating View instance");
 
-    linearLayout = new LinearLayout(context);
-    linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-    linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+    destroy();
 
-    valueSR = new ArrayList<>();
+    rootView = new FrameLayout(context);
+    rootView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+
+    previewView = new FrameLayout(context);
+    previewView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+
     graphView = createGraphView(context);
-    linearLayout.addView(graphView);
-
+    graphView.setBackgroundColor(Color.WHITE);
+    rootView.addView(previewView);
+    rootView.addView(graphView);
     cameraSettings = new CameraSettingsInput();
-    fibriChecker = new FibriChecker.FibriBuilder(context.getCurrentActivity(), linearLayout).build();
+
+    fibriChecker = new FibriChecker.FibriBuilder(context.getCurrentActivity(), previewView)
+        .rawDataListener((imageBytes, cameraData) -> {
+          WritableMap metaData = Arguments.createMap();
+          for (String key: cameraData.keySet()) {
+            metaData.putString(key, cameraData.get(key));
+          }
+
+          WritableMap map = Arguments.createMap();
+          map.putString("image", "");
+          map.putMap("cameraData", metaData);
+
+          sendEvent(EVENT_RAW_DATA, map);
+        })
+        .build();
     fibriChecker.setCameraSettings(cameraSettings);
     fibriChecker.setFibriListener(new FibriListener() {
-
       @Override public void onSampleReady(final double ppg, double raw) {
         if (drawGraphPoints) {
           addGraphData(ppg);
@@ -170,9 +198,9 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
       }
 
       @Override public void onTimeRemaining(int seconds) {
-          WritableMap event = Arguments.createMap();
-          event.putInt("seconds", seconds);
-          sendEvent(EVENT_TIME_REMAINING, event);
+        WritableMap event = Arguments.createMap();
+        event.putInt("seconds", seconds);
+        sendEvent(EVENT_TIME_REMAINING, event);
       }
 
       @Override public void onMeasurementFinished(long timestamp) {
@@ -206,30 +234,58 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
       }
 
       @Override public void onMeasurementProcessed(MeasurementData measurementData) {
-
         Log.i(TAG, "Measurement processed with Heartbeat: " + measurementData.heartrate);
         WritableMap event = Arguments.createMap();
         try {
           Gson gson = new Gson();
-          JSONObject jsonObject = new JSONObject(gson.toJson(measurementData));
-          String measurementJson = jsonObject.toString();
+          // JSONObject jsonObject = new JSONObject(gson.toJson(measurementData));
+          String measurementJson = gson.toJson(measurementData);
           event.putString("measurement", measurementJson);
           sendEvent(EVENT_MEASUREMENT_PROCESSED, event);
-        } catch (JSONException | NullPointerException ex) {
+        } catch (NullPointerException ex) {
           Log.e(TAG, ex.toString());
         }
       }
 
-       @Override public void onMeasurementError(String message) {
-          WritableMap event = Arguments.createMap();
-          event.putString("message", message);
-          sendEvent(EVENT_MEASUREMENT_ERROR, event);
+      @Override public void onMeasurementError(String message) {
+        WritableMap event = Arguments.createMap();
+        event.putString("message", message);
+        sendEvent(EVENT_MEASUREMENT_ERROR, event);
       }
     });
 
+    fibriChecker.initializeListeners();
     fibriChecker.start();
 
-    return linearLayout;
+    return rootView;
+  }
+
+  private void destroy() {
+    if (fibriChecker != null) {
+      fibriChecker.stop();
+      fibriChecker.destroy();
+      fibriChecker = null;
+    }
+
+    if (rootView != null) {
+      rootView.removeAllViews();
+      rootView = null;
+    }
+
+    if (previewView != null) {
+      previewView.removeAllViews();
+      previewView = null;
+    }
+
+    if (graphView != null) {
+      graphView.removeAllSeries();
+      graphView = null;
+    }
+
+    valueSR.clear();
+    cameraSettings = null;
+    started = false;
+    xValue = 0;
   }
 
   @Override public Map<String, Integer> getCommandsMap() {
@@ -241,14 +297,15 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   }
 
   @Override
-  public void receiveCommand(@NonNull LinearLayout view, @NonNull String commandId, @Nullable ReadableArray args) {
+  public void receiveCommand(@NonNull FrameLayout view, @NonNull String commandId, @Nullable ReadableArray args) {
     Assertions.assertNotNull(args);
 
     Log.i(TAG, "Received command: " + commandId);
     switch (commandId) {
       case COMMAND_START_MEASUREMENT_STRING: {
         Log.i(TAG, "Command Received: start measurement");
-        fibriChecker.start();
+        previewEnabled = false;
+        start();
         break;
       }
       case COMMAND_START_RECORDING_STRING: {
@@ -264,8 +321,8 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
 
       default:
         throw new IllegalArgumentException(
-                String.format("Unsupported command %s received by %s.", commandId,
-                        getClass().getSimpleName()));
+            String.format("Unsupported command %s received by %s.", commandId,
+                getClass().getSimpleName()));
     }
   }
 
@@ -282,19 +339,24 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
     series.setDrawBackground(drawBackground);
   }
 
+  @ReactProp(name = "preview")
+  public void setPreview(View view, boolean preview) {
+    previewEnabled = preview;
+  }
+
   @ReactProp(name = "lineColor")
   public void setLineColor(View view, String lineColor) {
-     series.setColor(Color.parseColor(lineColor));
+    series.setColor(Color.parseColor(lineColor));
   }
 
   @ReactProp(name = "lineThickness")
   public void setLineThickness(View view, int lineThickness) {
-     series.setThickness(lineThickness);
+    series.setThickness(lineThickness);
   }
 
   @ReactProp(name = "graphBackgroundColor")
   public void setGraphBackgroundColor(View view, String graphBackgroundColor) {
-     series.setBackgroundColor(Color.parseColor(graphBackgroundColor));
+    series.setBackgroundColor(Color.parseColor(graphBackgroundColor));
   }
 
   @ReactProp(name = "sampleTime")
@@ -406,23 +468,36 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
     if (map.hasKey("logWhiteBalance")) {
       cameraSettings.setLogWhiteBalance(map.getBoolean("logWhiteBalance"));
     }
-
-
-    fibriChecker.setCameraSettings(cameraSettings);
   }
   //endregion
 
   @Override
-  protected void onAfterUpdateTransaction(@NonNull LinearLayout view) {
-
+  protected void onAfterUpdateTransaction(@NonNull FrameLayout view) {
     super.onAfterUpdateTransaction(view);
+    start();
+  }
+
+  private void start() {
     // This will be called when all the props are set
-    fibriChecker.initializeListeners();
+    fibriChecker.setCameraSettings(cameraSettings);
+
+    boolean previewJustEnabled = previewEnabled && !fibriChecker.getPreviewEnabled();
+    if (previewJustEnabled) {
+      fibriChecker.preview();
+      graphView.setVisibility(View.GONE);
+    }
+
+    boolean previewJustDisabled = !previewEnabled && fibriChecker.getPreviewEnabled();
+    if (previewJustDisabled || !started) {
+      Log.d(TAG, "FibriChecker Started");
+      graphView.setVisibility(View.VISIBLE);
+      fibriChecker.start();
+      started = true;
+    }
   }
 
   //region Graphs
   private GraphView createGraphView(Context context) {
-
     graphView = new GraphView(context);
     invalidateGraphView(graphView, context);
 
@@ -431,9 +506,8 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   }
 
   private void invalidateGraphView(GraphView graphView, Context context) {
-    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
     graphView.setBackgroundColor(Color.TRANSPARENT);
-    params.gravity = Gravity.CENTER_HORIZONTAL;
     graphView.setLayoutParams(params);
     setViewPortOptions(graphView);
     setSeries(graphView, context);
@@ -456,7 +530,7 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
       data[i] = new DataPoint(0, 0);
     }
 
-    series = new LineGraphSeries<>(data);
+    series.resetData(data);
     series.setColor(Color.BLUE);
     series.setThickness(8);
     series.setBackgroundColor(Color.TRANSPARENT);
@@ -476,13 +550,11 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   }
 
   private void addGraphData(double value) {
-
     calculateYaxisBoundaries(value);
     series.appendData(new DataPoint(++xValue, value), true, SAMPLE_COUNT);
   }
 
   private void calculateYaxisBoundaries(double value) {
-
     addValueToSR(value);
     graphView.getViewport().setMaxY(Collections.max(valueSR) + 0.2);
     graphView.getViewport().setMinY(Collections.min(valueSR) - 0.2);
@@ -512,11 +584,8 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
     final Map<String, String> heartBeatMap = new HashMap<>();
     final Map<String, String> ppgMap = new HashMap<>();
 
-    heartBeatMap.put("registrationName", "onHeartBeat");
-    ppgMap.put("registrationName", "onPPG");
-
-    returnMap.put("onHeartBeat", heartBeatMap);
-    returnMap.put("onPPG", ppgMap);
+    heartBeatMap.put("registrationName", EVENT_HEARTBEAT);
+    returnMap.put(EVENT_HEARTBEAT, heartBeatMap);
 
     return returnMap;
   }
@@ -538,13 +607,17 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
     returnMap.put(EVENT_PULSE_DETECTION_TIME_EXPIRED, getBubbledMap(EVENT_PULSE_DETECTION_TIME_EXPIRED));
     returnMap.put(EVENT_MOVEMENT_DETECTED, getBubbledMap(EVENT_MOVEMENT_DETECTED));
     returnMap.put(EVENT_MEASUREMENT_PROCESSED, getBubbledMap(EVENT_MEASUREMENT_PROCESSED));
+    returnMap.put(EVENT_MEASUREMENT_ERROR, getBubbledMap(EVENT_MEASUREMENT_ERROR));
+    returnMap.put(EVENT_RAW_DATA, getBubbledMap(EVENT_RAW_DATA));
 
     return returnMap;
   }
 
   @Override
-  public void onDropViewInstance(@NonNull LinearLayout view) {
-    fibriChecker.stop();
+  public void onDropViewInstance(@NonNull FrameLayout view) {
+    if (view == rootView) {
+      destroy();
+    }
   }
 
   public static CameraSettingMode toCameraSettingMode(String mode, CameraSettingMode defaultValue) {
@@ -553,12 +626,12 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
     }
 
     switch (mode) {
-        case "auto":
-            return CameraSettingMode.Auto;
-        case "locked":
-            return CameraSettingMode.Locked;
-        case "manual":
-            return CameraSettingMode.Manual;
+      case "auto":
+        return CameraSettingMode.Auto;
+      case "locked":
+        return CameraSettingMode.Locked;
+      case "manual":
+        return CameraSettingMode.Manual;
     }
 
     Log.e(TAG, "Invalid camera setting mode " + mode);

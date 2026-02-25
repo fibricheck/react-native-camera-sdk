@@ -47,6 +47,7 @@ import Share from "react-native-share";
  */
 export async function saveJsonToFile(filename: string, data: object) {
   try {
+    console.log(filename, data);
     // Convert data to a pretty JSON string
     const jsonString = JSON.stringify(data, null, 2);
 

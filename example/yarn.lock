@@ -1156,10 +1156,10 @@
     qs "6.14.1"
     typescript-json-decoder "1.0.11"
 
-"@fibricheck/react-native-camera-sdk@1.4.0-fda.13":
-  version "1.4.0-fda.13"
-  resolved "https://npm.pkg.github.com/download/@fibricheck/react-native-camera-sdk/1.4.0-fda.13/5292261d707506d3f0caa6f8119bbde0df00530e#5292261d707506d3f0caa6f8119bbde0df00530e"
-  integrity sha512-t9OXCp3e0jIPypMbJ8IyEgrXuo7kepUaKNrfFx5a5iata64y8xWR+Gqha4i0YCvENWilv2HFnkzp/GJYxZ9bfw==
+"@fibricheck/react-native-camera-sdk@1.4.0-fda.19":
+  version "1.4.0-fda.19"
+  resolved "https://npm.pkg.github.com/download/@fibricheck/react-native-camera-sdk/1.4.0-fda.19/5c17f863f9f904d89fb22e5c075783e1b4a5d907#5c17f863f9f904d89fb22e5c075783e1b4a5d907"
+  integrity sha512-+fKoygE6x+A8n5nesQJ/+ULB3EYVA14/Wzc//rAYr9kpvBzw2KLlHKfCGvczEe2TtGY08nXZD1oGbl4r/cZF8A==
 
 "@hapi/hoek@^9.0.0", "@hapi/hoek@^9.3.0":
   version "9.3.0"
