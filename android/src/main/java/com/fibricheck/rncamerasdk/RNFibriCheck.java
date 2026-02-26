@@ -117,7 +117,7 @@ public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
 		ReactContext reactContext = (ReactContext) rootView.getContext();
 		int reactTag = rootView.getId();
 
-		Log.d(TAG, "Send event " + eventName);
+		// Log.d(TAG, "Send event " + eventName);
 		int surfaceId = UIManagerHelper.getSurfaceId(rootView);
 
 
@@ -283,6 +283,7 @@ public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
 	public FrameLayout createViewInstance(@NonNull ThemedReactContext context) {
 		Log.i(TAG, "Creating View instance");
 
+		destroy();
 		initIfNeeded(context);
 		start();
 
@@ -293,7 +294,6 @@ public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
 		Log.d(TAG, "Destroy");
 		if (fibriChecker != null) {
 			fibriChecker.destroy();
-
 			fibriChecker = null;
 		}
 
@@ -312,10 +312,16 @@ public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
 			graphView = null;
 		}
 
+		if (series != null) {
+			DataPoint[] empty = {};
+			series.resetData(empty);
+		}
+
 		valueSR.clear();
 		cameraSettings = null;
 
 		xValue = 0;
+		isInit = false;
 	}
 
 	@Override
@@ -499,6 +505,10 @@ public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
 		if (map.hasKey("logWhiteBalance")) {
 			cameraSettings.setLogWhiteBalance(map.getBoolean("logWhiteBalance"));
 		}
+
+		if (map.hasKey("rawDataEnabled")) {
+			cameraSettings.setRawDataEnabled(map.getBoolean("rawDataEnabled"));
+		}
 	}
 	//endregion
 
@@ -589,7 +599,6 @@ public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
 	}
 
 	private void addValueToSR(double value) {
-
 		valueSR.add(value);
 		if (valueSR.size() > SAMPLE_COUNT) {
 			valueSR.remove(0);
@@ -643,7 +652,9 @@ public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
 
 	@Override
 	public void onDropViewInstance(@NonNull FrameLayout view) {
-		fibriChecker.stop();
+		if (view == rootView) {
+			destroy();
+		}
 	}
 
 	public static CameraSettingMode toCameraSettingMode(String mode, CameraSettingMode defaultValue) {
