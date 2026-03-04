@@ -134,6 +134,7 @@ interface FibriCheckViewProps {
 
 type CameraSettingsMode = 'auto' | 'locked' | 'manual'
 type WhiteBalanceMode = 'auto' | 'locked' | 'manual-rgb' | 'manual-kelvin'
+type HdrMode = 'auto' | 'on' | 'off'
 
 interface CameraSettings {
   exposureMode?: CameraSettingsMode;
@@ -146,11 +147,13 @@ interface CameraSettings {
   whiteBalanceRgb?: [number, number, number];
   whiteBalanceKelvin?: number;
 
+  hdrMode?: HdrMode;
   rawDataEnabled?: boolean;
 
   logExposure?: boolean;
   logFocus?: boolean;
   logWhiteBalance?: boolean;
+  logHdr?: boolean;
 }
 
 const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheckViewProps>(({
