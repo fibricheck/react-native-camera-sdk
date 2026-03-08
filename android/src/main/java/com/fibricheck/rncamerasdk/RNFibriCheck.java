@@ -273,7 +273,7 @@ public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
 		});
 
 		fibriChecker.initializeListeners();
-		start();
+		// start();
 
 		isInit = true;
 	}
@@ -283,9 +283,9 @@ public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
 	public FrameLayout createViewInstance(@NonNull ThemedReactContext context) {
 		Log.i(TAG, "Creating View instance");
 
-		destroy();
+		// destroy();
 		initIfNeeded(context);
-		start();
+		// start();
 
 		return rootView;
 	}
@@ -522,8 +522,7 @@ public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
 		// This will be called when all the props are set
 		fibriChecker.setCameraSettings(cameraSettings);
 
-		boolean previewJustEnabled = previewEnabled && !fibriChecker.getPreviewEnabled();
-		if (previewJustEnabled) {
+		if (previewEnabled) {
 			fibriChecker.preview();
 			graphView.setVisibility(View.GONE);
 			return;
@@ -531,7 +530,7 @@ public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
 
 		Log.d(TAG, "FibriChecker Started");
 		graphView.setVisibility(View.VISIBLE);
-		fibriChecker.start();
+		fibriChecker.record();
 	}
 
 	//region Graphs
