@@ -36,6 +36,7 @@ import com.qompium.fibricheck.camerasdk.measurement.MeasurementData;
 import com.qompium.fibricheck.camerasdk.measurement.Vec3f;
 import com.qompium.fibricheck.camerasdk.models.CameraSettingMode;
 import com.qompium.fibricheck.camerasdk.models.CameraSettingsInput;
+import com.qompium.fibricheck.camerasdk.models.HdrMode;
 import com.qompium.fibricheck.camerasdk.models.WhiteBalanceMode;
 
 import java.util.ArrayList;
@@ -407,6 +408,13 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
       cameraSettings.setLogWhiteBalance(map.getBoolean("logWhiteBalance"));
     }
 
+	if (map.hasKey("hdrMode")) {
+		cameraSettings.setHdrMode(toHdrMode(map.getString("hdrMode"), HdrMode.Auto));
+	}
+
+	if (map.hasKey("logHdr")) {
+		cameraSettings.setLogHdr(map.getBoolean("logHdr"));
+	}
 
     fibriChecker.setCameraSettings(cameraSettings);
   }
@@ -566,22 +574,40 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   }
 
   public static WhiteBalanceMode toWhiteBalanceMode(String mode, WhiteBalanceMode defaultValue) {
-    if (mode == null) {
-      return defaultValue;
-    }
+		if (mode == null) {
+			return defaultValue;
+		}
 
-    switch (mode) {
-      case "auto":
-        return WhiteBalanceMode.Auto;
-      case "locked":
-        return WhiteBalanceMode.Locked;
-      case "manual-rgb":
-        return WhiteBalanceMode.ManualRgb;
-      case "manual-kelvin":
-        return WhiteBalanceMode.ManualKelvin;
-    }
+		switch (mode) {
+			case "auto":
+				return WhiteBalanceMode.Auto;
+			case "locked":
+				return WhiteBalanceMode.Locked;
+			case "manual-rgb":
+				return WhiteBalanceMode.ManualRgb;
+			case "manual-kelvin":
+				return WhiteBalanceMode.ManualKelvin;
+		}
 
-    Log.e(TAG, "Invalid white balance mode " + mode);
-    return defaultValue;
-  }
+		Log.e(TAG, "Invalid white balance mode " + mode);
+		return defaultValue;
+	}
+
+	public static HdrMode toHdrMode(String mode, HdrMode defaultValue) {
+		if (mode == null) {
+			return defaultValue;
+		}
+
+		switch (mode) {
+			case "auto":
+				return HdrMode.Auto;
+			case "off":
+				return HdrMode.Off;
+			case "on":
+				Log.w(TAG, "HdrMode On is not supported on android");
+		}
+
+		Log.e(TAG, "Invalid hdr mode " + mode);
+		return defaultValue;
+	}
 }

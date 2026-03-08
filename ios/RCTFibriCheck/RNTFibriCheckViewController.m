@@ -65,7 +65,9 @@
     CameraSettingsInput* input = [[CameraSettingsInput alloc] initWithValues:
                                   CameraModeLocked manualIso:0 manualExposureTime:0
                                 whiteBalanceMode:WhiteBalanceModeAuto manualWhiteBalanceRgb: (RgbColor) { .r = 1.0, .g = 1.0, .b = 1.0 } manualWhiteBalanceKelvin:5000
-                               focusMode:CameraModeAuto manualFocus:0.0 logExposure:NO logWhiteBalance:NO logFocus:NO];
+                               focusMode:CameraModeAuto manualFocus:0.0
+                                 hdrMode: HdrAuto
+                             logExposure:NO logWhiteBalance:NO logFocus:NO logHdr:NO];
 
     
     
@@ -124,6 +126,15 @@
    if (settings[@"logWhiteBalance"]) {
        input.logWhiteBalance = [settings[@"logWhiteBalance"] boolValue];
    }
+    
+    if (settings[@"hdrMode"]) {
+        HdrMode hdrMode = [self toHdrMode:settings[@"hdrMode"] defaultValue:HdrAuto];
+        input.hdrMode = hdrMode;
+    }
+    
+    if (settings[@"logHdr"]) {
+        input.logHdr = [settings[@"logHdr"] boolValue];
+    }
 
    [_fibrichecker setCameraSettings:input];
 }
@@ -317,5 +328,21 @@
     return defaultValue;
 }
 
+- (HdrMode)toHdrMode:(NSString *)mode defaultValue:(HdrMode)defaultValue {
+    if (mode == nil) {
+        return defaultValue;
+    }
+
+    if ([mode isEqualToString:@"auto"]) {
+        return HdrAuto;
+    } else if ([mode isEqualToString:@"on"]) {
+        return HdrOn;
+    } else if ([mode isEqualToString:@"off"]) {
+        return HdrOff;
+    }
+
+    NSLog(@"Invalid white balance mode %@", mode);
+    return defaultValue;
+}
 
 @end
