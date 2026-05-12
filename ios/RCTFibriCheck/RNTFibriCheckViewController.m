@@ -81,9 +81,14 @@
   [self addListeners];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [UIApplication sharedApplication].idleTimerDisabled = YES;
+}
+
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-    // Clean up resources, remove observers, stop timers, etc.
+    [UIApplication sharedApplication].idleTimerDisabled = NO;
     [self.fibrichecker stop];
 }
 

@@ -23,7 +23,9 @@ export interface CameraData {
     camera_exposure_time: number;
     camera_hardware_level: string;
     camera_iso: number;
+    [key: string]: unknown;
   };
+  camera_settings?: Record<string, unknown>;
   time: number[];
   attempts?: number;
 }
