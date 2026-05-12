@@ -18,7 +18,6 @@
     "prepare": "yarn build",
     "lint": "eslint src/**/*.{ts,tsx}",
     "lint-fix": "yarn lint --quiet --fix",
-    "prepublish": "sh ./scripts/get_version.sh",
     "publish:dev": "yarn publish --tag dev",
     "test": "jest"
   },
