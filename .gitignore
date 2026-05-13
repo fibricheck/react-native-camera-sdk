@@ -26,15 +26,20 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
-project.xcworkspace
+Pods/
+
 
 # Android/IntelliJ
-#
 build/
 .idea
 .gradle
 local.properties
 *.iml
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+output.json
 
 # BUCK
 buck-out/

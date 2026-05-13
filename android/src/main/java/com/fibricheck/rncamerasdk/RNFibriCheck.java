@@ -124,6 +124,7 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
     linearLayout = new LinearLayout(context);
     linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
     linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+    linearLayout.setKeepScreenOn(true);
 
     valueSR = new ArrayList<>();
     graphView = createGraphView(context);
@@ -172,12 +173,12 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
           sendEvent(EVENT_TIME_REMAINING, event);
       }
 
-      @Override public void onMeasurementFinished() {
+      @Override public void onMeasurementFinished(long timestamp) {
         WritableMap event = Arguments.createMap();
         sendEvent(EVENT_MEASUREMENT_FINISHED, event);
       }
 
-      @Override public void onMeasurementStart() {
+      @Override public void onMeasurementStart(long timestamp) {
         WritableMap event = Arguments.createMap();
         sendEvent(EVENT_MEASUREMENT_START, event);
       }

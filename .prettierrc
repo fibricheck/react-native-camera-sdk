@@ -1,5 +1,9 @@
 {
-  "singleQuote": true,
+  "semi": true,
   "trailingComma": "es5",
-  "tabWidth": 2
+  "singleQuote": true,
+  "bracketSameLine": false,
+  "arrowParens": "avoid",
+  "printWidth": 125,
+  "multilineArraysWrapThreshold": 3
 }
