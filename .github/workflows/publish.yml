@@ -1,0 +1,72 @@
+name: Publish
+
+on:
+  workflow_call:
+    inputs:
+      type:
+        description: "Release type (prod, dev, snapshot)"
+        required: true
+        type: string
+      dry_run:
+        description: "Run without making changes"
+        required: false
+        type: boolean
+        default: false
+    secrets:
+      token:
+        required: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://npm.pkg.github.com/
+          scope: '@fibricheck'
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Prepare npmrc
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.token }}" >> ~/.npmrc
+          echo "@fibricheck:registry=https://npm.pkg.github.com" >> ~/.npmrc
+
+      - name: Install and build
+        run: yarn install && yarn build
+
+      - name: Create release
+        id: sdk-release
+        uses: fibricheck/actions-general/sdk-release@v5
+        with:
+          token: ${{ secrets.token }}
+          type: ${{ inputs.type }}
+          dry_run: ${{ inputs.dry_run }}
+
+      - name: Publish to GitHub Packages
+        if: ${{ !inputs.dry_run }}
+        run: |
+          VERSION="${{ steps.sdk-release.outputs.tag }}"
+          VERSION="${VERSION#v}"
+          jq --arg v "$VERSION" '.version = $v' package.json > package.json.tmp
+          mv package.json.tmp package.json
+          if [ "${{ inputs.type }}" = "dev" ]; then
+            yarn publish --tag dev
+          elif [ "${{ inputs.type }}" = "snapshot" ]; then
+            yarn publish --tag snapshot
+          else
+            yarn publish
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.token }}

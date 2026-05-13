@@ -6,8 +6,6 @@
   "main": "build/src/index.js",
   "types": "build/types/src/index.d.ts",
   "scripts": {
-    "add-suffix": "add-suffix",
-    "remove-suffix": "remove-suffix",
     "start": "react-native start",
     "android": "tsc && react-native run-android",
     "clear": "rm -rf $TMPDIR/react-native-packager-cache-* && rm -rf $TMPDIR/metro-bundler-cache-*",
@@ -18,7 +16,6 @@
     "prepare": "yarn build",
     "lint": "eslint src/**/*.{ts,tsx}",
     "lint-fix": "yarn lint --quiet --fix",
-    "prepublish": "sh ./scripts/get_version.sh",
     "publish:dev": "yarn publish --tag dev",
     "test": "jest"
   },
@@ -45,7 +42,6 @@
     "react-native": ">=0.60.0-rc.0 <1.0.x"
   },
   "devDependencies": {
-    "@fibricheck/npm-version-suffix": "^1.0.0",
     "@qompium/eslint-config-q-react": "^1.5.1",
     "@react-native/babel-preset": "^0.76.3",
     "@types/jest": "^30.0.0",
