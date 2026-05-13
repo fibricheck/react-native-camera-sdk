@@ -19,7 +19,8 @@
     "lint": "eslint src/**/*.{ts,tsx}",
     "lint-fix": "yarn lint --quiet --fix",
     "prepublish": "sh ./scripts/get_version.sh",
-    "publish:dev": "yarn publish --tag dev"
+    "publish:dev": "yarn publish --tag dev",
+    "test": "jest"
   },
   "files": [
     "build",
@@ -47,11 +48,14 @@
     "@fibricheck/npm-version-suffix": "^1.0.0",
     "@qompium/eslint-config-q-react": "^1.5.1",
     "@react-native/babel-preset": "^0.76.3",
+    "@types/jest": "^30.0.0",
     "@types/react": "^18.3.12",
     "@typescript-eslint/eslint-plugin": "^8.16.0",
     "@typescript-eslint/parser": "^8.16.0",
     "eslint": "^9.15.0",
+    "jest": "^30.3.0",
     "react-native": "^0.76.3",
+    "ts-jest": "^29.4.9",
     "typescript": "^5.7.2"
   }
 }

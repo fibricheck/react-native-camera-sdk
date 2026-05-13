@@ -31,3 +31,12 @@ export interface CameraData {
 export enum MeasurementError {
   BrokenAccSensor = 'BROKEN_ACC_SENSOR'
 }
+
+export interface LabelInfo {
+  componentName: string;
+  udi: string;
+  ceLabel: string;
+  manufacturer: string;
+  releaseDate: string;
+  ifu: string;
+}
