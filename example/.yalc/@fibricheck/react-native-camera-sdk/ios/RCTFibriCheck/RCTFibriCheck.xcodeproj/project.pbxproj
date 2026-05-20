@@ -1,0 +1,340 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A1CDF30326B5DEF0001BCAFE /* RNCameraPreviewViewManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A1CDF30126B5DEF0001BCAFE /* RNCameraPreviewViewManager.h */; };
+		A1CDF30426B5DEF0001BCAFE /* RNCameraPreviewViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1CDF30226B5DEF0001BCAFE /* RNCameraPreviewViewManager.m */; };
+		C72EF70F26A06CF9009C0229 /* RNTFibriCheckViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = C72EF70926A06CF8009C0229 /* RNTFibriCheckViewController.h */; };
+		C72EF71026A06CF9009C0229 /* RNTFibriCheckViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C72EF70A26A06CF8009C0229 /* RNTFibriCheckViewController.m */; };
+		C72EF71126A06CF9009C0229 /* RNFibriCheckViewManager.h in Headers */ = {isa = PBXBuildFile; fileRef = C72EF70B26A06CF8009C0229 /* RNFibriCheckViewManager.h */; };
+		C72EF71226A06CF9009C0229 /* RNTFibriCheckView.m in Sources */ = {isa = PBXBuildFile; fileRef = C72EF70C26A06CF9009C0229 /* RNTFibriCheckView.m */; };
+		C72EF71326A06CF9009C0229 /* RNFibriCheckViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C72EF70D26A06CF9009C0229 /* RNFibriCheckViewManager.m */; };
+		C72EF71426A06CF9009C0229 /* RNTFibriCheckView.h in Headers */ = {isa = PBXBuildFile; fileRef = C72EF70E26A06CF9009C0229 /* RNTFibriCheckView.h */; };
+		C7B11BD52698723900A3BD77 /* RCTFibriCheckEventEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B11BD12698723900A3BD77 /* RCTFibriCheckEventEmitter.m */; };
+		C7B11BD72698723900A3BD77 /* RCTFibriCheckEventEmitter.h in Headers */ = {isa = PBXBuildFile; fileRef = C7B11BD32698723900A3BD77 /* RCTFibriCheckEventEmitter.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C7B11BDE2698762100A3BD77 /* Copy Headers */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			name = "Copy Headers";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		A1CDF30126B5DEF0001BCAFE /* RNCameraPreviewViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNCameraPreviewViewManager.h; sourceTree = SOURCE_ROOT; };
+		A1CDF30226B5DEF0001BCAFE /* RNCameraPreviewViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNCameraPreviewViewManager.m; sourceTree = SOURCE_ROOT; };
+		C72EF70926A06CF8009C0229 /* RNTFibriCheckViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNTFibriCheckViewController.h; sourceTree = SOURCE_ROOT; };
+		C72EF70A26A06CF8009C0229 /* RNTFibriCheckViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNTFibriCheckViewController.m; sourceTree = SOURCE_ROOT; };
+		C72EF70B26A06CF8009C0229 /* RNFibriCheckViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNFibriCheckViewManager.h; sourceTree = SOURCE_ROOT; };
+		C72EF70C26A06CF9009C0229 /* RNTFibriCheckView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNTFibriCheckView.m; sourceTree = SOURCE_ROOT; };
+		C72EF70D26A06CF9009C0229 /* RNFibriCheckViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNFibriCheckViewManager.m; sourceTree = SOURCE_ROOT; };
+		C72EF70E26A06CF9009C0229 /* RNTFibriCheckView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNTFibriCheckView.h; sourceTree = SOURCE_ROOT; };
+		C7B11BCD2698719800A3BD77 /* libRCTFibriCheck.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRCTFibriCheck.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C7B11BD12698723900A3BD77 /* RCTFibriCheckEventEmitter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTFibriCheckEventEmitter.m; sourceTree = "<group>"; };
+		C7B11BD32698723900A3BD77 /* RCTFibriCheckEventEmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTFibriCheckEventEmitter.h; sourceTree = "<group>"; };
+		C7B11BE12698769B00A3BD77 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		58B511D81A9E6C8500147676 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C7B11BCB2698719800A3BD77 /* /Users/janvandertaelen/Documents/git/@fibricheck/react-native-sdk/ios/RCTFibriCheck.xcodeproj */ = {
+			isa = PBXGroup;
+			children = (
+				C7B11BE12698769B00A3BD77 /* SystemConfiguration.framework */,
+				C7B11BD02698723900A3BD77 /* RCTFibriCheck */,
+				C7B11BCE2698719800A3BD77 /* Products */,
+			);
+			path = "/Users/janvandertaelen/Documents/git/@fibricheck/react-native-sdk/ios/RCTFibriCheck.xcodeproj";
+			sourceTree = "<absolute>";
+		};
+		C7B11BCE2698719800A3BD77 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C7B11BCD2698719800A3BD77 /* libRCTFibriCheck.a */,
+			);
+			name = Products;
+			path = RCTFibriCheck.xcodeproj/Frameworks/RCTFibriCheck.xcodeproj;
+			sourceTree = SOURCE_ROOT;
+		};
+		C7B11BD02698723900A3BD77 /* RCTFibriCheck */ = {
+			isa = PBXGroup;
+			children = (
+				A1CDF30126B5DEF0001BCAFE /* RNCameraPreviewViewManager.h */,
+				A1CDF30226B5DEF0001BCAFE /* RNCameraPreviewViewManager.m */,
+				C72EF70B26A06CF8009C0229 /* RNFibriCheckViewManager.h */,
+				C72EF70D26A06CF9009C0229 /* RNFibriCheckViewManager.m */,
+				C72EF70E26A06CF9009C0229 /* RNTFibriCheckView.h */,
+				C72EF70C26A06CF9009C0229 /* RNTFibriCheckView.m */,
+				C72EF70926A06CF8009C0229 /* RNTFibriCheckViewController.h */,
+				C72EF70A26A06CF8009C0229 /* RNTFibriCheckViewController.m */,
+				C7B11BD12698723900A3BD77 /* RCTFibriCheckEventEmitter.m */,
+				C7B11BD32698723900A3BD77 /* RCTFibriCheckEventEmitter.h */,
+			);
+			path = RCTFibriCheck;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		CA3D8B572076D824006F3572 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1CDF30326B5DEF0001BCAFE /* RNCameraPreviewViewManager.h in Headers */,
+				C7B11BD72698723900A3BD77 /* RCTFibriCheckEventEmitter.h in Headers */,
+				C72EF70F26A06CF9009C0229 /* RNTFibriCheckViewController.h in Headers */,
+				C72EF71426A06CF9009C0229 /* RNTFibriCheckView.h in Headers */,
+				C72EF71126A06CF9009C0229 /* RNFibriCheckViewManager.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		58B511DA1A9E6C8500147676 /* RCTFibriCheck */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "RCTFibriCheck" */;
+			buildPhases = (
+				58B511D71A9E6C8500147676 /* Sources */,
+				58B511D81A9E6C8500147676 /* Frameworks */,
+				C7B11BDE2698762100A3BD77 /* Copy Headers */,
+				CA3D8B572076D824006F3572 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RCTFibriCheck;
+			productName = RCTFibriCheck;
+			productReference = C7B11BCD2698719800A3BD77 /* libRCTFibriCheck.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		58B511D31A9E6C8500147676 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0920;
+				ORGANIZATIONNAME = Facebook;
+				TargetAttributes = {
+					58B511DA1A9E6C8500147676 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+				};
+			};
+			buildConfigurationList = 58B511D61A9E6C8500147676 /* Build configuration list for PBXProject "RCTFibriCheck" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				English,
+				en,
+			);
+			mainGroup = C7B11BCB2698719800A3BD77 /* /Users/janvandertaelen/Documents/git/@fibricheck/react-native-sdk/ios/RCTFibriCheck.xcodeproj */;
+			productRefGroup = C7B11BCE2698719800A3BD77 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				58B511DA1A9E6C8500147676 /* RCTFibriCheck */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		58B511D71A9E6C8500147676 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1CDF30426B5DEF0001BCAFE /* RNCameraPreviewViewManager.m in Sources */,
+				C7B11BD52698723900A3BD77 /* RCTFibriCheckEventEmitter.m in Sources */,
+				C72EF71326A06CF9009C0229 /* RNFibriCheckViewManager.m in Sources */,
+				C72EF71026A06CF9009C0229 /* RNTFibriCheckViewController.m in Sources */,
+				C72EF71226A06CF9009C0229 /* RNTFibriCheckView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		58B511ED1A9E6C8500147676 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		58B511EE1A9E6C8500147676 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		58B511F01A9E6C8500147676 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/../../../React/**",
+					"$(SRCROOT)/../../react-native/React/**",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/**",
+					"$(PROJECT_DIR)/RCTFibriCheck",
+					"$(PROJECT_DIR)",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		58B511F11A9E6C8500147676 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/../../../React/**",
+					"$(SRCROOT)/../../react-native/React/**",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/**",
+					"$(PROJECT_DIR)/RCTOneSignal",
+					"$(PROJECT_DIR)",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		58B511D61A9E6C8500147676 /* Build configuration list for PBXProject "RCTFibriCheck" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				58B511ED1A9E6C8500147676 /* Debug */,
+				58B511EE1A9E6C8500147676 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "RCTFibriCheck" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				58B511F01A9E6C8500147676 /* Debug */,
+				58B511F11A9E6C8500147676 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 58B511D31A9E6C8500147676 /* Project object */;
+}
