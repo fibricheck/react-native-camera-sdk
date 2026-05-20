@@ -39,7 +39,7 @@
   "author": "Qompium",
   "readmeFilename": "README.md",
   "peerDependencies": {
-    "react-native": ">=0.60.0-rc.0 <1.0.x"
+    "react-native": ">=0.73.0 <1.0.x"
   },
   "devDependencies": {
     "@qompium/eslint-config-q-react": "^1.5.1",

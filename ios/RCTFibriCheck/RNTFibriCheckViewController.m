@@ -1,4 +1,5 @@
 #import "RNTFibriCheckViewController.h"
+#import "RNCameraPreviewViewManager.h"
 #import <React/RCTLog.h>
 #import "RCTFibriCheckEventEmitter.h"
 #import "FibriCheckerComponent.h"
@@ -7,7 +8,24 @@
 @property (nonatomic, strong) FibriChecker *fibrichecker;
 @end
 
+/**
+ * RNFibriCheckView and RNCameraPreviewView are two separate React Native view managers with no
+ * direct reference to each other. RNCameraPreviewView needs the AVCaptureSession owned by
+ * FibriChecker to render the camera feed, so we expose it here as a class-level pointer.
+ *
+ * Lifecycle:
+ *   - Set in viewDidLoad, right after FibriChecker is created.
+ *   - A "FibriCheckerReady" NSNotification is posted so RNCameraPreviewView knows it can safely
+ *     call +sharedFibriChecker, regardless of which view mounts first.
+ *   - Cleared in viewDidDisappear to avoid holding a stale reference.
+ */
+static FibriChecker *_sharedFibriChecker;
+
 @implementation RNTFibriCheckViewController
+
++ (nullable FibriChecker *)sharedFibriChecker {
+  return _sharedFibriChecker;
+}
 
 - (void)fibriCheckViewDidSetSampleTime {
     NSInteger sampleTime = ((RNTFibriCheckView*)self.view).sampleTime;
@@ -77,7 +95,13 @@
 // MARK: - UI
 - (void)viewDidLoad {
   [super viewDidLoad];
+  if ([RNCameraPreviewViewManager isStandalonePreviewActive]) {
+    RCTLogError(@"[RNFibriCheckView] Cannot mount RNFibriCheckView while RNCameraPreviewView is "
+                @"in standalone mode — mount one or the other, not both simultaneously.");
+  }
   self.fibrichecker = [FibriChecker new];
+  _sharedFibriChecker = self.fibrichecker;
+  [[NSNotificationCenter defaultCenter] postNotificationName:@"FibriCheckerReady" object:nil];
   [self addListeners];
 }
 
@@ -90,6 +114,7 @@
     [super viewDidDisappear:animated];
     [UIApplication sharedApplication].idleTimerDisabled = NO;
     [self.fibrichecker stop];
+    _sharedFibriChecker = nil;
 }
 
 - (void)loadView {

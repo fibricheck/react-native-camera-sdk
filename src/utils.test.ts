@@ -1,6 +1,6 @@
 /// <reference types="jest" />
 import { getLabel } from './utils';
-import sdkRelease from '../__mocks__/sdk-release.json';
+import sdkRelease from '../sdk-release.json';
 
 const { version, releaseDate } = sdkRelease;
 const zeroPaddedVersion = version

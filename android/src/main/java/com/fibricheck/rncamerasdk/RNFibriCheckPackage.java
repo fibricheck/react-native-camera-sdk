@@ -30,7 +30,8 @@ public class RNFibriCheckPackage implements ReactPackage {
   @Override
   public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
        return Arrays.asList(
-           new RNFibriCheck()
+           new RNFibriCheck(),
+           new RNCameraPreviewView()
        );
   }
 }
