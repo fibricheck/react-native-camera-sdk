@@ -47,3 +47,4 @@ buck-out/
 *.keystore
 .yarn
 .npmrc
+example/.yalc
