@@ -8,9 +8,9 @@ on:
         required: true
         type: string
       target_branch:
-        description: "Branch to open the PR against (e.g. main, v1.2.3)"
+        description: "Branch to open the PR against (e.g. master, v1.2.3)"
         required: false
-        default: "main"
+        default: "master"
         type: string
 
 permissions:

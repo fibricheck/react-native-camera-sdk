@@ -27,10 +27,11 @@ body = """
 """
 footer = ""
 trim = true
+render_always = true
 
 [git]
 conventional_commits = true
-filter_unconventional = true
+filter_unconventional = false
 split_commits = false
 commit_parsers = [
   { message = "^feat", group = "Added" },
@@ -41,12 +42,15 @@ commit_parsers = [
   { message = "^style", group = "Changed" },
   { message = "^test", group = "Changed" },
   { message = "^ci", group = "Changed" },
+  { message = "^(FCS|FIBSDK|FRS|FCRN)-", group = "Changed" },
+  { message = "^Merge", skip = true },
   { message = "^chore\\(release\\)", skip = true },
   { message = "release \\d", skip = true },
   { message = "(?i)changelog", skip = true },
   { author = "github-actions", skip = true },
   { message = "^chore", group = "Changed" },
   { body = ".*security", group = "Security" },
+  { message = ".*", skip = true },
 ]
 filter_commits = false
 tag_pattern = "v[0-9]+\\.[0-9]+\\.[0-9]+$"

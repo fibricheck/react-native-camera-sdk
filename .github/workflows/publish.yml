@@ -46,6 +46,13 @@ jobs:
       - name: Install and build
         run: yarn install && yarn build
 
+      - name: Generate release notes
+        id: release-notes
+        uses: orhun/git-cliff-action@f50e11560dce63f7c33227798f90b924471a88b5 # v4.8.0
+        with:
+          config: cliff.toml
+          args: --unreleased --strip all
+
       - name: Create release
         id: sdk-release
         uses: fibricheck/actions-general/sdk-release@v5
@@ -53,6 +60,7 @@ jobs:
           token: ${{ secrets.token }}
           type: ${{ inputs.type }}
           dry_run: ${{ inputs.dry_run }}
+          body: ${{ steps.release-notes.outputs.content }}
 
       - name: Publish to GitHub Packages
         if: ${{ !inputs.dry_run }}
