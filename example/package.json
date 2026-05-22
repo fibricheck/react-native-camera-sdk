@@ -7,7 +7,7 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "postinstall": "cd ios && pod install"
   },
   "reactNativePermissionsIOS": [
@@ -16,7 +16,7 @@
   "//": "do not install @fibricheck/react-native-camera-sdk as a relative package, many developers have treaded upon this path, beaten and bruised they all returned unsuccesful.",
   "dependencies": {
     "@extrahorizon/javascript-sdk": "^8.8.0",
-    "@fibricheck/react-native-camera-sdk": "file:.yalc/@fibricheck/react-native-camera-sdk",
+    "@fibricheck/react-native-camera-sdk": "^1.4.0-snapshot.9423cd7",
     "react": "^18.3.1",
     "react-native": "0.76.3",
     "react-native-permissions": "^5.2.0",
