@@ -14,7 +14,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.Arguments;
@@ -40,11 +40,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
+public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
   public static final String REACT_CLASS = "FibriCheck";
   private static final String TAG = "RNFibriCheck";
-  private static final int SURFACE_ID = 0;
-
   private static final String COMMAND_START_MEASUREMENT_STRING = "startMeasurement";
   private static final String COMMAND_START_RECORDING_STRING = "startRecording";
   private static final String COMMAND_RESET_MODULE_STRING = "resetModule";
@@ -53,6 +51,9 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   private static final int COMMAND_RESET_MODULE_INT = 3;
 
   private static final int SAMPLE_COUNT = 120;
+
+  public static FrameLayout previewContainer;
+  public static FrameLayout rootLayout;
 
   public boolean drawGraphPoints = false;
 
@@ -64,7 +65,6 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
 
   private GraphView graphView;
 
-  private LinearLayout linearLayout;
 
   private FibriChecker fibriChecker;
 
@@ -107,8 +107,9 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
 
   private void sendEvent(String eventName,
                          @Nullable WritableMap params) {
-    ReactContext reactContext = (ReactContext) linearLayout.getContext();
-    int reactTag = linearLayout.getId();
+    if (rootLayout == null) return;
+    ReactContext reactContext = (ReactContext) rootLayout.getContext();
+    int reactTag = rootLayout.getId();
 
     reactContext
             // TODO: RCTEventEmitter is deprecated but info about a replacement is scarce
@@ -118,19 +119,27 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
 
   @NonNull
   @Override
-  public LinearLayout createViewInstance(@NonNull ThemedReactContext context) {
+  public FrameLayout createViewInstance(@NonNull ThemedReactContext context) {
     Log.i(TAG, "Creating View instance");
+    if (RNCameraPreviewView.standalonePreviewActive) {
+      Log.e(TAG, "Cannot mount RNFibriCheckView while RNCameraPreviewView is in standalone mode — mount one or the other, not both simultaneously.");
+    }
 
-    linearLayout = new LinearLayout(context);
-    linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-    linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-    linearLayout.setKeepScreenOn(true);
+    rootLayout = new FrameLayout(context);
+    rootLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+    rootLayout.setKeepScreenOn(true);
 
     valueSR = new ArrayList<>();
-    graphView = createGraphView(context);
-    linearLayout.addView(graphView);
 
-    fibriChecker = new FibriChecker.FibriBuilder(context.getCurrentActivity(), linearLayout).build();
+    // previewContainer must be in the view hierarchy so FibriChecker's TextureView gets a SurfaceTexture.
+    // It sits behind the graph; RNCameraPreviewView will reparent it when operating in shared mode.
+    previewContainer = new FrameLayout(context);
+    rootLayout.addView(previewContainer, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+
+    graphView = createGraphView(context);
+    rootLayout.addView(graphView);
+
+    fibriChecker = new FibriChecker.FibriBuilder(context.getCurrentActivity(), previewContainer).build();
     fibriChecker.setFibriListener(new FibriListener() {
 
       @Override public void onSampleReady(final double ppg, double raw) {
@@ -227,7 +236,7 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
 
     fibriChecker.start();
 
-    return linearLayout;
+    return rootLayout;
   }
 
   @Override public Map<String, Integer> getCommandsMap() {
@@ -239,7 +248,7 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   }
 
   @Override
-  public void receiveCommand(@NonNull LinearLayout view, @NonNull String commandId, @Nullable ReadableArray args) {
+  public void receiveCommand(@NonNull FrameLayout view, @NonNull String commandId, @Nullable ReadableArray args) {
     Assertions.assertNotNull(args);
 
     Log.i(TAG, "Received command: " + commandId);
@@ -348,7 +357,7 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   //endregion
 
   @Override
-  protected void onAfterUpdateTransaction(@NonNull LinearLayout view) {
+  protected void onAfterUpdateTransaction(@NonNull FrameLayout view) {
 
     super.onAfterUpdateTransaction(view);
     // This will be called when all the props are set
@@ -366,7 +375,7 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   }
 
   private void invalidateGraphView(GraphView graphView, Context context) {
-    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
     graphView.setBackgroundColor(Color.TRANSPARENT);
     params.gravity = Gravity.CENTER_HORIZONTAL;
     graphView.setLayoutParams(params);
@@ -478,7 +487,9 @@ public class RNFibriCheck extends SimpleViewManager<LinearLayout> {
   }
 
   @Override
-  public void onDropViewInstance(@NonNull LinearLayout view) {
+  public void onDropViewInstance(@NonNull FrameLayout view) {
     fibriChecker.stop();
+    previewContainer = null;
+    rootLayout = null;
   }
 }
