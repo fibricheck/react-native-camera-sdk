@@ -46,12 +46,18 @@ jobs:
       - name: Install and build
         run: yarn install && yarn build
 
+      - name: Compute changelog range
+        id: range
+        run: |
+          LAST_RELEASE=$(git tag --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
+          echo "value=${LAST_RELEASE:+${LAST_RELEASE}..}HEAD" >> $GITHUB_OUTPUT
+
       - name: Generate release notes
         id: release-notes
         uses: orhun/git-cliff-action@f50e11560dce63f7c33227798f90b924471a88b5 # v4.8.0
         with:
           config: cliff.toml
-          args: --unreleased --strip all
+          args: --strip all ${{ steps.range.outputs.value }}
 
       - name: Create release
         id: sdk-release
