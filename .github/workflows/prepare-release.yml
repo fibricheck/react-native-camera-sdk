@@ -8,9 +8,9 @@ on:
         required: true
         type: string
       target_branch:
-        description: "Branch to open the PR against (e.g. main, v1.2.3)"
+        description: "Branch to open the PR against (e.g. master, v1.2.3)"
         required: false
-        default: "main"
+        default: "master"
         type: string
 
 permissions:
@@ -31,18 +31,24 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+      - name: Compute changelog range
+        id: range
+        run: |
+          LAST_RELEASE=$(git tag --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
+          echo "value=${LAST_RELEASE:+${LAST_RELEASE}..}HEAD" >> $GITHUB_OUTPUT
+
       - name: Generate changelog
         uses: orhun/git-cliff-action@f50e11560dce63f7c33227798f90b924471a88b5 # v4.8.0
         with:
           config: cliff.toml
-          args: --tag v${{ inputs.version }} --output CHANGELOG.md
+          args: --tag v${{ inputs.version }} --prepend CHANGELOG.md ${{ steps.range.outputs.value }}
 
       - name: Generate release notes
         id: release-notes
         uses: orhun/git-cliff-action@f50e11560dce63f7c33227798f90b924471a88b5 # v4.8.0
         with:
           config: cliff.toml
-          args: --tag v${{ inputs.version }} --unreleased --strip all
+          args: --tag v${{ inputs.version }} --strip all ${{ steps.range.outputs.value }}
 
       - name: Update sdk-release.json
         run: |

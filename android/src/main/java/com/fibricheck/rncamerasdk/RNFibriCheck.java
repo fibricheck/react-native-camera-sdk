@@ -139,7 +139,15 @@ public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
     graphView = createGraphView(context);
     rootLayout.addView(graphView);
 
-    fibriChecker = new FibriChecker.FibriBuilder(context.getCurrentActivity(), previewContainer).build();
+    Activity activity = context.getCurrentActivity();
+    if (activity == null) {
+      activity = getActivity(context);
+    }
+    if (activity == null) {
+      Log.e(TAG, "createViewInstance: no Activity available, cannot initialize FibriChecker");
+      return rootLayout;
+    }
+    fibriChecker = new FibriChecker.FibriBuilder(activity, previewContainer).build();
     fibriChecker.setFibriListener(new FibriListener() {
 
       @Override public void onSampleReady(final double ppg, double raw) {
