@@ -134,17 +134,55 @@ When the permissions are all set up, you can implement the FibriCheck component 
 />
 ```
 
-##
+## Camera Preview
+
+The SDK exposes an `RNCameraPreviewView` component that renders a live camera viewfinder without requiring a full measurement flow. It operates in two modes that are selected automatically based on whether `RNFibriCheckView` is mounted at the same time — no extra configuration is needed.
+
+### Standalone mode
+
+Use this when you want to display a camera feed on its own, without running a FibriCheck measurement. `RNCameraPreviewView` creates and owns its own FibriChecker instance internally.
+
+```tsx
+import { RNCameraPreviewView } from '@fibricheck/react-native-camera-sdk';
+
+<RNCameraPreviewView style={StyleSheet.absoluteFill} />
+```
+
+The camera starts when the component mounts and stops when it unmounts. No measurement data is collected.
+
+### Shared mode (alongside a measurement)
+
+When `RNFibriCheckView` is already mounted, `RNCameraPreviewView` detects this and borrows the active camera session instead of opening a second one. This is useful when you want to show a viewfinder overlay while a measurement is in progress.
+
+```tsx
+import { RNFibriCheckView, RNCameraPreviewView } from '@fibricheck/react-native-camera-sdk';
+
+{/* RNFibriCheckView drives the measurement; it can be visually hidden */}
+<RNFibriCheckView style={{ width: 0, height: 0 }} ... />
+
+{/* RNCameraPreviewView renders the live feed from the shared session */}
+<RNCameraPreviewView style={styles.preview} />
+```
+
+The mode is determined at mount time: if `RNFibriCheckView` is present, shared mode is used; if not, standalone mode is used.
+
+### How it works internally
+
+**iOS:** In standalone mode the component calls `startPreview` on a dedicated `FibriChecker` instance, which opens the camera without collecting PPG data. In shared mode it attaches to the `AVCaptureSession` that `RNFibriCheckView` already holds.
+
+**Android:** `RNFibriCheckView` keeps its `TextureView` container in the view hierarchy at all times (behind its graph overlay) so that the camera surface remains valid. When `RNCameraPreviewView` mounts in shared mode, it takes ownership of that container and displays it. When `RNCameraPreviewView` unmounts, the container is returned to `RNFibriCheckView` so the measurement can continue uninterrupted.
+
+> **Important:** Do not mount `RNCameraPreviewView` in standalone mode and `RNFibriCheckView` simultaneously. Both would attempt to open the camera independently. The SDK logs an error if this conflict is detected.
 
 # Update Dependencies
-The React Native SDK depends on the FibriCheck native SDK's for [Android](https://github.com/fibricheck/android-camera-sdk) and [iOS](https://github.com/fibricheck/ios-camera-sdk). 
+The React Native SDK depends on the FibriCheck native SDKs for [Android](https://github.com/fibricheck/android-camera-sdk) and [iOS](https://github.com/fibricheck/ios-camera-sdk). 
 
-To update the iOS SDK dependency, change the following line in `ios/react-native-camera-sdk.podspec`:
+To update the iOS SDK dependency, change the following line in `react-native-camera-sdk.podspec`:
 ```
-  s.dependency 'FibriCheckCameraSDK', '0.1.3'
+  s.dependency 'FibriCheckCameraSDK'
 ```
 
-To update the Android SDK dependency, change the following line in `android/build.gradle`
+To update the Android SDK dependency, change the following line in `android/build.gradle`:
 ```
-    implementation 'com.github.fibricheck:android-camera-sdk:v0.3.2'
+    implementation 'com.github.fibricheck:android-camera-sdk:v1.1.0'
 ```

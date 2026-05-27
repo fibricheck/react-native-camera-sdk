@@ -167,9 +167,10 @@ const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheck
   }
 
   const onMeasurementProcessedCallback =(event: MeasurementProcessedEvent) => {
+    const parsed = JSON.parse(event.nativeEvent.measurement);
     onMeasurementProcessed?.({
-      ...JSON.parse(event.nativeEvent.measurement),
-      measurement_timestamp: Date.now(),
+      ...parsed,
+      technicalDetails: parsed.technical_details,
     });
   };
 

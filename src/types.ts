@@ -23,11 +23,22 @@ export interface CameraData {
     camera_exposure_time: number;
     camera_hardware_level: string;
     camera_iso: number;
+    [key: string]: unknown;
   };
+  camera_settings?: Record<string, unknown>;
   time: number[];
   attempts?: number;
 }
 
 export enum MeasurementError {
   BrokenAccSensor = 'BROKEN_ACC_SENSOR'
+}
+
+export interface LabelInfo {
+  componentName: string;
+  udi: string;
+  ceLabel: string;
+  manufacturer: string;
+  releaseDate: string;
+  ifu: string;
 }

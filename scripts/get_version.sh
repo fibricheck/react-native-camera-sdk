@@ -1,1 +1,0 @@
-jq -n --arg version $(npm view . version) '{"version":$version}' > package-version.json

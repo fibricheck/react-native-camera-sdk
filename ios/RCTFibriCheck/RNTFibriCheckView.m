@@ -23,6 +23,7 @@
 }
 
 - (void)drawRect:(CGRect)rect {
+  CGContextClearRect(UIGraphicsGetCurrentContext(), rect);
   if(self.graphBackgroundColor) {
     [self drawGraphArea];
   }
