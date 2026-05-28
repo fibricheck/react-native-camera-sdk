@@ -132,9 +132,10 @@ public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
     valueSR = new ArrayList<>();
 
     // previewContainer must be in the view hierarchy so FibriChecker's TextureView gets a SurfaceTexture.
-    // It sits behind the graph; RNCameraPreviewView will reparent it when operating in shared mode.
+    // Kept at 1x1 so it is invisible; RNCameraPreviewView reparents it when operating in standalone mode.
     previewContainer = new FrameLayout(context);
-    rootLayout.addView(previewContainer, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+    previewContainer.setLayoutParams(new FrameLayout.LayoutParams(1, 1));
+    rootLayout.addView(previewContainer);
 
     graphView = createGraphView(context);
     rootLayout.addView(graphView);

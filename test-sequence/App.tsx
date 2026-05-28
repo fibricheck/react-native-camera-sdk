@@ -53,15 +53,6 @@ export default function App() {
     request(perm).then(result => setCameraPermission(result === 'granted'));
   }, []);
 
-  // Start measurement after camera becomes visible
-  useEffect(() => {
-    if (!isCameraVisible) return;
-    const timer = setTimeout(() => {
-      fibriViewRef.current?.startMeasurement();
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [isCameraVisible]);
-
   // Auto-scroll to current step
   useEffect(() => {
     if (currentStepIndex < 0) return;
