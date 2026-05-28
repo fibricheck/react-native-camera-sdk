@@ -4,8 +4,16 @@
 @implementation RNTFibriCheckView
 
 - (id)init {
-  self = [super init];
-  return self;
+  return [self initWithFrame:CGRectZero];
+}
+
+- (void)setOpaque:(BOOL)opaque {
+  [super setOpaque:NO];
+}
+
+- (void)setBackgroundColor:(UIColor *)backgroundColor {
+  [super setBackgroundColor:[UIColor clearColor]];
+  self.layer.opaque = NO;
 }
 
 - (void)didSetProps:(NSArray<NSString *> *)changedProps {
