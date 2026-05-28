@@ -26,6 +26,7 @@
     delta = 1;
     self.stepIncrement = 2.5;
     self.verticalOffset = 6;
+    self.opaque = NO;
   }
   return self;
 }
