@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.4.0] - 2026-05-27
+## [1.4.0] - 2026-05-28
 
 ### Added
 - Added UDI generation (FCS-82) ([1d4430a](https://github.com/fibricheck/react-native-camera-sdk/commit/1d4430a5a3a41c747e5639f2824bc01d601384a9))
@@ -20,9 +20,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update release process ([74b5bf1](https://github.com/fibricheck/react-native-camera-sdk/commit/74b5bf1d4d50c98f22b2c3423f017da30b045770))
 - Remove unused scripts ([9e2bb72](https://github.com/fibricheck/react-native-camera-sdk/commit/9e2bb7241f1dc8c5753bc2d5286b796acad1252e))
 - Final changes after testing ([4980a59](https://github.com/fibricheck/react-native-camera-sdk/commit/4980a5961177bfebe0d0e6f23de17477c41b327e))
+- Release v1.4.0 ([7d5fb12](https://github.com/fibricheck/react-native-camera-sdk/commit/7d5fb12e68b46c674fdcecd5a0a889ca2c647315))
 
 ### Fixed
 - Cliff changelog ([ade15fe](https://github.com/fibricheck/react-native-camera-sdk/commit/ade15fec54f6aa634ae2c39cfe214d95d672dd3d))
+- Camera preview for android rendering behind graph ([94e2998](https://github.com/fibricheck/react-native-camera-sdk/commit/94e299831f48e33120d0b95df8f0a1b184b74978))
 
 ## [1.3.4] - 2024-12-17
 
