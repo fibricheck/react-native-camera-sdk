@@ -84,7 +84,7 @@ public class RNCameraPreviewView extends SimpleViewManager<RNCameraPreviewView.P
         FrameLayout root = RNFibriCheck.rootLayout;
         if (previewContainer != null && root != null) {
           removeView(previewContainer);
-          root.addView(previewContainer, 0, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+          root.addView(previewContainer, 0, new FrameLayout.LayoutParams(1, 1));
         }
       }
       super.onDetachedFromWindow();

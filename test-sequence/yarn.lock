@@ -1610,12 +1610,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fibricheck/react-native-camera-sdk@npm:^1.4.0-snapshot.9423cd7":
-  version: 1.4.0-snapshot.9423cd7
-  resolution: "@fibricheck/react-native-camera-sdk@npm:1.4.0-snapshot.9423cd7::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40fibricheck%2Freact-native-camera-sdk%2F1.4.0-snapshot.9423cd7%2Fdd8da9e122bd5ccc1ebec2d789ce8b27cee5c5e8"
+"@fibricheck/react-native-camera-sdk@npm:v1.4.0-snapshot.7860d67":
+  version: 1.4.0-snapshot.7860d67
+  resolution: "@fibricheck/react-native-camera-sdk@npm:1.4.0-snapshot.7860d67::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40fibricheck%2Freact-native-camera-sdk%2F1.4.0-snapshot.7860d67%2F154a10a1f25bd30275a246ddfd761443ec486bb6"
   peerDependencies:
     react-native: ">=0.73.0 <1.0.x"
-  checksum: 10c0/790c73378583c546df290aa8d99c039f19db8ea961d452b344db809ebd01185dddb31c29b7f5ef029a6dd798fea92be6446ece90fc06be2b7cdb533947ebdd24
+  checksum: 10c0/2f702b889f75c72b1bb6d394e5fb4e7a69ec601f5245b17fab69ecd5eb7bed1716d136e67482111d8a63bcf29ead88277d7e6f40b13026e3dab7cc956bc6476a
   languageName: node
   linkType: hard
 
@@ -8887,7 +8887,7 @@ __metadata:
     "@babel/core": "npm:^7.26.0"
     "@babel/preset-env": "npm:^7.26.0"
     "@babel/runtime": "npm:^7.26.0"
-    "@fibricheck/react-native-camera-sdk": "npm:^1.4.0-snapshot.9423cd7"
+    "@fibricheck/react-native-camera-sdk": "npm:v1.4.0-snapshot.7860d67"
     "@react-native-community/cli": "npm:15.1.2"
     "@react-native-community/cli-platform-android": "npm:15.1.2"
     "@react-native-community/cli-platform-ios": "npm:15.1.2"
