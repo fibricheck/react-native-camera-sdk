@@ -21,10 +21,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove unused scripts ([9e2bb72](https://github.com/fibricheck/react-native-camera-sdk/commit/9e2bb7241f1dc8c5753bc2d5286b796acad1252e))
 - Final changes after testing ([4980a59](https://github.com/fibricheck/react-native-camera-sdk/commit/4980a5961177bfebe0d0e6f23de17477c41b327e))
 - Release v1.4.0 ([7d5fb12](https://github.com/fibricheck/react-native-camera-sdk/commit/7d5fb12e68b46c674fdcecd5a0a889ca2c647315))
+- Release v1.4.0 ([52cfef3](https://github.com/fibricheck/react-native-camera-sdk/commit/52cfef3f5293b4e37655ab31d750715080319a9b))
 
 ### Fixed
 - Cliff changelog ([ade15fe](https://github.com/fibricheck/react-native-camera-sdk/commit/ade15fec54f6aa634ae2c39cfe214d95d672dd3d))
 - Camera preview for android rendering behind graph ([94e2998](https://github.com/fibricheck/react-native-camera-sdk/commit/94e299831f48e33120d0b95df8f0a1b184b74978))
+- Camera preview for ios rendering non opaque ([f92d232](https://github.com/fibricheck/react-native-camera-sdk/commit/f92d23284ec5c635b25bfa696e073d983a66adf8))
 
 ## [1.3.4] - 2024-12-17
 
