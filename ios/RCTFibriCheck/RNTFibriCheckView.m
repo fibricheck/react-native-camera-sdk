@@ -27,6 +27,7 @@
     self.stepIncrement = 2.5;
     self.verticalOffset = 6;
     self.opaque = NO;
+    self.backgroundColor = [UIColor clearColor];
   }
   return self;
 }

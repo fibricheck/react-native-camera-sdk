@@ -184,5 +184,5 @@ To update the iOS SDK dependency, change the following line in `react-native-cam
 
 To update the Android SDK dependency, change the following line in `android/build.gradle`:
 ```
-    implementation 'com.github.fibricheck:android-camera-sdk:v1.1.0'
+    implementation 'com.github.fibricheck:android-camera-sdk:vx.y.z'
 ```
