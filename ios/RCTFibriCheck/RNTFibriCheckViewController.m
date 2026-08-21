@@ -1,7 +1,6 @@
 #import "RNTFibriCheckViewController.h"
 #import "RNCameraPreviewViewManager.h"
 #import <React/RCTLog.h>
-#import "RCTFibriCheckEventEmitter.h"
 #import "FibriCheckerComponent.h"
 
 @interface RNTFibriCheckViewController ()
@@ -14,14 +13,21 @@
  * FibriChecker to render the camera feed, so we expose it here as a class-level pointer.
  *
  * Lifecycle:
- *   - Set in viewDidLoad, right after FibriChecker is created.
+ *   - Set by -activate once the React Native view is attached.
  *   - A "FibriCheckerReady" NSNotification is posted so RNCameraPreviewView knows it can safely
  *     call +sharedFibriChecker, regardless of which view mounts first.
- *   - Cleared in viewDidDisappear to avoid holding a stale reference.
+ *   - Cleared by -invalidate when the React Native view is detached or recycled.
  */
 static FibriChecker *_sharedFibriChecker;
+static __weak RNTFibriCheckViewController *_sharedFibriCheckerOwner;
 
-@implementation RNTFibriCheckViewController
+@implementation RNTFibriCheckViewController {
+  BOOL _active;
+  BOOL _idleTimerWasDisabled;
+}
+
+// React Native embeds this controller's view without UIKit view-controller containment, so the
+// Paper/Fabric view-to-window callbacks explicitly call activate/invalidate.
 
 + (nullable FibriChecker *)sharedFibriChecker {
   return _sharedFibriChecker;
@@ -30,6 +36,18 @@ static FibriChecker *_sharedFibriChecker;
 - (void)fibriCheckViewDidSetSampleTime {
     NSInteger sampleTime = ((RNTFibriCheckView*)self.view).sampleTime;
     _fibrichecker.sampleTime = sampleTime;
+}
+
+- (void)fibriCheckViewDidMoveToWindow:(UIWindow *)window {
+  if (!self.legacyManaged) return;
+  if (window) {
+    [self activate];
+  } else if (_active) {
+    [self invalidate];
+    // Break UIViewController -> view; the legacy view retains its controller through an
+    // associated object until the view itself is released by React Native.
+    self.view = nil;
+  }
 }
 
 - (void)fibriCheckViewDidSetFlash {
@@ -73,23 +91,65 @@ static FibriChecker *_sharedFibriChecker;
 }
 
 - (void)fibriCheckViewDidSetWaitForStartRecordingSignal {
-    NSInteger waitForStartRecordingSignal = ((RNTFibriCheckView*)self.view).waitForStartRecordingSignal;
+    BOOL waitForStartRecordingSignal = ((RNTFibriCheckView*)self.view).waitForStartRecordingSignal;
     _fibrichecker.waitForStartRecordingSignal = waitForStartRecordingSignal;
 }
 
 - (void)startMeasurement {
+  if (!_active) {
+    RCTLogError(@"[RNFibriCheckView] Cannot start measurement because this view is not the active measurement view.");
+    return;
+  }
   NSLog(@"startMeasurement");
   [_fibrichecker startMeasurement];
 }
 
 - (void)startRecording {
+  if (!_active) {
+    RCTLogError(@"[RNFibriCheckView] Cannot start recording because this view is not the active measurement view.");
+    return;
+  }
   NSLog(@"startRecording");
-  _fibrichecker.startRecording;
+  [_fibrichecker startRecording];
 }
 
 - (void)stopCamera {
   NSLog(@"stopCamera");
-  _fibrichecker.stop;
+  [_fibrichecker stop];
+}
+
+- (void)activate {
+  if (_active) return;
+  if ([RNCameraPreviewViewManager isStandalonePreviewActive]) {
+    RCTLogError(@"[RNFibriCheckView] Cannot activate while a standalone camera preview is active.");
+    return;
+  }
+  if (_sharedFibriCheckerOwner && _sharedFibriCheckerOwner != self) {
+    RCTLogError(@"[RNFibriCheckView] Only one mounted FibriCheck measurement view is supported.");
+    return;
+  }
+  _active = YES;
+  _sharedFibriCheckerOwner = self;
+  _sharedFibriChecker = self.fibrichecker;
+  _idleTimerWasDisabled = [UIApplication sharedApplication].idleTimerDisabled;
+  [UIApplication sharedApplication].idleTimerDisabled = YES;
+  [[NSNotificationCenter defaultCenter] postNotificationName:@"FibriCheckerReady" object:nil];
+}
+
+- (void)invalidate {
+  if (!_active) return;
+  _active = NO;
+  [self.fibrichecker stop];
+  if (_sharedFibriCheckerOwner == self) {
+    _sharedFibriCheckerOwner = nil;
+    _sharedFibriChecker = nil;
+    [UIApplication sharedApplication].idleTimerDisabled = _idleTimerWasDisabled;
+  }
+}
+
+- (void)emitEvent:(RNTFibriCheckEvent)event body:(NSDictionary *)body {
+  id<RNTFibriCheckEventDelegate> delegate = self.eventDelegate;
+  if (delegate) [delegate fibriCheckViewController:self emitEvent:event body:body ?: @{}];
 }
 
 // MARK: - UI
@@ -100,21 +160,7 @@ static FibriChecker *_sharedFibriChecker;
                 @"in standalone mode — mount one or the other, not both simultaneously.");
   }
   self.fibrichecker = [FibriChecker new];
-  _sharedFibriChecker = self.fibrichecker;
-  [[NSNotificationCenter defaultCenter] postNotificationName:@"FibriCheckerReady" object:nil];
   [self addListeners];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    [UIApplication sharedApplication].idleTimerDisabled = YES;
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    [UIApplication sharedApplication].idleTimerDisabled = NO;
-    [self.fibrichecker stop];
-    _sharedFibriChecker = nil;
 }
 
 - (void)loadView {
@@ -124,27 +170,28 @@ static FibriChecker *_sharedFibriChecker;
 }
 
 - (void)drawGraphPoint:(double)value {
-  [((RNTFibriCheckView*)self.view) addPoint:[NSNumber numberWithDouble:value]];
   dispatch_async(dispatch_get_main_queue(), ^{
-    [((RNTFibriCheckView*)self.view) setNeedsDisplay];
+    RNTFibriCheckView *view = (RNTFibriCheckView *)self.view;
+    [view addPoint:[NSNumber numberWithDouble:value]];
+    [view setNeedsDisplay];
   });
 }
 
 - (void)addListeners {
   RCTLogInfo(@"addListeners");
-  __unsafe_unretained typeof(self) weakSelf = self;
+  __weak typeof(self) weakSelf = self;
 
   self.fibrichecker.onMeasurementStart = ^{
     RCTLogInfo(@"Measurement start");
     dispatch_async(dispatch_get_main_queue(), ^{
-        if(((RNTFibriCheckView*)weakSelf.view).onMeasurementStart != nil) ((RNTFibriCheckView*)weakSelf.view).onMeasurementStart(@{});
+        [weakSelf emitEvent:RNTFibriCheckEventMeasurementStart body:@{}];
     });
   };
 
   self.fibrichecker.onMeasurementFinished = ^{
     RCTLogInfo(@"Measurement Finished");
     dispatch_async(dispatch_get_main_queue(), ^{
-        if(((RNTFibriCheckView*)weakSelf.view).onMeasurementFinished != nil) ((RNTFibriCheckView*)weakSelf.view).onMeasurementFinished(@{});
+        [weakSelf emitEvent:RNTFibriCheckEventMeasurementFinished body:@{}];
     });
   };
 
@@ -152,23 +199,23 @@ static FibriChecker *_sharedFibriChecker;
     RCTLogInfo(@"Measurement processed");
     NSDictionary *data = @{@"measurement":[measurement mapToJson]};
     dispatch_async(dispatch_get_main_queue(), ^{
-        if(((RNTFibriCheckView*)weakSelf.view).onMeasurementProcessed != nil) ((RNTFibriCheckView*)weakSelf.view).onMeasurementProcessed(data);
+        [weakSelf emitEvent:RNTFibriCheckEventMeasurementProcessed body:data];
     });
   };
 
   self.fibrichecker.onSampleReady = ^(double ppg, double raw) {
-    BOOL drawGraph = ((RNTFibriCheckView*)self.view).drawGraph;
+    BOOL drawGraph = ((RNTFibriCheckView*)weakSelf.view).drawGraph;
     if(drawGraph) [weakSelf drawGraphPoint:ppg];
     NSDictionary *data = @{@"ppg":[NSNumber numberWithFloat:ppg], @"raw":[NSNumber numberWithFloat:raw]};
     dispatch_async(dispatch_get_main_queue(), ^{
-        if(((RNTFibriCheckView*)weakSelf.view).onSampleReady != nil) ((RNTFibriCheckView*)weakSelf.view).onSampleReady(data);
+        [weakSelf emitEvent:RNTFibriCheckEventSampleReady body:data];
     });
   };
 
   self.fibrichecker.onCalibrationReady = ^{
     RCTLogInfo(@"Calibration Ready");
     dispatch_async(dispatch_get_main_queue(), ^{
-        if(((RNTFibriCheckView*)weakSelf.view).onCalibrationReady != nil) ((RNTFibriCheckView*)weakSelf.view).onCalibrationReady(@{});
+        [weakSelf emitEvent:RNTFibriCheckEventCalibrationReady body:@{}];
     });
   };
 
@@ -176,42 +223,42 @@ static FibriChecker *_sharedFibriChecker;
     RCTLogInfo(@"Finger Removed");
     NSDictionary *data = @{@"y":[NSNumber numberWithFloat:y], @"v":[NSNumber numberWithFloat:v], @"stdDevY":[NSNumber numberWithFloat:stdDevY]};
     dispatch_async(dispatch_get_main_queue(), ^{
-        if(((RNTFibriCheckView*)weakSelf.view).onFingerRemoved != nil) ((RNTFibriCheckView*)weakSelf.view).onFingerRemoved(data);
+        [weakSelf emitEvent:RNTFibriCheckEventFingerRemoved body:data];
     });
   };
 
   self.fibrichecker.onFingerDetected = ^{
     RCTLogInfo(@"Finger Detected");
     dispatch_async(dispatch_get_main_queue(), ^{
-        if(((RNTFibriCheckView*)weakSelf.view).onFingerDetected != nil) ((RNTFibriCheckView*)weakSelf.view).onFingerDetected(@{});
+        [weakSelf emitEvent:RNTFibriCheckEventFingerDetected body:@{}];
     });
   };
 
   self.fibrichecker.onMovementDetected = ^{
     RCTLogInfo(@"Movement Detected");
     dispatch_async(dispatch_get_main_queue(), ^{
-        if(((RNTFibriCheckView*)weakSelf.view).onMovementDetected != nil) ((RNTFibriCheckView*)weakSelf.view).onMovementDetected(@{});
+        [weakSelf emitEvent:RNTFibriCheckEventMovementDetected body:@{}];
     });
   };
 
   self.fibrichecker.onPulseDetected = ^{
     RCTLogInfo(@"Pulse Detected");
     dispatch_async(dispatch_get_main_queue(), ^{
-        if(((RNTFibriCheckView*)weakSelf.view).onPulseDetected != nil) ((RNTFibriCheckView*)weakSelf.view).onPulseDetected(@{});
+        [weakSelf emitEvent:RNTFibriCheckEventPulseDetected body:@{}];
     });
   };
 
   self.fibrichecker.onPulseDetectionTimeExpired = ^{
     RCTLogInfo(@"Pulse Detection Time Expired");
     dispatch_async(dispatch_get_main_queue(), ^{
-        if(((RNTFibriCheckView*)weakSelf.view).onPulseDetectionTimeExpired != nil) ((RNTFibriCheckView*)weakSelf.view).onPulseDetectionTimeExpired(@{});
+        [weakSelf emitEvent:RNTFibriCheckEventPulseDetectionTimeExpired body:@{}];
     });
   };
 
   self.fibrichecker.onFingerDetectionTimeExpired = ^{
     RCTLogInfo(@"Finger Detection Time Expired");
     dispatch_async(dispatch_get_main_queue(), ^{
-        if(((RNTFibriCheckView*)weakSelf.view).onFingerDetectionTimeExpired != nil) ((RNTFibriCheckView*)weakSelf.view).onFingerDetectionTimeExpired(@{});
+        [weakSelf emitEvent:RNTFibriCheckEventFingerDetectionTimeExpired body:@{}];
     });
   };
 
@@ -219,7 +266,7 @@ static FibriChecker *_sharedFibriChecker;
     RCTLogInfo(@"Heart Beat Detected: %lu", value);
     NSDictionary *data = @{@"heartRate":[NSNumber numberWithInteger:value]};
     dispatch_async(dispatch_get_main_queue(), ^{
-        if(((RNTFibriCheckView*)weakSelf.view).onHeartBeat != nil) ((RNTFibriCheckView*)weakSelf.view).onHeartBeat(data);
+        [weakSelf emitEvent:RNTFibriCheckEventHeartBeat body:data];
     });
   };
 
@@ -227,7 +274,7 @@ static FibriChecker *_sharedFibriChecker;
     RCTLogInfo(@"Time Remaining: %lu", seconds);
     NSDictionary *data = @{@"seconds":[NSNumber numberWithInteger:seconds]};
     dispatch_async(dispatch_get_main_queue(), ^{
-        if(((RNTFibriCheckView*)weakSelf.view).onTimeRemaining != nil) ((RNTFibriCheckView*)weakSelf.view).onTimeRemaining(data);
+        [weakSelf emitEvent:RNTFibriCheckEventTimeRemaining body:data];
     });
   };
 
@@ -235,9 +282,13 @@ static FibriChecker *_sharedFibriChecker;
     RCTLogInfo(@"Measurement error occured: %@", message);
     NSDictionary *data = @{@"message": message};
     dispatch_async(dispatch_get_main_queue(), ^{
-        if(((RNTFibriCheckView*)weakSelf.view).onMeasurementError != nil) ((RNTFibriCheckView*)weakSelf.view).onMeasurementError(data);
+        [weakSelf emitEvent:RNTFibriCheckEventMeasurementError body:data];
     });
   };
+}
+
+- (void)dealloc {
+  [self invalidate];
 }
 
 @end

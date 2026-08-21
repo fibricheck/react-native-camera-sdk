@@ -43,8 +43,12 @@ jobs:
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.token }}" >> ~/.npmrc
           echo "@fibricheck:registry=https://npm.pkg.github.com" >> ~/.npmrc
 
-      - name: Install and build
-        run: yarn install && yarn build
+      - name: Install and validate
+        run: |
+          yarn install --frozen-lockfile
+          yarn build
+          yarn lint
+          yarn test --runInBand --no-watchman
 
       - name: Compute changelog range
         id: range
@@ -55,6 +59,8 @@ jobs:
       - name: Generate release notes
         id: release-notes
         uses: orhun/git-cliff-action@f50e11560dce63f7c33227798f90b924471a88b5 # v4.8.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           config: cliff.toml
           args: --strip all ${{ steps.range.outputs.value }}

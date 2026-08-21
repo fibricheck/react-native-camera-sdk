@@ -26,6 +26,28 @@ A FibriCheck Measurement consists of multiple phases:
 
 ## Installation
 
+### Compatibility
+
+This release supports React Native 0.73 and newer. It has been built and runtime smoke-tested on
+Android and iOS with RN 0.73.11 (Paper), RN 0.79.7 (Paper and Fabric), and RN 0.87.0 (Fabric). Its
+minimum platform versions are:
+
+- iOS 13.4
+- Android 7.0 (API level 24)
+
+Apps using React Native below 0.73 or an older platform target should remain on the preceding SDK
+release until they are upgraded. See [compatibility-examples](compatibility-examples/README.md) for
+the build matrix and smoke-test apps.
+
+RN 0.87 is the newest version tested for this release, not an installation ceiling. The package's
+peer dependency intentionally has no upper bound, so newer React Native versions can install it;
+versions newer than the tested matrix should be validated in the consuming app before release.
+
+Only one `RNFibriCheckView` measurement component may be mounted at a time. A standalone
+`RNCameraPreviewView` also cannot be active at the same time as the measurement component, and
+only one standalone preview may be mounted at once. These constraints prevent component instances
+from competing for the device camera.
+
 To install the Camera SDK, you will need to have access to the [Camera SDK git repository](https://github.com/fibricheck/react-native-camera-sdk).
 
 In your project, if you are using yarn or npm you need to create a file called `.npmrc` at the root level of your project and add these lines. Replace ${AUTH\_TOKEN} with your personal access token. You can get a new one [here](https://github.com/settings/tokens/new.). Make sure you enable the `read:packages` scope.
@@ -133,6 +155,10 @@ When the permissions are all set up, you can implement the FibriCheck component 
     }
 />
 ```
+
+`RNFibriCheckView` starts a measurement automatically when it mounts. To control
+startup manually, set `autoStart={false}`, attach a ref, and call
+`ref.current?.startMeasurement()` when ready.
 
 ## Camera Preview
 

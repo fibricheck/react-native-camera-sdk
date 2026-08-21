@@ -8,6 +8,11 @@ node_modules/
 npm-debug.log
 yarn-error.log
 
+# yalc
+#
+.yalc/
+/test-sequence/test-sequence/
+
 # Xcode
 #
 build/
@@ -27,6 +32,10 @@ DerivedData
 *.ipa
 *.xcuserstate
 Pods/
+**/.xcode.env.local
+
+# Ruby / CocoaPods (Bundler)
+vendor/bundle/
 
 
 # Android/IntelliJ

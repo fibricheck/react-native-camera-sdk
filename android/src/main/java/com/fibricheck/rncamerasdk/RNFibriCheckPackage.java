@@ -29,9 +29,10 @@ public class RNFibriCheckPackage implements ReactPackage {
 
   @Override
   public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
+       FibriCheckSharedState sharedState = new FibriCheckSharedState();
        return Arrays.asList(
-           new RNFibriCheck(),
-           new RNCameraPreviewView()
+           new RNFibriCheck(sharedState),
+           new RNCameraPreviewView(sharedState)
        );
   }
 }

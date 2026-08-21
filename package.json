@@ -1,15 +1,16 @@
 {
   "name": "@fibricheck/react-native-camera-sdk",
   "title": "React Native Fibricheck",
-  "version": "1.4.0",
-  "description": "React Native FibriCheck",
+  "version": "1.4.1",
+  "description": "FibriCheck Camera SDK bindings for React Native 0.73+ with Paper and Fabric support",
   "main": "build/src/index.js",
+  "react-native": "src/index.ts",
   "types": "build/types/src/index.d.ts",
   "scripts": {
     "start": "react-native start",
     "android": "tsc && react-native run-android",
     "clear": "rm -rf $TMPDIR/react-native-packager-cache-* && rm -rf $TMPDIR/metro-bundler-cache-*",
-    "fresh-start": "watchman watch-del-all && rm -rf $TMPDIR/react-native-packager-cache-* && rm -rf $TMPDIR/metro-bundler-cache-* && rm -rf node_modules/ && npm cache clean --force && npm install && npm run start-clear-cache",
+    "fresh-start": "watchman watch-del-all && rm -rf $TMPDIR/react-native-packager-cache-* && rm -rf $TMPDIR/metro-bundler-cache-* && rm -rf node_modules/ && yarn cache clean && yarn install && yarn start-clear-cache",
     "start-clear-cache": "react-native start --reset-cache",
     "ios": "tsc && react-native run-ios",
     "build": "tsc --project tsconfig.json",
@@ -21,6 +22,11 @@
   },
   "files": [
     "build",
+    "!build/**/*.test.*",
+    "src",
+    "!src/**/*.test.*",
+    "package-version.json",
+    "sdk-release.json",
     "ios",
     "android",
     "react-native-camera-sdk.podspec"
@@ -28,29 +34,47 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },
+  "packageManager": "yarn@1.22.22",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/fibricheck/react-native-camera-sdk.git",
     "baseUrl": "https://github.com/fibricheck/react-native-camera-sdk.git"
   },
   "keywords": [
-    "react-native"
+    "react-native",
+    "fibricheck",
+    "camera",
+    "new-architecture",
+    "fabric"
   ],
   "author": "Qompium",
   "readmeFilename": "README.md",
   "peerDependencies": {
-    "react-native": ">=0.73.0 <1.0.x"
+    "react-native": ">=0.73.0"
+  },
+  "codegenConfig": {
+    "name": "RNFibriCheckSpecs",
+    "type": "components",
+    "jsSrcsDir": "src/specs",
+    "android": {
+      "javaPackageName": "com.fibricheck.rncamerasdk"
+    },
+    "ios": {
+      "componentProvider": {
+        "FibriCheck": "FibriCheckComponentView",
+        "FibriCheckCameraPreview": "FibriCheckCameraPreviewComponentView"
+      }
+    }
   },
   "devDependencies": {
-    "@qompium/eslint-config-q-react": "^1.5.1",
-    "@react-native/babel-preset": "^0.76.3",
+    "@react-native/babel-preset": "^0.79.7",
+    "@react-native/eslint-config": "0.79.7",
     "@types/jest": "^30.0.0",
-    "@types/react": "^18.3.12",
-    "@typescript-eslint/eslint-plugin": "^8.16.0",
-    "@typescript-eslint/parser": "^8.16.0",
-    "eslint": "^9.15.0",
+    "@types/react": "^19.0.0",
+    "eslint": "^8.57.1",
     "jest": "^30.3.0",
-    "react-native": "^0.76.3",
+    "prettier": "2.8.8",
+    "react-native": "^0.79.7",
     "ts-jest": "^29.4.9",
     "typescript": "^5.7.2"
   }

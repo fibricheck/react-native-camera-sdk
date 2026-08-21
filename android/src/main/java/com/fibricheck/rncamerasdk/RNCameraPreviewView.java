@@ -17,8 +17,11 @@ public class RNCameraPreviewView extends SimpleViewManager<RNCameraPreviewView.P
   public static final String REACT_CLASS = "FibriCheckCameraPreview";
   private static final String TAG = "RNCameraPreviewView";
 
-  // Tracks whether a standalone preview is active so RNFibriCheck can detect the conflict.
-  static boolean standalonePreviewActive = false;
+  private final FibriCheckSharedState sharedState;
+
+  public RNCameraPreviewView(@NonNull FibriCheckSharedState sharedState) {
+    this.sharedState = sharedState;
+  }
 
   @NonNull
   @Override
@@ -29,22 +32,24 @@ public class RNCameraPreviewView extends SimpleViewManager<RNCameraPreviewView.P
   @NonNull
   @Override
   public PreviewFrameLayout createViewInstance(@NonNull ThemedReactContext context) {
-    return new PreviewFrameLayout(context);
+    return new PreviewFrameLayout(context, sharedState);
   }
 
   public static class PreviewFrameLayout extends FrameLayout {
 
+    private final FibriCheckSharedState sharedState;
     private boolean isStandaloneMode = false;
     private FibriChecker ownFibriChecker;
 
-    public PreviewFrameLayout(Context context) {
+    public PreviewFrameLayout(Context context, FibriCheckSharedState sharedState) {
       super(context);
+      this.sharedState = sharedState;
     }
 
     @Override
     protected void onAttachedToWindow() {
       super.onAttachedToWindow();
-      FrameLayout previewContainer = RNFibriCheck.previewContainer;
+      FrameLayout previewContainer = sharedState.previewContainer;
       if (previewContainer != null) {
         // Shared mode: RNFibriCheckView is mounted — steal its TextureView container.
         // It may already be parented to RNFibriCheck's rootLayout, so detach it first.
@@ -55,13 +60,16 @@ public class RNCameraPreviewView extends SimpleViewManager<RNCameraPreviewView.P
         addView(previewContainer, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
       } else {
         // Standalone mode: no RNFibriCheckView present — own the FibriChecker instance.
+        if (sharedState.standalonePreviewOwner != null && sharedState.standalonePreviewOwner != this) {
+          throw new IllegalStateException("Only one standalone FibriCheckCameraPreview is supported per React Native instance.");
+        }
         Activity activity = getActivity(getContext());
         if (activity == null) {
           Log.e(TAG, "Cannot start standalone preview: no Activity found in context");
           return;
         }
         isStandaloneMode = true;
-        standalonePreviewActive = true;
+        sharedState.standalonePreviewOwner = this;
         FrameLayout container = new FrameLayout(getContext());
         ownFibriChecker = new FibriChecker.FibriBuilder(activity, container).build();
         ownFibriChecker.start();
@@ -76,12 +84,14 @@ public class RNCameraPreviewView extends SimpleViewManager<RNCameraPreviewView.P
           ownFibriChecker.stop();
           ownFibriChecker = null;
         }
-        standalonePreviewActive = false;
+        if (sharedState.standalonePreviewOwner == this) {
+          sharedState.standalonePreviewOwner = null;
+        }
         isStandaloneMode = false;
       } else {
         // Return previewContainer to rootLayout so FibriChecker retains its camera surface.
-        FrameLayout previewContainer = RNFibriCheck.previewContainer;
-        FrameLayout root = RNFibriCheck.rootLayout;
+        FrameLayout previewContainer = sharedState.previewContainer;
+        FrameLayout root = sharedState.rootLayout;
         if (previewContainer != null && root != null) {
           removeView(previewContainer);
           root.addView(previewContainer, 0, new FrameLayout.LayoutParams(1, 1));

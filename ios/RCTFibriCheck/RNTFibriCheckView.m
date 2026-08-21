@@ -16,10 +16,6 @@
   self.layer.opaque = NO;
 }
 
-- (void)didSetProps:(NSArray<NSString *> *)changedProps {
-    [self.delegate startMeasurement];
-}
-
 - (id)initWithFrame:(CGRect)frame {
   self = [super initWithFrame:frame];
   if (self) {
@@ -32,9 +28,14 @@
   return self;
 }
 
+- (void)didMoveToWindow {
+  [super didMoveToWindow];
+  [self.delegate fibriCheckViewDidMoveToWindow:self.window];
+}
+
 - (void)drawRect:(CGRect)rect {
   CGContextClearRect(UIGraphicsGetCurrentContext(), rect);
-  if(self.graphBackgroundColor) {
+  if(self.drawBackground && self.graphBackgroundColor) {
     [self drawGraphArea];
   }
   [self drawGraphLine];
@@ -134,7 +135,7 @@
   }
 }
 
-- (void)setSampleTime:(NSInteger *)sampleTime {
+- (void)setSampleTime:(NSInteger)sampleTime {
     _sampleTime = sampleTime;
     [self.delegate fibriCheckViewDidSetSampleTime];
 }
@@ -169,17 +170,17 @@
     [self.delegate fibriCheckViewDidSetMovementDetection];
 }
 
-- (void)setFingerDetectionExpiryTime:(NSInteger *)fingerDetectionExpiryTime {
+- (void)setFingerDetectionExpiryTime:(NSInteger)fingerDetectionExpiryTime {
     _fingerDetectionExpiryTime = fingerDetectionExpiryTime;
     [self.delegate fibriCheckViewDidSetFingerDetectionExpiryTime];
 }
 
-- (void)setPulseDetectionExpiryTime:(NSInteger *)pulseDetectionExpiryTime {
+- (void)setPulseDetectionExpiryTime:(NSInteger)pulseDetectionExpiryTime {
     _pulseDetectionExpiryTime = pulseDetectionExpiryTime;
     [self.delegate fibriCheckViewDidSetPulseDetectionExpiryTime];
 }
 
-- (void)setWaitForStartRecordingSignal:(NSInteger *)waitForStartRecordingSignal {
+- (void)setWaitForStartRecordingSignal:(BOOL)waitForStartRecordingSignal {
     _waitForStartRecordingSignal = waitForStartRecordingSignal;
     [self.delegate fibriCheckViewDidSetWaitForStartRecordingSignal];
 }
