@@ -55,7 +55,7 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation('com.github.fibricheck:android-camera-sdk:v1.1.1-dev.2') {
+    implementation('com.github.fibricheck:android-camera-sdk:v1.1.1') {
         // core-ktx 1.15 requires compileSdk 35. Keep consumers on older RN/AGP
         // templates (such as RN 0.73 with compileSdk 34) buildable.
         exclude group: 'androidx.core', module: 'core-ktx'

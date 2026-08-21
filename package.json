@@ -18,6 +18,8 @@
     "lint": "eslint src/**/*.{ts,tsx}",
     "lint-fix": "yarn lint --quiet --fix",
     "publish:dev": "yarn publish --tag dev",
+    "yalc:clean": "rm -rf test-sequence/.yalc compatibility-examples/rn-0.73/.yalc compatibility-examples/rn-0.79/.yalc compatibility-examples/rn-latest/.yalc",
+    "test-apps:clean": "yarn yalc:clean && rm -rf test-sequence/node_modules test-sequence/ios/Pods test-sequence/ios/build test-sequence/android/.gradle test-sequence/android/build test-sequence/android/app/build compatibility-examples/rn-0.73/node_modules compatibility-examples/rn-0.73/ios/Pods compatibility-examples/rn-0.73/ios/build compatibility-examples/rn-0.73/android/.gradle compatibility-examples/rn-0.73/android/build compatibility-examples/rn-0.73/android/app/build compatibility-examples/rn-0.79/node_modules compatibility-examples/rn-0.79/ios/Pods compatibility-examples/rn-0.79/ios/build compatibility-examples/rn-0.79/android/.gradle compatibility-examples/rn-0.79/android/build compatibility-examples/rn-0.79/android/app/build compatibility-examples/rn-latest/node_modules compatibility-examples/rn-latest/ios/Pods compatibility-examples/rn-latest/ios/build compatibility-examples/rn-latest/android/.gradle compatibility-examples/rn-latest/android/build compatibility-examples/rn-latest/android/app/build",
     "test": "jest"
   },
   "files": [

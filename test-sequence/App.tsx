@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 import React, { useCallback, useEffect, useReducer, useRef, useState } from 'react';
-import { AppState, AppStateStatus, Platform, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { AppState, AppStateStatus, Platform, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { request, PERMISSIONS } from 'react-native-permissions';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 import { RNFibriCheckView, RNCameraPreviewView } from '@fibricheck/react-native-camera-sdk';
 import type { CameraData } from '@fibricheck/react-native-camera-sdk';
@@ -155,7 +155,7 @@ export default function App() {
   const gyroEnabled = true;
   const gravEnabled = true;
   const rotationEnabled = true;
-  const sampleTime = 10;
+  const sampleTime = 35;
   const sensorConfig = { accEnabled, gyroEnabled, gravEnabled, rotationEnabled };
 
   const { fingerDetectionExpiryTime, pulseDetectionExpiryTime } = (() => {
@@ -397,8 +397,9 @@ export default function App() {
   const showSkip = isRunning && currentStepIndex === STEP.pulse;
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={styles.root}>
+    <SafeAreaProvider style={styles.root}>
+      <StatusBar barStyle="dark-content" />
+      <SafeAreaView style={styles.root} edges={['top', 'right', 'bottom', 'left']}>
         <LabelInfoBanner />
 
         {hasCameraPermission && isCameraVisible && (
