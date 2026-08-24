@@ -35,7 +35,6 @@ import com.qompium.fibricheck.camerasdk.listeners.FibriListener;
 import com.qompium.fibricheck.camerasdk.measurement.MeasurementData;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,10 +46,6 @@ public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
   private static final String COMMAND_START_MEASUREMENT_STRING = "startMeasurement";
   private static final String COMMAND_START_RECORDING_STRING = "startRecording";
   private static final String COMMAND_RESET_MODULE_STRING = "resetModule";
-  private static final int COMMAND_START_MEASUREMENT_INT = 1;
-  private static final int COMMAND_START_RECORDING_INT = 2;
-  private static final int COMMAND_RESET_MODULE_INT = 3;
-
   private static final int SAMPLE_COUNT = 120;
 
   private final FibriCheckSharedState sharedState;
@@ -127,10 +122,19 @@ public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
   public FrameLayout createViewInstance(@NonNull ThemedReactContext context) {
     Log.i(TAG, "Creating View instance");
     if (sharedState.rootLayout != null) {
-      throw new IllegalStateException("Only one mounted FibriCheck measurement view is supported per React Native instance.");
+      Log.e(TAG, "Only one mounted FibriCheck measurement view is supported per React Native instance.");
+      return new FrameLayout(context);
     }
     if (sharedState.standalonePreviewOwner != null) {
-      throw new IllegalStateException("Cannot mount FibriCheck while a standalone FibriCheckCameraPreview is active.");
+      Log.e(TAG, "Cannot mount FibriCheck while a standalone FibriCheckCameraPreview is active.");
+      return new FrameLayout(context);
+    }
+
+    Activity activity = context.getCurrentActivity();
+    if (activity == null) activity = getActivity(context);
+    if (activity == null) {
+      Log.e(TAG, "createViewInstance: no Activity available, cannot initialize FibriChecker");
+      return new FrameLayout(context);
     }
 
     FrameLayout rootLayout = new FrameLayout(context);
@@ -147,14 +151,6 @@ public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
     graphView = createGraphView(context);
     rootLayout.addView(graphView);
 
-    Activity activity = context.getCurrentActivity();
-    if (activity == null) {
-      activity = getActivity(context);
-    }
-    if (activity == null) {
-      Log.e(TAG, "createViewInstance: no Activity available, cannot initialize FibriChecker");
-      throw new IllegalStateException("Cannot initialize FibriCheck without an Android Activity.");
-    }
     sharedState.rootLayout = rootLayout;
     sharedState.previewContainer = previewContainer;
     fibriChecker = new FibriChecker.FibriBuilder(activity, previewContainer).build();
@@ -252,20 +248,19 @@ public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
       }
     });
 
-    return rootLayout;
-  }
+    RNCameraPreviewView.PreviewFrameLayout previewOwner = sharedState.sharedPreviewOwner;
+    if (previewOwner != null) previewOwner.bindSharedPreview(previewContainer);
 
-  @Override public Map<String, Integer> getCommandsMap() {
-    final Map<String, Integer> returnMap = new HashMap<>();
-    returnMap.put(COMMAND_START_MEASUREMENT_STRING, COMMAND_START_MEASUREMENT_INT);
-    returnMap.put(COMMAND_START_RECORDING_STRING, COMMAND_START_RECORDING_INT);
-    returnMap.put(COMMAND_RESET_MODULE_STRING, COMMAND_RESET_MODULE_INT);
-    return returnMap;
+    return rootLayout;
   }
 
   @Override
   public void receiveCommand(@NonNull FrameLayout view, @NonNull String commandId, @Nullable ReadableArray args) {
     Assertions.assertNotNull(args);
+    if (sharedState.rootLayout != view) {
+      Log.e(TAG, "Ignoring command for an inactive FibriCheck view: " + commandId);
+      return;
+    }
 
     Log.i(TAG, "Received command: " + commandId);
     switch (commandId) {
@@ -297,77 +292,92 @@ public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
   // https://facebook.github.io/react-native/docs/native-components-android.html#3-expose-view-property-setters-using-reactprop-or-reactpropgroup-annotation
   @ReactProp(name = "drawGraph")
   public void setDrawGraph(View view, boolean drawGraph) {
+    if (sharedState.rootLayout != view) return;
     drawGraphPoints = drawGraph;
   }
 
   @ReactProp(name = "drawBackground")
   public void setDrawBackground(View view, boolean drawBackground) {
+    if (sharedState.rootLayout != view) return;
     series.setDrawBackground(drawBackground);
   }
 
   @ReactProp(name = "lineColor", customType = "Color")
   public void setLineColor(View view, @Nullable Integer lineColor) {
+    if (sharedState.rootLayout != view) return;
      series.setColor(lineColor != null ? lineColor : Color.BLUE);
   }
 
   @ReactProp(name = "lineThickness")
   public void setLineThickness(View view, int lineThickness) {
+    if (sharedState.rootLayout != view) return;
      series.setThickness(lineThickness);
   }
 
   @ReactProp(name = "graphBackgroundColor", customType = "Color")
   public void setGraphBackgroundColor(View view, @Nullable Integer graphBackgroundColor) {
+    if (sharedState.rootLayout != view) return;
      series.setBackgroundColor(graphBackgroundColor != null ? graphBackgroundColor : Color.TRANSPARENT);
   }
 
   @ReactProp(name = "sampleTime")
   public void setSampleTime(View view, int sampleTime) {
+    if (sharedState.rootLayout != view) return;
     fibriChecker.sampleTime = sampleTime;
     Log.i(TAG, "Sampletime set to: " + sampleTime);
   }
 
   @ReactProp(name = "accEnabled")
   public void setAccEnabled(View view, boolean accEnabled) {
+    if (sharedState.rootLayout != view) return;
     fibriChecker.accEnabled = accEnabled;
   }
 
   @ReactProp(name = "fingerDetectionExpiryTime")
   public void setFingerDetectionExpiryTime(View view, int fingerDetectionExpiryTime) {
+    if (sharedState.rootLayout != view) return;
     fibriChecker.fingerDetectionExpiryTime = fingerDetectionExpiryTime;
   }
 
   @ReactProp(name = "pulseDetectionExpiryTime")
   public void setPulseDetectionExpiryTime(View view, int pulseDetectionExpiryTime) {
+    if (sharedState.rootLayout != view) return;
     fibriChecker.pulseDetectionExpiryTime = pulseDetectionExpiryTime;
   }
 
   @ReactProp(name = "flashEnabled")
   public void setFlashEnabled(View view, boolean flashEnabled) {
+    if (sharedState.rootLayout != view) return;
     fibriChecker.flashEnabled = flashEnabled;
   }
 
   @ReactProp(name = "gravEnabled")
   public void setGravEnabled(View view, boolean gravEnabled) {
+    if (sharedState.rootLayout != view) return;
     fibriChecker.gravEnabled = gravEnabled;
   }
 
   @ReactProp(name = "gyroEnabled")
   public void setGyroEnabled(View view, boolean gyroEnabled) {
+    if (sharedState.rootLayout != view) return;
     fibriChecker.gyroEnabled = gyroEnabled;
   }
 
   @ReactProp(name = "movementDetectionEnabled")
   public void setMovementDetectionEnabled(View view, boolean movementDetectionEnabled) {
+    if (sharedState.rootLayout != view) return;
     fibriChecker.movementDetectionEnabled = movementDetectionEnabled;
   }
 
   @ReactProp(name = "rotationEnabled")
   public void setRotationEnabled(View view, boolean rotationEnabled) {
+    if (sharedState.rootLayout != view) return;
     fibriChecker.rotationEnabled = rotationEnabled;
   }
 
   @ReactProp(name = "waitForStartRecordingSignal")
   public void setWaitForStartRecordingSignal(View view, boolean waitForStartRecordingSignal) {
+    if (sharedState.rootLayout != view) return;
     fibriChecker.waitForStartRecordingSignal = waitForStartRecordingSignal;
   }
   //endregion
@@ -376,6 +386,7 @@ public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
   protected void onAfterUpdateTransaction(@NonNull FrameLayout view) {
 
     super.onAfterUpdateTransaction(view);
+    if (sharedState.rootLayout != view) return;
     // This will be called when all the props are set
     fibriChecker.initializeListeners();
   }
@@ -480,8 +491,8 @@ public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
 
   @Override
   public void onDropViewInstance(@NonNull FrameLayout view) {
-    if (fibriChecker != null) fibriChecker.stop();
     if (sharedState.rootLayout == view) {
+      if (fibriChecker != null) fibriChecker.stop();
       sharedState.previewContainer = null;
       sharedState.rootLayout = null;
     }

@@ -3,22 +3,24 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol FibriCheckViewDelegate <NSObject>
-- (void) fibriCheckViewDidSetSampleTime;
-- (void) fibriCheckViewDidSetGrav;
-- (void) fibriCheckViewDidSetFlash;
-- (void) fibriCheckViewDidSetGyro;
-- (void) fibriCheckViewDidSetAcc;
-- (void) fibriCheckViewDidSetRotation;
-- (void) fibriCheckViewDidSetMovementDetection;
-- (void) fibriCheckViewDidSetFingerDetectionExpiryTime;
-- (void) fibriCheckViewDidSetPulseDetectionExpiryTime;
+@class RNTFibriCheckView;
 
-- (void) fibriCheckViewDidSetWaitForStartRecordingSignal;
+@protocol FibriCheckViewDelegate <NSObject>
+- (void) fibriCheckViewDidSetSampleTime:(NSInteger)value;
+- (void) fibriCheckViewDidSetGrav:(BOOL)value;
+- (void) fibriCheckViewDidSetFlash:(BOOL)value;
+- (void) fibriCheckViewDidSetGyro:(BOOL)value;
+- (void) fibriCheckViewDidSetAcc:(BOOL)value;
+- (void) fibriCheckViewDidSetRotation:(BOOL)value;
+- (void) fibriCheckViewDidSetMovementDetection:(BOOL)value;
+- (void) fibriCheckViewDidSetFingerDetectionExpiryTime:(NSInteger)value;
+- (void) fibriCheckViewDidSetPulseDetectionExpiryTime:(NSInteger)value;
+
+- (void) fibriCheckViewDidSetWaitForStartRecordingSignal:(BOOL)value;
 - (void) startMeasurement;
 - (void) startRecording;
 - (void) stopCamera;
-- (void) fibriCheckViewDidMoveToWindow:(nullable UIWindow *)window;
+- (void) fibriCheckView:(RNTFibriCheckView *)view didMoveToWindow:(nullable UIWindow *)window;
 @end
 
 @interface RNTFibriCheckView : UIView {
@@ -73,6 +75,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, retain, nullable) NSMutableArray *points;
 
 -(void) addPoint:(NSNumber *) newPoint;
+-(void) resetGraph;
 
 @end
 

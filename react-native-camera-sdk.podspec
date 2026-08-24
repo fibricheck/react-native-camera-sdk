@@ -17,7 +17,9 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/fibricheck/react-native-camera-sdk.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,mm,swift}"
-  s.dependency 'FibriCheckCameraSDK', '>= 1.1.0'
+  # RNFibriCheckCameraSessionPatch.m targets the 1.1.0 camera-session implementation exactly.
+  # Keep this pinned until the serialization fix is released by the native SDK.
+  s.dependency 'FibriCheckCameraSDK', '1.1.0'
   s.requires_arc = true
 
   # Fabric components (ios/RCTFibriCheck/Fabric) need the Codegen-generated headers/dependencies;
@@ -29,4 +31,3 @@ Pod::Spec.new do |s|
     s.dependency "React-Core"
   end
 end
-

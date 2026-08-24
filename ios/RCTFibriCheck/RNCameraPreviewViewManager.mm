@@ -57,8 +57,6 @@ static __weak RNCameraPreviewUIView *_standalonePreviewOwner = nil;
 }
 
 - (void)activatePreview {
-  if (self.previewLayer) return;
-
   FibriChecker *sharedChecker = [RNTFibriCheckViewController sharedFibriChecker];
   if (sharedChecker) {
     // Shared mode: the session is already running — just attach a preview layer.
@@ -69,6 +67,9 @@ static __weak RNCameraPreviewUIView *_standalonePreviewOwner = nil;
       RCTLogWarn(@"[RNCameraPreviewView] captureSession unavailable on shared FibriChecker");
       return;
     }
+    if (self.previewLayer.session == session) return;
+    [self.previewLayer removeFromSuperlayer];
+    self.previewLayer = nil;
     [self attachPreviewLayerToSession:session];
   } else {
     // Standalone mode: no RNFibriCheckView present — own the FibriChecker instance.
@@ -76,6 +77,9 @@ static __weak RNCameraPreviewUIView *_standalonePreviewOwner = nil;
       RCTLogError(@"[RNCameraPreviewView] Only one standalone camera preview is supported.");
       return;
     }
+    if (self.ownFibriChecker && self.previewLayer) return;
+    [self.previewLayer removeFromSuperlayer];
+    self.previewLayer = nil;
     _standalonePreviewOwner = self;
     self.ownFibriChecker = [FibriChecker new];
     [self.ownFibriChecker startPreview];

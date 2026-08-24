@@ -20,4 +20,5 @@ class FibriCheckSharedState {
   volatile FrameLayout previewContainer;
   volatile FrameLayout rootLayout;
   volatile RNCameraPreviewView.PreviewFrameLayout standalonePreviewOwner;
+  volatile RNCameraPreviewView.PreviewFrameLayout sharedPreviewOwner;
 }

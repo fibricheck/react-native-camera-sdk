@@ -24,6 +24,7 @@ static __weak RNTFibriCheckViewController *_sharedFibriCheckerOwner;
 @implementation RNTFibriCheckViewController {
   BOOL _active;
   BOOL _idleTimerWasDisabled;
+  __weak RNTFibriCheckView *_managedView;
 }
 
 // React Native embeds this controller's view without UIKit view-controller containment, so the
@@ -33,14 +34,17 @@ static __weak RNTFibriCheckViewController *_sharedFibriCheckerOwner;
   return _sharedFibriChecker;
 }
 
-- (void)fibriCheckViewDidSetSampleTime {
-    NSInteger sampleTime = ((RNTFibriCheckView*)self.view).sampleTime;
-    _fibrichecker.sampleTime = sampleTime;
+- (void)fibriCheckViewDidSetSampleTime:(NSInteger)value {
+    _fibrichecker.sampleTime = value;
 }
 
-- (void)fibriCheckViewDidMoveToWindow:(UIWindow *)window {
+- (void)fibriCheckView:(RNTFibriCheckView *)view didMoveToWindow:(UIWindow *)window {
   if (!self.legacyManaged) return;
+  _managedView = view;
   if (window) {
+    // A Paper view can detach temporarily without being unmounted. invalidate breaks the
+    // controller -> view half of the retain cycle, so restore that same view on reattachment.
+    if (self.view != view) self.view = view;
     [self activate];
   } else if (_active) {
     [self invalidate];
@@ -50,49 +54,40 @@ static __weak RNTFibriCheckViewController *_sharedFibriCheckerOwner;
   }
 }
 
-- (void)fibriCheckViewDidSetFlash {
-    BOOL flashEnabled = ((RNTFibriCheckView*)self.view).flashEnabled;
-    _fibrichecker.flashEnabled = flashEnabled;
+- (void)fibriCheckViewDidSetFlash:(BOOL)value {
+    _fibrichecker.flashEnabled = value;
 }
 
-- (void)fibriCheckViewDidSetGrav {
-    BOOL gravEnabled = ((RNTFibriCheckView*)self.view).gravEnabled;
-    _fibrichecker.gravEnabled = gravEnabled;
+- (void)fibriCheckViewDidSetGrav:(BOOL)value {
+    _fibrichecker.gravEnabled = value;
 }
 
-- (void)fibriCheckViewDidSetGyro {
-    BOOL gyroEnabled = ((RNTFibriCheckView*)self.view).gyroEnabled;
-    _fibrichecker.gyroEnabled = gyroEnabled;
+- (void)fibriCheckViewDidSetGyro:(BOOL)value {
+    _fibrichecker.gyroEnabled = value;
 }
 
-- (void)fibriCheckViewDidSetAcc {
-    BOOL accEnabled = ((RNTFibriCheckView*)self.view).accEnabled;
-    _fibrichecker.accEnabled = accEnabled;
+- (void)fibriCheckViewDidSetAcc:(BOOL)value {
+    _fibrichecker.accEnabled = value;
 }
 
-- (void)fibriCheckViewDidSetRotation {
-    BOOL rotationEnabled = ((RNTFibriCheckView*)self.view).rotationEnabled;
-    _fibrichecker.rotationEnabled = rotationEnabled;
+- (void)fibriCheckViewDidSetRotation:(BOOL)value {
+    _fibrichecker.rotationEnabled = value;
 }
 
-- (void)fibriCheckViewDidSetMovementDetection {
-    BOOL movementDetectionEnabled = ((RNTFibriCheckView*)self.view).movementDetectionEnabled;
-    _fibrichecker.movementDetectionEnabled = movementDetectionEnabled;
+- (void)fibriCheckViewDidSetMovementDetection:(BOOL)value {
+    _fibrichecker.movementDetectionEnabled = value;
 }
 
-- (void)fibriCheckViewDidSetFingerDetectionExpiryTime {
-    NSInteger fingerDetectionExpiryTime = ((RNTFibriCheckView*)self.view).fingerDetectionExpiryTime;
-    _fibrichecker.fingerDetectionExpiryTime = fingerDetectionExpiryTime;
+- (void)fibriCheckViewDidSetFingerDetectionExpiryTime:(NSInteger)value {
+    _fibrichecker.fingerDetectionExpiryTime = value;
 }
 
-- (void)fibriCheckViewDidSetPulseDetectionExpiryTime {
-    NSInteger pulseDetectionExpiryTime = ((RNTFibriCheckView*)self.view).pulseDetectionExpiryTime;
-    _fibrichecker.pulseDetectionExpiryTime = pulseDetectionExpiryTime;
+- (void)fibriCheckViewDidSetPulseDetectionExpiryTime:(NSInteger)value {
+    _fibrichecker.pulseDetectionExpiryTime = value;
 }
 
-- (void)fibriCheckViewDidSetWaitForStartRecordingSignal {
-    BOOL waitForStartRecordingSignal = ((RNTFibriCheckView*)self.view).waitForStartRecordingSignal;
-    _fibrichecker.waitForStartRecordingSignal = waitForStartRecordingSignal;
+- (void)fibriCheckViewDidSetWaitForStartRecordingSignal:(BOOL)value {
+    _fibrichecker.waitForStartRecordingSignal = value;
 }
 
 - (void)startMeasurement {
@@ -148,6 +143,7 @@ static __weak RNTFibriCheckViewController *_sharedFibriCheckerOwner;
 }
 
 - (void)emitEvent:(RNTFibriCheckEvent)event body:(NSDictionary *)body {
+  if (!_active) return;
   id<RNTFibriCheckEventDelegate> delegate = self.eventDelegate;
   if (delegate) [delegate fibriCheckViewController:self emitEvent:event body:body ?: @{}];
 }
@@ -166,12 +162,14 @@ static __weak RNTFibriCheckViewController *_sharedFibriCheckerOwner;
 - (void)loadView {
     RNTFibriCheckView *customView = [[RNTFibriCheckView alloc] init];
     customView.delegate = self;
+    _managedView = customView;
     self.view = customView;
 }
 
 - (void)drawGraphPoint:(double)value {
   dispatch_async(dispatch_get_main_queue(), ^{
-    RNTFibriCheckView *view = (RNTFibriCheckView *)self.view;
+    RNTFibriCheckView *view = self->_managedView;
+    if (!view) return;
     [view addPoint:[NSNumber numberWithDouble:value]];
     [view setNeedsDisplay];
   });
@@ -204,7 +202,8 @@ static __weak RNTFibriCheckViewController *_sharedFibriCheckerOwner;
   };
 
   self.fibrichecker.onSampleReady = ^(double ppg, double raw) {
-    BOOL drawGraph = ((RNTFibriCheckView*)weakSelf.view).drawGraph;
+    RNTFibriCheckView *view = weakSelf ? weakSelf->_managedView : nil;
+    BOOL drawGraph = view.drawGraph;
     if(drawGraph) [weakSelf drawGraphPoint:ppg];
     NSDictionary *data = @{@"ppg":[NSNumber numberWithFloat:ppg], @"raw":[NSNumber numberWithFloat:raw]};
     dispatch_async(dispatch_get_main_queue(), ^{

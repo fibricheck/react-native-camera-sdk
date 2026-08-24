@@ -47,11 +47,6 @@ static NSString *_Nullable RNTHexStringFromSharedColor(const SharedColor &shared
   RNTFibriCheckViewController *_controller;
 }
 
-+ (void)load
-{
-  [super load];
-}
-
 + (ComponentDescriptorProvider)componentDescriptorProvider
 {
   return facebook::react::concreteComponentDescriptorProvider<
@@ -205,8 +200,9 @@ static NSString *_Nullable RNTHexStringFromSharedColor(const SharedColor &shared
 
 - (void)prepareForRecycle
 {
-  [super prepareForRecycle];
   [_controller invalidate];
+  [self.fibriCheckView resetGraph];
+  [super prepareForRecycle];
 }
 
 @end
