@@ -40,6 +40,7 @@ public class RNCameraPreviewView extends SimpleViewManager<RNCameraPreviewView.P
     private final FibriCheckSharedState sharedState;
     private boolean isStandaloneMode = false;
     private FibriChecker ownFibriChecker;
+    private FrameLayout sharedPreviewContainer;
 
     public PreviewFrameLayout(Context context, FibriCheckSharedState sharedState) {
       super(context);
@@ -51,17 +52,13 @@ public class RNCameraPreviewView extends SimpleViewManager<RNCameraPreviewView.P
       super.onAttachedToWindow();
       FrameLayout previewContainer = sharedState.previewContainer;
       if (previewContainer != null) {
-        // Shared mode: RNFibriCheckView is mounted — steal its TextureView container.
-        // It may already be parented to RNFibriCheck's rootLayout, so detach it first.
-        ViewParent currentParent = previewContainer.getParent();
-        if (currentParent instanceof android.view.ViewGroup) {
-          ((android.view.ViewGroup) currentParent).removeView(previewContainer);
-        }
-        addView(previewContainer, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+        sharedState.sharedPreviewOwner = this;
+        bindSharedPreview(previewContainer);
       } else {
         // Standalone mode: no RNFibriCheckView present — own the FibriChecker instance.
         if (sharedState.standalonePreviewOwner != null && sharedState.standalonePreviewOwner != this) {
-          throw new IllegalStateException("Only one standalone FibriCheckCameraPreview is supported per React Native instance.");
+          Log.e(TAG, "Only one standalone FibriCheckCameraPreview is supported per React Native instance.");
+          return;
         }
         Activity activity = getActivity(getContext());
         if (activity == null) {
@@ -90,14 +87,31 @@ public class RNCameraPreviewView extends SimpleViewManager<RNCameraPreviewView.P
         isStandaloneMode = false;
       } else {
         // Return previewContainer to rootLayout so FibriChecker retains its camera surface.
-        FrameLayout previewContainer = sharedState.previewContainer;
+        FrameLayout previewContainer = sharedPreviewContainer;
         FrameLayout root = sharedState.rootLayout;
-        if (previewContainer != null && root != null) {
+        if (previewContainer != null && previewContainer == sharedState.previewContainer && root != null) {
           removeView(previewContainer);
           root.addView(previewContainer, 0, new FrameLayout.LayoutParams(1, 1));
         }
+        sharedPreviewContainer = null;
+        if (sharedState.sharedPreviewOwner == this) {
+          sharedState.sharedPreviewOwner = null;
+        }
       }
       super.onDetachedFromWindow();
+    }
+
+    void bindSharedPreview(FrameLayout previewContainer) {
+      if (sharedPreviewContainer == previewContainer) return;
+      if (sharedPreviewContainer != null && sharedPreviewContainer.getParent() == this) {
+        removeView(sharedPreviewContainer);
+      }
+      ViewParent currentParent = previewContainer.getParent();
+      if (currentParent instanceof android.view.ViewGroup) {
+        ((android.view.ViewGroup) currentParent).removeView(previewContainer);
+      }
+      sharedPreviewContainer = previewContainer;
+      addView(previewContainer, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
     }
 
     private static Activity getActivity(Context context) {

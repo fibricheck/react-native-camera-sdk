@@ -75,7 +75,7 @@ const FibriCheckView = Object.assign(
   forwardRef<FibriCheckViewHandle, FibriCheckViewProps>(({
   style = {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: 'transparent',
   },
 
   autoStart = true,

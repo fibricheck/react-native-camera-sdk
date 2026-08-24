@@ -19,11 +19,6 @@ using namespace facebook::react;
   UIView<RNCameraPreviewLifecycle> *_previewView;
 }
 
-+ (void)load
-{
-  [super load];
-}
-
 + (ComponentDescriptorProvider)componentDescriptorProvider
 {
   return facebook::react::concreteComponentDescriptorProvider<

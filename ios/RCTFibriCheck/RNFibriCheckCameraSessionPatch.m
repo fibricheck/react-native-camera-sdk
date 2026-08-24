@@ -1,12 +1,11 @@
-#import "FibriCheckerComponent.h"
 #import <FibriCheckCameraSDK/MeasurementController.h>
 #import <AVFoundation/AVFoundation.h>
 #import <objc/runtime.h>
 
-// FibriCheckCameraSDK 1.1.0 initializes AVCaptureSession on the caller's thread and starts it
-// asynchronously. A rapid preview remount can therefore call startRunning while the session is
-// still between beginConfiguration and commitConfiguration. Keep this compatibility fix local to
-// that exact native version; later SDKs contain the serialized implementation themselves.
+// FibriCheckCameraSDK 1.1.0 initializes AVCaptureSession on the caller's thread while stopCamera
+// tears it down synchronously on dispatchQueue. A rapid remount can therefore start and stop the
+// same session concurrently. The podspec is pinned to 1.1.0 while this compatibility patch is in
+// place; remove both the pin and this file once the fix is available in the native SDK.
 @interface MeasurementController (RNFibriCheckCameraSessionPatchPrivate)
 @property (nonatomic, readonly) dispatch_queue_t dispatchQueue;
 @property (nonatomic, readonly) AVCaptureSession *session;
@@ -44,8 +43,6 @@
 @implementation RNFibriCheckCameraSessionPatchLoader
 
 + (void)load {
-  if (![[FibriChecker sdkVersion] isEqualToString:@"1.1.0"]) return;
-
   Method original = class_getInstanceMethod(MeasurementController.class, @selector(startCamera));
   Method replacement = class_getInstanceMethod(MeasurementController.class, @selector(rnfc_startCamera));
   if (original && replacement) {
