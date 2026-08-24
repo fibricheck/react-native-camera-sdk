@@ -35,7 +35,15 @@ Apps using React Native below 0.73 or an older platform target should remain on 
 
 RN 0.87 is the newest version tested for this release, not an installation ceiling. The package's peer dependency intentionally has no upper bound, so newer React Native versions can install it; versions newer than the tested matrix should be validated in the consuming app before release.
 
-Only one `RNFibriCheckView` measurement component may be mounted at a time. A measurement may be combined with one `RNCameraPreviewView` in shared mode, provided the measurement component is mounted first. A standalone preview cannot be converted to shared mode after it has mounted and cannot be active at the same time as a measurement. Only one standalone preview may be mounted at once. These constraints prevent component instances from competing for the device camera.
+Only one `RNFibriCheckView` measurement component may be mounted at a time. On iOS, a measurement may be combined with one `RNCameraPreviewView` in shared mode, provided the measurement component is mounted first. A standalone preview cannot be converted to shared mode after it has mounted and cannot be active at the same time as a measurement. Only one standalone preview may be mounted at once. Android preview is disabled for this release.
+
+#### Android/iOS feature parity
+
+This release pins `android-camera-sdk` to v1.0.2 (see `android/build.gradle`) instead of the newer v1.1.x line, because issues found in v1.1.x during testing couldn't be fixed in time for this release. Until Android moves back onto v1.1.x, Android is behind iOS on:
+
+- No `camera_settings` at all in the `onMeasurementProcessed` payload (`exposure_mode`, `hdr_profile`, `hdr_mode`, `focus_mode`, `focus`, `white_balance`). iOS reports these.
+- No `technicalDetails.camera_hdr`. iOS reports this; `camera_hardware_level` and `camera_resolution` are still reported on both platforms.
+- `RNCameraPreviewView` (standalone/shared camera preview) is disabled on Android and renders an empty native view. It remains available on iOS.
 
 To install the Camera SDK, you will need to have access to the [Camera SDK git repository](https://github.com/fibricheck/react-native-camera-sdk).
 
@@ -149,7 +157,9 @@ When the permissions are all set up, you can implement the FibriCheck component 
 
 ## Camera Preview
 
-The SDK exposes an `RNCameraPreviewView` component that renders a live camera viewfinder without requiring a full measurement flow. It operates in two modes that are selected automatically based on whether `RNFibriCheckView` is mounted at the same time — no extra configuration is needed.
+`RNCameraPreviewView` is supported on iOS only in this release. On Android, where the native camera SDK is pinned to v1.0.2, it is registered as a no-op component that renders an empty view and never opens the camera.
+
+On iOS, the component renders a live camera viewfinder without requiring a full measurement flow. It operates in two modes that are selected automatically based on whether `RNFibriCheckView` is mounted at the same time — no extra configuration is needed.
 
 ### Standalone mode
 
@@ -186,11 +196,9 @@ Mount `RNFibriCheckView` before `RNCameraPreviewView` when using shared mode. Mo
 
 ### How it works internally
 
-**iOS:** In standalone mode the component calls `startPreview` on a dedicated `FibriChecker` instance, which opens the camera without collecting PPG data. In shared mode it attaches to the `AVCaptureSession` that `RNFibriCheckView` already holds.
+On iOS, standalone mode calls `startPreview` on a dedicated `FibriChecker` instance, which opens the camera without collecting PPG data. Shared mode attaches to the `AVCaptureSession` that `RNFibriCheckView` already holds.
 
-**Android:** `RNFibriCheckView` keeps its `TextureView` container in the view hierarchy at all times (behind its graph overlay) so that the camera surface remains valid. When `RNCameraPreviewView` mounts in shared mode, it takes ownership of that container and displays it. When `RNCameraPreviewView` unmounts, the container is returned to `RNFibriCheckView` so the measurement can continue uninterrupted.
-
-> **Important:** Do not mount `RNCameraPreviewView` in standalone mode and `RNFibriCheckView` simultaneously. Both would attempt to open the camera independently, so the SDK rejects this combination.
+> **Important (iOS):** Do not mount `RNCameraPreviewView` in standalone mode and `RNFibriCheckView` simultaneously. Both would attempt to open the camera independently, so the SDK rejects this combination.
 
 # Update Dependencies
 

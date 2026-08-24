@@ -126,11 +126,6 @@ public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
       Log.e(TAG, "Only one mounted FibriCheck measurement view is supported per React Native instance.");
       return new FrameLayout(context);
     }
-    if (sharedState.standalonePreviewOwner != null) {
-      Log.e(TAG, "Cannot mount FibriCheck while a standalone FibriCheckCameraPreview is active.");
-      return new FrameLayout(context);
-    }
-
     Activity activity = context.getCurrentActivity();
     if (activity == null) activity = getActivity(context);
     if (activity == null) {
@@ -144,7 +139,7 @@ public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
     valueSR = new ArrayList<>();
 
     // previewContainer must be in the view hierarchy so FibriChecker's TextureView gets a SurfaceTexture.
-    // Kept at 1x1 so it is invisible; RNCameraPreviewView reparents it when operating in standalone mode.
+    // Keep it at 1x1 so it remains invisible. Android preview is disabled while using camera SDK 1.0.2.
     FrameLayout previewContainer = new FrameLayout(context);
     previewContainer.setLayoutParams(new FrameLayout.LayoutParams(1, 1));
     rootLayout.addView(previewContainer);
@@ -197,12 +192,12 @@ public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
           sendEvent(rootLayout, EVENT_TIME_REMAINING, event);
       }
 
-      @Override public void onMeasurementFinished(long timestamp) {
+      @Override public void onMeasurementFinished() {
         WritableMap event = Arguments.createMap();
         sendEvent(rootLayout, EVENT_MEASUREMENT_FINISHED, event);
       }
 
-      @Override public void onMeasurementStart(long timestamp) {
+      @Override public void onMeasurementStart() {
         WritableMap event = Arguments.createMap();
         sendEvent(rootLayout, EVENT_MEASUREMENT_START, event);
       }
@@ -248,9 +243,6 @@ public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
           sendEvent(rootLayout, EVENT_MEASUREMENT_ERROR, event);
       }
     });
-
-    RNCameraPreviewView.PreviewFrameLayout previewOwner = sharedState.sharedPreviewOwner;
-    if (previewOwner != null) previewOwner.bindSharedPreview(previewContainer);
 
     return rootLayout;
   }

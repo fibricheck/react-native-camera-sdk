@@ -16,6 +16,7 @@ import { CameraSettingsModal } from './components/CameraSettingsModal';
 import { StepRow } from './components/StepRow';
 import { ControlButton } from './components/ControlButton';
 import { validateMeasurement } from './utils/validateMeasurement';
+import { cameraSdkExpiryTime } from './utils/cameraSdkExpiryTime';
 
 const scrollPadding = 20;
 
@@ -177,6 +178,8 @@ export default function App() {
       pulseDetectionExpiryTime: 30, // 30 seconds — pulse detection can take a while
     };
   })();
+  const nativeFingerDetectionExpiryTime = cameraSdkExpiryTime(fingerDetectionExpiryTime, Platform.OS);
+  const nativePulseDetectionExpiryTime = cameraSdkExpiryTime(pulseDetectionExpiryTime, Platform.OS);
 
   // Event handlers
   const onFingerDetected = useCallback(() => {
@@ -416,8 +419,8 @@ export default function App() {
                 gyroEnabled={gyroEnabled}
                 gravEnabled={gravEnabled}
                 rotationEnabled={rotationEnabled}
-                fingerDetectionExpiryTime={fingerDetectionExpiryTime}
-                pulseDetectionExpiryTime={pulseDetectionExpiryTime}
+                fingerDetectionExpiryTime={nativeFingerDetectionExpiryTime}
+                pulseDetectionExpiryTime={nativePulseDetectionExpiryTime}
                 onFingerDetected={onFingerDetected}
                 onFingerRemoved={onFingerRemoved}
                 onCalibrationReady={onCalibrationReady}
@@ -434,9 +437,12 @@ export default function App() {
                 onMeasurementError={onMeasurementError}
               />
             </View>
-            <View style={styles.cameraOverlay}>
-              <RNCameraPreviewView style={styles.cameraView} />
-            </View>
+            {/* Android preview is disabled while android-camera-sdk is pinned to v1.0.2. */}
+            {Platform.OS === 'ios' && (
+              <View style={styles.cameraOverlay}>
+                <RNCameraPreviewView style={styles.cameraView} />
+              </View>
+            )}
           </>
         )}
 

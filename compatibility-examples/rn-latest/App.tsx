@@ -92,12 +92,14 @@ export default function App(): React.JSX.Element {
             label="Measurement"
             onPress={() => switchMode('measurement')}
           />
-          <ModeButton
-            active={isPreview}
-            disabled={mode === null}
-            label="Camera preview"
-            onPress={() => switchMode('preview')}
-          />
+          {Platform.OS === 'ios' && (
+            <ModeButton
+              active={isPreview}
+              disabled={mode === null}
+              label="Camera preview"
+              onPress={() => switchMode('preview')}
+            />
+          )}
         </View>
 
         <View style={styles.cameraCard}>
@@ -129,8 +131,13 @@ export default function App(): React.JSX.Element {
                 }
                 onMeasurementError={error => setStatus('Error: ' + error)}
               />
-            ) : (
+            ) : Platform.OS === 'ios' ? (
               <RNCameraPreviewView style={styles.fill} />
+            ) : (
+              <EmptyState
+                icon="!"
+                message="Camera preview is unavailable on Android in this release."
+              />
             )}
           </View>
         </View>

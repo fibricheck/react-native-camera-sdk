@@ -2,7 +2,7 @@
   "version": "v1",
   "packages": {
     "@fibricheck/react-native-camera-sdk": {
-      "signature": "ecf44914cb9a6992b77124346920686e",
+      "signature": "c1ccc5e2abb31168fa67ea759a806633",
       "file": true
     }
   }

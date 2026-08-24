@@ -55,7 +55,11 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation('com.github.fibricheck:android-camera-sdk:v1.1.1') {
+    // Pinned below v1.1.0: v1.1.x introduced regressions found during testing and the
+    // timeline didn't allow a fix. This means Android lacks camera_settings (exposure_mode,
+    // hdr_profile, hdr_mode, focus_mode, focus, white_balance) and technicalDetails.camera_hdr,
+    // which iOS already reports. Revert once the upstream issues are resolved.
+    implementation('com.github.fibricheck:android-camera-sdk:v1.0.2') {
         // core-ktx 1.15 requires compileSdk 35. Keep consumers on older RN/AGP
         // templates (such as RN 0.73 with compileSdk 34) buildable.
         exclude group: 'androidx.core', module: 'core-ktx'
