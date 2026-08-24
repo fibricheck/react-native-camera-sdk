@@ -41,7 +41,7 @@ export function validateMeasurement(data: CameraData, config: SensorConfig): str
     const isAdvancedCamera2 = hwLevel !== 'camera2 - legacy' && hwLevel !== 'camera2 - limited';
     if (isAdvancedCamera2) {
       if (!settings.focus_mode) return 'camera_settings.focus_mode is missing';
-      if (settings.focus == null) return 'camera_settings.focus is missing';
+      if (!Array.isArray(settings.focus)) return 'camera_settings.focus is missing or has an invalid format';
       if (!settings.white_balance) return 'camera_settings.white_balance is missing';
     }
   }

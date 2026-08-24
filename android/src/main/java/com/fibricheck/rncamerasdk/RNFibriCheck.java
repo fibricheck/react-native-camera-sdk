@@ -33,10 +33,14 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import com.qompium.fibricheck.camerasdk.FibriChecker;
 import com.qompium.fibricheck.camerasdk.listeners.FibriListener;
 import com.qompium.fibricheck.camerasdk.measurement.MeasurementData;
+import com.qompium.fibricheck.camerasdk.models.CameraSettingMode;
+import com.qompium.fibricheck.camerasdk.models.CameraSettingsInfo;
+import com.qompium.fibricheck.camerasdk.models.CameraSettingsInput;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -155,6 +159,18 @@ public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
     sharedState.rootLayout = rootLayout;
     sharedState.previewContainer = previewContainer;
     fibriChecker = new FibriChecker.FibriBuilder(activity, previewContainer).build();
+    CameraSettingsInput cameraSettings = new CameraSettingsInput();
+    // internal_manualFocus maps to Camera2's LENS_FOCUS_DISTANCE, which is in diopters:
+    // 0 is infinity, and the closest focusable distance is device-specific (focusRange.second).
+    CameraSettingsInfo cameraInfo = fibriChecker.getCameraInfo();
+    float closestFocus = cameraInfo != null ? cameraInfo.getFocusRange().getSecond() : -1.0f;
+    if (closestFocus > 0.0f) {
+      cameraSettings.setInternal_focusMode(CameraSettingMode.Manual);
+      cameraSettings.setInternal_manualFocus(closestFocus);
+    } else {
+      Log.w(TAG, "Manual focus is not supported on this device, leaving focus in auto mode");
+    }
+    fibriChecker.setCameraSettings(cameraSettings);
     fibriChecker.setFibriListener(new FibriListener() {
 
       @Override public void onSampleReady(final double ppg, double raw) {
@@ -234,6 +250,14 @@ public class RNFibriCheck extends SimpleViewManager<FrameLayout> {
         try {
           Gson gson = new Gson();
           JSONObject jsonObject = new JSONObject(gson.toJson(measurementData));
+          if (closestFocus > 0.0f) {
+            JSONObject cameraSettingsOutput = jsonObject.optJSONObject("camera_settings");
+            if (cameraSettingsOutput != null) {
+              cameraSettingsOutput.put(
+                      "focus",
+                      new JSONArray().put(new JSONArray().put(closestFocus).put(0)));
+            }
+          }
           String measurementJson = jsonObject.toString();
           event.putString("measurement", measurementJson);
           sendEvent(rootLayout, EVENT_MEASUREMENT_PROCESSED, event);

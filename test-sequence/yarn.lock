@@ -1532,10 +1532,10 @@ __metadata:
 
 "@fibricheck/react-native-camera-sdk@file:.yalc/@fibricheck/react-native-camera-sdk::locator=test-sequence%40workspace%3A.":
   version: 1.4.1
-  resolution: "@fibricheck/react-native-camera-sdk@file:.yalc/@fibricheck/react-native-camera-sdk#.yalc/@fibricheck/react-native-camera-sdk::hash=0eb134&locator=test-sequence%40workspace%3A."
+  resolution: "@fibricheck/react-native-camera-sdk@file:.yalc/@fibricheck/react-native-camera-sdk#.yalc/@fibricheck/react-native-camera-sdk::hash=9ec374&locator=test-sequence%40workspace%3A."
   peerDependencies:
     react-native: ">=0.73.0"
-  checksum: 10c0/dd6601c8c55e03127176f9046ddb069d06fb191133ab7424db2dd8234dce9a1c1b8e6004b4ed7c54b8cec127ee96d5ea9f831bef8d3999bfbacc112dc75f3975
+  checksum: 10c0/bd0fad31750538c347ff5664e52b34faad1dba2cb49e0f6fccae7449ae71dc6b7622330731255db668fa47a2a0e525e86083cf9be2572ff3c8b825d50d6856f1
   languageName: node
   linkType: hard
 

@@ -2,6 +2,7 @@
 #import "RNCameraPreviewViewManager.h"
 #import <React/RCTLog.h>
 #import "FibriCheckerComponent.h"
+#import "CameraSettings.h"
 
 @interface RNTFibriCheckViewController ()
 @property (nonatomic, strong) FibriChecker *fibrichecker;
@@ -156,6 +157,13 @@ static __weak RNTFibriCheckViewController *_sharedFibriCheckerOwner;
                 @"in standalone mode — mount one or the other, not both simultaneously.");
   }
   self.fibrichecker = [FibriChecker new];
+  // AVCaptureDevice.lensPosition is normalized 0.0 (nearest) to 1.0 (farthest), so 0.0
+  // is the closest focus distance. CameraSettings' own -init already carries the SDK's
+  // other defaults; only override the two focus-related fields here.
+  CameraSettings *cameraSettings = [CameraSettings new];
+  cameraSettings.internal_focusMode = CameraModeManual;
+  cameraSettings.internal_manualFocus = 0.0f;
+  [self.fibrichecker setCameraSettings:cameraSettings];
   [self addListeners];
 }
 
@@ -195,6 +203,9 @@ static __weak RNTFibriCheckViewController *_sharedFibriCheckerOwner;
 
   self.fibrichecker.onMeasurementProcessed = ^(Measurement* measurement){
     RCTLogInfo(@"Measurement processed");
+    // The native SDK only emits camera_settings.focus in autofocus mode. Preserve the
+    // configured manual lens position in the exported measurement as well.
+    measurement.camera_settings[@"focus"] = @[@[@0.0f, @0]];
     NSDictionary *data = @{@"measurement":[measurement mapToJson]};
     dispatch_async(dispatch_get_main_queue(), ^{
         [weakSelf emitEvent:RNTFibriCheckEventMeasurementProcessed body:data];

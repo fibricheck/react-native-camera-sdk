@@ -37,7 +37,7 @@ const measurementData: CameraData = {
     hdr_profile: 'none',
     hdr_mode: 'off',
     focus_mode: 'auto',
-    focus: 0.5,
+    focus: [[0.5, 0]],
     white_balance: 'auto',
   } as unknown as CameraData['camera_settings'],
 } as unknown as CameraData;
@@ -195,7 +195,7 @@ describe('validateMeasurement', () => {
       hdr_profile: 'none',
       hdr_mode: 'off',
       focus_mode: 'auto',
-      focus: 0.5,
+      focus: [[0.5, 0]],
       white_balance: 'auto',
     };
 
@@ -226,6 +226,19 @@ describe('validateMeasurement', () => {
           camera_resolution: '176x144',
         } as unknown as CameraData['technicalDetails'],
         camera_settings: { ...advancedSettings, focus: null } as unknown as CameraData['camera_settings'],
+      };
+      expect(validateMeasurement(data as unknown as CameraData, noSensors)).toMatch(/focus/);
+    });
+
+    it.each(advancedLevels)('requires focus to be an array on %s hardware', hwLevel => {
+      const data = {
+        ...specificAndroidMeasurementData,
+        technicalDetails: {
+          camera_hdr: 'off',
+          camera_hardware_level: hwLevel,
+          camera_resolution: '176x144',
+        } as unknown as CameraData['technicalDetails'],
+        camera_settings: { ...advancedSettings, focus: 0.5 } as unknown as CameraData['camera_settings'],
       };
       expect(validateMeasurement(data as unknown as CameraData, noSensors)).toMatch(/focus/);
     });

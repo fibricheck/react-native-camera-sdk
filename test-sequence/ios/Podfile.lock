@@ -1335,7 +1335,7 @@ PODS:
     - ReactCommon/turbomodule/core
   - react-native-camera-sdk (1.4.1):
     - DoubleConversion
-    - FibriCheckCameraSDK (>= 1.1.0)
+    - FibriCheckCameraSDK (= 1.1.0)
     - glog
     - hermes-engine
     - RCT-Folly (= 2024.11.18.00)
@@ -2093,7 +2093,7 @@ SPEC CHECKSUMS:
   React-logger: fbdc0814b62fefa412a90af7cacc666387f1bc9a
   React-Mapbuffer: cfe4726ba1929b9dab4645c78376a9165375d62f
   React-microtasksnativemodule: c99b8f1240609566de105b73f2569c0f22880ee1
-  react-native-camera-sdk: 0608701bab803e4f217c736212c898c642a906fa
+  react-native-camera-sdk: e6cbc615e22edadccb3190f3cd1d914ea7fbe3a6
   react-native-safe-area-context: fa5e784a9cd2087af913fee5233a3c549f2e07d2
   React-NativeModulesApple: 74051ff264ce0b89ac799b56314f8f440a95ee4d
   React-oscompat: 0047f0ce53a328ce225777a6c617970556602c7c
