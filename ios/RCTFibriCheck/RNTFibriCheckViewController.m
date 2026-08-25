@@ -202,9 +202,10 @@ static __weak RNTFibriCheckViewController *_sharedFibriCheckerOwner;
   };
 
   self.fibrichecker.onSampleReady = ^(double ppg, double raw) {
-    RNTFibriCheckView *view = weakSelf ? weakSelf->_managedView : nil;
+    __strong typeof(weakSelf) strongSelf = weakSelf;
+    RNTFibriCheckView *view = strongSelf ? strongSelf->_managedView : nil;
     BOOL drawGraph = view.drawGraph;
-    if(drawGraph) [weakSelf drawGraphPoint:ppg];
+    if(drawGraph) [strongSelf drawGraphPoint:ppg];
     NSDictionary *data = @{@"ppg":[NSNumber numberWithFloat:ppg], @"raw":[NSNumber numberWithFloat:raw]};
     dispatch_async(dispatch_get_main_queue(), ^{
         [weakSelf emitEvent:RNTFibriCheckEventSampleReady body:data];
