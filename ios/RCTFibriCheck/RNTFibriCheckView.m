@@ -16,10 +16,6 @@
   self.layer.opaque = NO;
 }
 
-- (void)didSetProps:(NSArray<NSString *> *)changedProps {
-    [self.delegate startMeasurement];
-}
-
 - (id)initWithFrame:(CGRect)frame {
   self = [super initWithFrame:frame];
   if (self) {
@@ -27,13 +23,19 @@
     self.stepIncrement = 2.5;
     self.verticalOffset = 6;
     self.opaque = NO;
+    self.backgroundColor = [UIColor clearColor];
   }
   return self;
 }
 
+- (void)didMoveToWindow {
+  [super didMoveToWindow];
+  [self.delegate fibriCheckView:self didMoveToWindow:self.window];
+}
+
 - (void)drawRect:(CGRect)rect {
   CGContextClearRect(UIGraphicsGetCurrentContext(), rect);
-  if(self.graphBackgroundColor) {
+  if(self.drawBackground && self.graphBackgroundColor) {
     [self drawGraphArea];
   }
   [self drawGraphLine];
@@ -133,54 +135,63 @@
   }
 }
 
-- (void)setSampleTime:(NSInteger *)sampleTime {
+-(void) resetGraph {
+  [_points removeAllObjects];
+  min = 0;
+  max = 0;
+  delta = 1;
+  index = 0;
+  [self setNeedsDisplay];
+}
+
+- (void)setSampleTime:(NSInteger)sampleTime {
     _sampleTime = sampleTime;
-    [self.delegate fibriCheckViewDidSetSampleTime];
+    [self.delegate fibriCheckViewDidSetSampleTime:sampleTime];
 }
 
 - (void)setFlashEnabled:(BOOL)flashEnabled {
     _flashEnabled = flashEnabled;
-    [self.delegate fibriCheckViewDidSetFlash];
+    [self.delegate fibriCheckViewDidSetFlash:flashEnabled];
 }
 
 - (void)setGravEnabled:(BOOL)gravEnabled {
     _gravEnabled = gravEnabled;
-    [self.delegate fibriCheckViewDidSetGrav];
+    [self.delegate fibriCheckViewDidSetGrav:gravEnabled];
 }
 
 - (void)setGyroEnabled:(BOOL)gyroEnabled {
     _gyroEnabled = gyroEnabled;
-    [self.delegate fibriCheckViewDidSetGyro];
+    [self.delegate fibriCheckViewDidSetGyro:gyroEnabled];
 }
 
 - (void)setAccEnabled:(BOOL)accEnabled {
     _accEnabled = accEnabled;
-    [self.delegate fibriCheckViewDidSetAcc];
+    [self.delegate fibriCheckViewDidSetAcc:accEnabled];
 }
 
 - (void)setRotationEnabled:(BOOL)rotationEnabled {
     _rotationEnabled = rotationEnabled;
-    [self.delegate fibriCheckViewDidSetRotation];
+    [self.delegate fibriCheckViewDidSetRotation:rotationEnabled];
 }
 
 - (void)setMovementDetectionEnabled:(BOOL)movementDetectionEnabled {
     _movementDetectionEnabled = movementDetectionEnabled;
-    [self.delegate fibriCheckViewDidSetMovementDetection];
+    [self.delegate fibriCheckViewDidSetMovementDetection:movementDetectionEnabled];
 }
 
-- (void)setFingerDetectionExpiryTime:(NSInteger *)fingerDetectionExpiryTime {
+- (void)setFingerDetectionExpiryTime:(NSInteger)fingerDetectionExpiryTime {
     _fingerDetectionExpiryTime = fingerDetectionExpiryTime;
-    [self.delegate fibriCheckViewDidSetFingerDetectionExpiryTime];
+    [self.delegate fibriCheckViewDidSetFingerDetectionExpiryTime:fingerDetectionExpiryTime];
 }
 
-- (void)setPulseDetectionExpiryTime:(NSInteger *)pulseDetectionExpiryTime {
+- (void)setPulseDetectionExpiryTime:(NSInteger)pulseDetectionExpiryTime {
     _pulseDetectionExpiryTime = pulseDetectionExpiryTime;
-    [self.delegate fibriCheckViewDidSetPulseDetectionExpiryTime];
+    [self.delegate fibriCheckViewDidSetPulseDetectionExpiryTime:pulseDetectionExpiryTime];
 }
 
-- (void)setWaitForStartRecordingSignal:(NSInteger *)waitForStartRecordingSignal {
+- (void)setWaitForStartRecordingSignal:(BOOL)waitForStartRecordingSignal {
     _waitForStartRecordingSignal = waitForStartRecordingSignal;
-    [self.delegate fibriCheckViewDidSetWaitForStartRecordingSignal];
+    [self.delegate fibriCheckViewDidSetWaitForStartRecordingSignal:waitForStartRecordingSignal];
 }
 
 - (void)dealloc {

@@ -13,13 +13,21 @@ Pod::Spec.new do |s|
   s.license      = "MIT"
   # s.license    = { :type => "MIT", :file => "FILE_LICENSE" }
   s.authors      = { 'FibriCheck' => 'development@fibricheck.com' }
-  s.platforms    = { :ios => "10.0" }
+  s.platforms    = { :ios => "13.4" }
   s.source       = { :git => "https://github.com/fibricheck/react-native-camera-sdk.git", :tag => "#{s.version}" }
 
-  s.source_files = "ios/**/*.{h,m,swift}"
-  s.dependency 'FibriCheckCameraSDK', '>= 1.1.0'
+  s.source_files = "ios/**/*.{h,m,mm,swift}"
+  # RNFibriCheckCameraSessionPatch.m targets the 1.1.0 camera-session implementation exactly.
+  # Keep this pinned until the serialization fix is released by the native SDK.
+  s.dependency 'FibriCheckCameraSDK', '1.1.0'
   s.requires_arc = true
 
-  s.dependency "React"
+  # Fabric components (ios/RCTFibriCheck/Fabric) need the Codegen-generated headers/dependencies;
+  # install_modules_dependencies is the standard conditional used by Fabric-ready community
+  # libraries so this podspec still works against older RN versions without it.
+  if respond_to?(:install_modules_dependencies, true)
+    install_modules_dependencies(s)
+  else
+    s.dependency "React-Core"
+  end
 end
-

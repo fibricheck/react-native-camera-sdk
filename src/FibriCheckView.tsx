@@ -1,21 +1,8 @@
-import { Component, forwardRef, useImperativeHandle, useRef } from 'react';
-import {
-  requireNativeComponent,
-  NativeSyntheticEvent,
-  ViewStyle,
-  ColorValue,
-  NativeMethods,
-  findNodeHandle,
-  UIManager,
-} from 'react-native';
+import { ElementRef, forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
+import { NativeSyntheticEvent, ViewStyle } from 'react-native';
 import packageVersion from '../package-version.json';
 import { CameraData, MeasurementError } from './types';
-
-enum NativeCommand {
-  StartMeasurement = "startMeasurement",
-  StartRecording = "startRecording",
-  ResetModule = "resetModule"
-}
+import FibriCheck, { Commands } from './specs/FibriCheckViewNativeComponent';
 
 export interface SampleReadyEventData { ppg: number; raw: number; }
 export type SampleReadyEvent = NativeSyntheticEvent<SampleReadyEventData>
@@ -43,48 +30,11 @@ export interface FibriCheckViewHandle {
   resetModule: () => void
 }
 
-interface FibriCheckNative {
+export interface FibriCheckViewProps {
   style?: ViewStyle;
 
-  drawGraph: boolean;
-  drawBackground: boolean;
-  accEnabled: boolean;
-  flashEnabled: boolean;
-  gravEnabled: boolean;
-  gyroEnabled: boolean;
-  movementDetectionEnabled: boolean;
-  rotationEnabled: boolean;
-  waitForStartRecordingSignal: boolean;
-
-  lineColor: ColorValue;
-  lineThickness: number;
-
-  graphBackgroundColor?: ColorValue;
-
-  sampleTime: number;
-  fingerDetectionExpiryTime: number;
-  pulseDetectionExpiryTime: number;
-
-  onSampleReady: (event: SampleReadyEvent) => void;
-  onFingerDetected: (event: EmptyEvent) => void;
-  onFingerRemoved: (event: FingerRemovedEvent) => void;
-  onCalibrationReady: (event: EmptyEvent) => void;
-  onHeartBeat: (event: HeartBeatEvent) => void;
-  onTimeRemaining: (event: TimeRemainingEvent) => void;
-  onMeasurementFinished: (event: EmptyEvent) => void;
-  onMeasurementStart: (event: EmptyEvent) => void;
-  onFingerDetectionTimeExpired: (event: EmptyEvent) => void;
-  onPulseDetected: (event: EmptyEvent) => void;
-  onPulseDetectionTimeExpired: (event: EmptyEvent) => void;
-  onMovementDetected: (event: EmptyEvent) => void;
-  onMeasurementProcessed: (event: MeasurementProcessedEvent) => void;
-  onMeasurementError: (event: MeasurementErrorEvent) => void;
-}
-
-const FibriCheck = requireNativeComponent<FibriCheckNative>('FibriCheck');
-
-interface FibriCheckViewProps {
-  style?: ViewStyle;
+  /** Start measuring after the native view mounts. Defaults to true. */
+  autoStart?: boolean;
 
   drawGraph?: boolean;
   drawBackground?: boolean;
@@ -121,11 +71,14 @@ interface FibriCheckViewProps {
   onMeasurementError?: (message: MeasurementError) => void;
 }
 
-const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheckViewProps>(({
+const FibriCheckView = Object.assign(
+  forwardRef<FibriCheckViewHandle, FibriCheckViewProps>(({
   style = {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: 'transparent',
   },
+
+  autoStart = true,
 
   drawGraph = true,
   drawBackground = true,
@@ -161,12 +114,29 @@ const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheck
   onMeasurementProcessed,
   onMeasurementError,
 }: FibriCheckViewProps, ref) => {
-  const nativeRef = useRef<Component<FibriCheckNative> & NativeMethods>(null);
+  const nativeRef = useRef<ElementRef<typeof FibriCheck>>(null);
+
+  useEffect(() => {
+    if (!autoStart) {
+      return;
+    }
+
+    // Wait until Fabric has attached the native component to its window before
+    // dispatching the command. This also keeps legacy mount-to-start behaviour.
+    const frame = requestAnimationFrame(() => {
+      if (nativeRef.current) {
+        Commands.startMeasurement(nativeRef.current);
+      }
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [autoStart]);
+
   const onSampleReadyCallback = (event: SampleReadyEvent) => {
     onSampleReady?.(event.nativeEvent);
-  }
+  };
 
-  const onMeasurementProcessedCallback =(event: MeasurementProcessedEvent) => {
+  const onMeasurementProcessedCallback = (event: MeasurementProcessedEvent) => {
     const parsed = JSON.parse(event.nativeEvent.measurement);
     onMeasurementProcessed?.({
       ...parsed,
@@ -176,36 +146,37 @@ const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheck
 
   const onHeartBeatCallback = (event: HeartBeatEvent) => {
     onHeartBeat?.(event.nativeEvent.heartRate);
-  }
+  };
 
   const onFingerRemovedCallback = (event: FingerRemovedEvent) => {
     onFingerRemoved?.(event.nativeEvent);
-  }
+  };
 
   const onMeasurementErrorCallback = (event: MeasurementErrorEvent) => {
     onMeasurementError?.(event.nativeEvent.message);
-  }
+  };
 
   const onTimeRemainingCallback = (event: TimeRemainingEvent) => {
     onTimeRemaining?.(event.nativeEvent.seconds);
-  }
-
-  const sendCommand = (command: NativeCommand) => {
-    const handle = findNodeHandle(nativeRef.current);
-    // @ts-ignore
-    UIManager.dispatchViewManagerCommand(
-      handle,
-      // @ts-ignore
-      command,
-      []
-    );
-  }
+  };
 
   useImperativeHandle(ref, () => ({
-    startMeasurement: () => { sendCommand(NativeCommand.StartMeasurement) },
-    startRecording: () => { sendCommand(NativeCommand.StartRecording) },
-    resetModule: () => { sendCommand(NativeCommand.ResetModule) }
-  }))
+    startMeasurement: () => {
+      if (nativeRef.current) {
+        Commands.startMeasurement(nativeRef.current);
+      }
+    },
+    startRecording: () => {
+      if (nativeRef.current) {
+        Commands.startRecording(nativeRef.current);
+      }
+    },
+    resetModule: () => {
+      if (nativeRef.current) {
+        Commands.resetModule(nativeRef.current);
+      }
+    },
+  }));
 
   return (
     <FibriCheck
@@ -247,12 +218,12 @@ const FibriCheckView = Object.assign(forwardRef<FibriCheckViewHandle, FibriCheck
       onMeasurementError={onMeasurementErrorCallback}
     />
   );
-}), {
+  }), {
   /**
    * @deprecated Will be removed in favor of the new import RNFibriCheckVersion
    */
-  versionNumber: packageVersion.version
-})
+  versionNumber: packageVersion.version,
+});
 
 export const versionNumber = packageVersion.version;
 export default FibriCheckView;

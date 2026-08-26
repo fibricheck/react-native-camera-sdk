@@ -4,6 +4,7 @@
   "version": "1.4.0",
   "description": "React Native FibriCheck",
   "main": "build/src/index.js",
+  "react-native": "src/index.ts",
   "types": "build/types/src/index.d.ts",
   "scripts": {
     "start": "react-native start",
@@ -21,6 +22,9 @@
   },
   "files": [
     "build",
+    "!build/**/*.test.*",
+    "src",
+    "!src/**/*.test.*",
     "ios",
     "android",
     "react-native-camera-sdk.podspec"
@@ -40,6 +44,20 @@
   "readmeFilename": "README.md",
   "peerDependencies": {
     "react-native": ">=0.73.0 <1.0.x"
+  },
+  "codegenConfig": {
+    "name": "RNFibriCheckSpecs",
+    "type": "components",
+    "jsSrcsDir": "src/specs",
+    "android": {
+      "javaPackageName": "com.fibricheck.rncamerasdk"
+    },
+    "ios": {
+      "componentProvider": {
+        "FibriCheck": "FibriCheckComponentView",
+        "FibriCheckCameraPreview": "FibriCheckCameraPreviewComponentView"
+      }
+    }
   },
   "devDependencies": {
     "@qompium/eslint-config-q-react": "^1.5.1",

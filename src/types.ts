@@ -1,4 +1,4 @@
-/* eslint-disable camelcase */
+
 interface MotionData {
   x: number[];
   y: number[];

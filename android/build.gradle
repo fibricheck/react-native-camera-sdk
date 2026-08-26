@@ -2,7 +2,7 @@
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
@@ -11,6 +11,21 @@ buildscript {
 }
 
 apply plugin: 'com.android.library'
+
+// Needed so this library generates its own Fabric C++/JNI codegen output
+// (build/generated/source/codegen/jni/) - required once any codegenConfig with
+// type "components" exists in package.json (for the iOS Fabric components), regardless of
+// whether Android has its own Fabric-specific ComponentView/ManagerDelegate implementation.
+// The existing SimpleViewManager classes (RNFibriCheck.java, RNCameraPreviewView.java) work
+// unchanged under Fabric on Android - this plugin only needs to run so the generated C++
+// target this library's consumers expect actually gets produced.
+def isNewArchitectureEnabled() {
+    return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
+}
+
+if (isNewArchitectureEnabled()) {
+    apply plugin: "com.facebook.react"
+}
 
 android {
     namespace "com.fibricheck.rncamerasdk"
@@ -21,7 +36,7 @@ android {
         minSdkVersion 24
         targetSdkVersion 34
         versionCode 3
-        versionName "1.4.0"
+        versionName "1.4.1"
     }
     lintOptions {
         abortOnError false
@@ -40,7 +55,16 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'com.github.fibricheck:android-camera-sdk:v1.1.0'
+    // Pinned below v1.1.0: v1.1.x introduced regressions found during testing and the
+    // timeline didn't allow a fix. This means Android lacks camera_settings (exposure_mode,
+    // hdr_profile, hdr_mode, focus_mode, focus, white_balance) and technicalDetails.camera_hdr,
+    // which iOS already reports. Revert once the upstream issues are resolved.
+    implementation('com.github.fibricheck:android-camera-sdk:v1.0.2') {
+        // core-ktx 1.15 requires compileSdk 35. Keep consumers on older RN/AGP
+        // templates (such as RN 0.73 with compileSdk 34) buildable.
+        exclude group: 'androidx.core', module: 'core-ktx'
+    }
+    implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'com.facebook.react:react-native:+'
     implementation 'com.google.code.gson:gson:2.11.0'
 }
