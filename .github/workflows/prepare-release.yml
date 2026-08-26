@@ -46,6 +46,8 @@ jobs:
 
       - name: Generate changelog
         uses: orhun/git-cliff-action@f50e11560dce63f7c33227798f90b924471a88b5 # v4.8.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           config: cliff.toml
           args: --tag v${{ inputs.version }} --prepend CHANGELOG.md ${{ steps.range.outputs.value }}
@@ -53,6 +55,8 @@ jobs:
       - name: Generate release notes
         id: release-notes
         uses: orhun/git-cliff-action@f50e11560dce63f7c33227798f90b924471a88b5 # v4.8.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           config: cliff.toml
           args: --tag v${{ inputs.version }} --strip all ${{ steps.range.outputs.value }}

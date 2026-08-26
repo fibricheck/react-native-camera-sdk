@@ -1060,8 +1060,10 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.57.1.tgz#de633db3ec2ef6a3c89e2f19038063e8a122e2c2"
   integrity sha512-d9zaMRSTIKDLhctzH12MtXvJKSSUhaHcjV+2Z+GK+EEY7XKpP5yR4x+N3TAcHTcu963nIr+TMcCb4DBCYX1z6Q==
 
-"@fibricheck/react-native-camera-sdk@file:.yalc/@fibricheck/react-native-camera-sdk":
-  version "1.4.1"
+"@fibricheck/react-native-camera-sdk@v1.4.1-snapshot.d2b577f":
+  version "1.4.1-snapshot.d2b577f"
+  resolved "https://npm.pkg.github.com/download/@fibricheck/react-native-camera-sdk/1.4.1-snapshot.d2b577f/f9437ba6a7172a30f9fe9991e472f158df19d6fd#f9437ba6a7172a30f9fe9991e472f158df19d6fd"
+  integrity sha512-uZb5ucax8l44a1r2x9mGq3XAJ5xsSh2pWyOu/aOFExGUhdVZ5pDTPjCtaE6i1FoxT6NIv2BXtPruraTnh4grYA==
 
 "@hapi/hoek@^9.0.0", "@hapi/hoek@^9.3.0":
   version "9.3.0"

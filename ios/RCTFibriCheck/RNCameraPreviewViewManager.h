@@ -1,5 +1,10 @@
 #import <React/RCTViewManager.h>
 
+@protocol RNCameraPreviewLifecycle <NSObject>
+- (void)activatePreview;
+- (void)invalidatePreview;
+@end
+
 @interface RNCameraPreviewViewManager : RCTViewManager
 
 /**
@@ -8,5 +13,8 @@
  * at the same time.
  */
 + (BOOL)isStandalonePreviewActive;
+
+/** Creates a preview whose lifecycle is driven by its outer Fabric component view. */
+- (UIView<RNCameraPreviewLifecycle> *)fabricView;
 
 @end

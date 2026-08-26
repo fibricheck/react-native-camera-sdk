@@ -9,6 +9,18 @@ description: >-
 
 ## Measurement Settings
 
+### autoStart
+
+Starts the measurement automatically after `RNFibriCheckView` mounts. This preserves the
+mount-to-start behavior used by existing applications.
+
+```javascript
+autoStart = true;
+```
+
+Set `autoStart={false}` when startup should be controlled manually, then attach a ref and call
+`ref.current?.startMeasurement()` when ready.
+
 ### sampleTime
 
 The duration of the measurement in seconds. Default is set to 1 minute.
