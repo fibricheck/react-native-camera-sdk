@@ -8,15 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		A1CDF30326B5DEF0001BCAFE /* RNCameraPreviewViewManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A1CDF30126B5DEF0001BCAFE /* RNCameraPreviewViewManager.h */; };
-		A1CDF30426B5DEF0001BCAFE /* RNCameraPreviewViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A1CDF30226B5DEF0001BCAFE /* RNCameraPreviewViewManager.m */; };
+		A1CDF30426B5DEF0001BCAFE /* RNCameraPreviewViewManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1CDF30226B5DEF0001BCAFE /* RNCameraPreviewViewManager.mm */; };
 		C72EF70F26A06CF9009C0229 /* RNTFibriCheckViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = C72EF70926A06CF8009C0229 /* RNTFibriCheckViewController.h */; };
 		C72EF71026A06CF9009C0229 /* RNTFibriCheckViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C72EF70A26A06CF8009C0229 /* RNTFibriCheckViewController.m */; };
 		C72EF71126A06CF9009C0229 /* RNFibriCheckViewManager.h in Headers */ = {isa = PBXBuildFile; fileRef = C72EF70B26A06CF8009C0229 /* RNFibriCheckViewManager.h */; };
 		C72EF71226A06CF9009C0229 /* RNTFibriCheckView.m in Sources */ = {isa = PBXBuildFile; fileRef = C72EF70C26A06CF9009C0229 /* RNTFibriCheckView.m */; };
-		C72EF71326A06CF9009C0229 /* RNFibriCheckViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C72EF70D26A06CF9009C0229 /* RNFibriCheckViewManager.m */; };
+		C72EF71326A06CF9009C0229 /* RNFibriCheckViewManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = C72EF70D26A06CF9009C0229 /* RNFibriCheckViewManager.mm */; };
 		C72EF71426A06CF9009C0229 /* RNTFibriCheckView.h in Headers */ = {isa = PBXBuildFile; fileRef = C72EF70E26A06CF9009C0229 /* RNTFibriCheckView.h */; };
-		C7B11BD52698723900A3BD77 /* RCTFibriCheckEventEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B11BD12698723900A3BD77 /* RCTFibriCheckEventEmitter.m */; };
-		C7B11BD72698723900A3BD77 /* RCTFibriCheckEventEmitter.h in Headers */ = {isa = PBXBuildFile; fileRef = C7B11BD32698723900A3BD77 /* RCTFibriCheckEventEmitter.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,16 +32,14 @@
 
 /* Begin PBXFileReference section */
 		A1CDF30126B5DEF0001BCAFE /* RNCameraPreviewViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNCameraPreviewViewManager.h; sourceTree = SOURCE_ROOT; };
-		A1CDF30226B5DEF0001BCAFE /* RNCameraPreviewViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNCameraPreviewViewManager.m; sourceTree = SOURCE_ROOT; };
+		A1CDF30226B5DEF0001BCAFE /* RNCameraPreviewViewManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RNCameraPreviewViewManager.mm; sourceTree = SOURCE_ROOT; };
 		C72EF70926A06CF8009C0229 /* RNTFibriCheckViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNTFibriCheckViewController.h; sourceTree = SOURCE_ROOT; };
 		C72EF70A26A06CF8009C0229 /* RNTFibriCheckViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNTFibriCheckViewController.m; sourceTree = SOURCE_ROOT; };
 		C72EF70B26A06CF8009C0229 /* RNFibriCheckViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNFibriCheckViewManager.h; sourceTree = SOURCE_ROOT; };
 		C72EF70C26A06CF9009C0229 /* RNTFibriCheckView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNTFibriCheckView.m; sourceTree = SOURCE_ROOT; };
-		C72EF70D26A06CF9009C0229 /* RNFibriCheckViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNFibriCheckViewManager.m; sourceTree = SOURCE_ROOT; };
+		C72EF70D26A06CF9009C0229 /* RNFibriCheckViewManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RNFibriCheckViewManager.mm; sourceTree = SOURCE_ROOT; };
 		C72EF70E26A06CF9009C0229 /* RNTFibriCheckView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNTFibriCheckView.h; sourceTree = SOURCE_ROOT; };
 		C7B11BCD2698719800A3BD77 /* libRCTFibriCheck.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRCTFibriCheck.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		C7B11BD12698723900A3BD77 /* RCTFibriCheckEventEmitter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTFibriCheckEventEmitter.m; sourceTree = "<group>"; };
-		C7B11BD32698723900A3BD77 /* RCTFibriCheckEventEmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTFibriCheckEventEmitter.h; sourceTree = "<group>"; };
 		C7B11BE12698769B00A3BD77 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
@@ -81,15 +77,13 @@
 			isa = PBXGroup;
 			children = (
 				A1CDF30126B5DEF0001BCAFE /* RNCameraPreviewViewManager.h */,
-				A1CDF30226B5DEF0001BCAFE /* RNCameraPreviewViewManager.m */,
+				A1CDF30226B5DEF0001BCAFE /* RNCameraPreviewViewManager.mm */,
 				C72EF70B26A06CF8009C0229 /* RNFibriCheckViewManager.h */,
-				C72EF70D26A06CF9009C0229 /* RNFibriCheckViewManager.m */,
+				C72EF70D26A06CF9009C0229 /* RNFibriCheckViewManager.mm */,
 				C72EF70E26A06CF9009C0229 /* RNTFibriCheckView.h */,
 				C72EF70C26A06CF9009C0229 /* RNTFibriCheckView.m */,
 				C72EF70926A06CF8009C0229 /* RNTFibriCheckViewController.h */,
 				C72EF70A26A06CF8009C0229 /* RNTFibriCheckViewController.m */,
-				C7B11BD12698723900A3BD77 /* RCTFibriCheckEventEmitter.m */,
-				C7B11BD32698723900A3BD77 /* RCTFibriCheckEventEmitter.h */,
 			);
 			path = RCTFibriCheck;
 			sourceTree = SOURCE_ROOT;
@@ -102,7 +96,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A1CDF30326B5DEF0001BCAFE /* RNCameraPreviewViewManager.h in Headers */,
-				C7B11BD72698723900A3BD77 /* RCTFibriCheckEventEmitter.h in Headers */,
 				C72EF70F26A06CF9009C0229 /* RNTFibriCheckViewController.h in Headers */,
 				C72EF71426A06CF9009C0229 /* RNTFibriCheckView.h in Headers */,
 				C72EF71126A06CF9009C0229 /* RNFibriCheckViewManager.h in Headers */,
@@ -167,9 +160,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1CDF30426B5DEF0001BCAFE /* RNCameraPreviewViewManager.m in Sources */,
-				C7B11BD52698723900A3BD77 /* RCTFibriCheckEventEmitter.m in Sources */,
-				C72EF71326A06CF9009C0229 /* RNFibriCheckViewManager.m in Sources */,
+				A1CDF30426B5DEF0001BCAFE /* RNCameraPreviewViewManager.mm in Sources */,
+				C72EF71326A06CF9009C0229 /* RNFibriCheckViewManager.mm in Sources */,
 				C72EF71026A06CF9009C0229 /* RNTFibriCheckViewController.m in Sources */,
 				C72EF71226A06CF9009C0229 /* RNTFibriCheckView.m in Sources */,
 			);

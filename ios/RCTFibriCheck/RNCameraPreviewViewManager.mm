@@ -4,11 +4,13 @@
 #import <AVFoundation/AVFoundation.h>
 #import <React/RCTLog.h>
 
-static BOOL _standalonePreviewActive = NO;
+@class RNCameraPreviewUIView;
+static __weak RNCameraPreviewUIView *_standalonePreviewOwner = nil;
 
-@interface RNCameraPreviewUIView : UIView
+@interface RNCameraPreviewUIView : UIView <RNCameraPreviewLifecycle>
 @property (nonatomic, strong) AVCaptureVideoPreviewLayer *previewLayer;
 @property (nonatomic, strong) FibriChecker *ownFibriChecker;
+@property (nonatomic) BOOL fabricManaged;
 @end
 
 @implementation RNCameraPreviewUIView
@@ -35,16 +37,17 @@ static BOOL _standalonePreviewActive = NO;
                   @"active — mount one or the other, not both simultaneously.");
       return;
     }
-    [self setupPreviewLayer];
+    [self activatePreview];
   });
 }
 
 - (void)didMoveToWindow {
   [super didMoveToWindow];
+  if (self.fabricManaged) return;
   if (self.window) {
-    [self setupPreviewLayer];
+    [self activatePreview];
   } else {
-    [self teardownPreviewLayer];
+    [self invalidatePreview];
   }
 }
 
@@ -53,9 +56,7 @@ static BOOL _standalonePreviewActive = NO;
   self.previewLayer.frame = self.bounds;
 }
 
-- (void)setupPreviewLayer {
-  if (self.previewLayer) return;
-
+- (void)activatePreview {
   FibriChecker *sharedChecker = [RNTFibriCheckViewController sharedFibriChecker];
   if (sharedChecker) {
     // Shared mode: the session is already running — just attach a preview layer.
@@ -66,18 +67,29 @@ static BOOL _standalonePreviewActive = NO;
       RCTLogWarn(@"[RNCameraPreviewView] captureSession unavailable on shared FibriChecker");
       return;
     }
+    if (self.previewLayer.session == session) return;
+    [self.previewLayer removeFromSuperlayer];
+    self.previewLayer = nil;
     [self attachPreviewLayerToSession:session];
   } else {
     // Standalone mode: no RNFibriCheckView present — own the FibriChecker instance.
+    if (_standalonePreviewOwner && _standalonePreviewOwner != self) {
+      RCTLogError(@"[RNCameraPreviewView] Only one standalone camera preview is supported.");
+      return;
+    }
+    if (self.ownFibriChecker && self.previewLayer) return;
+    [self.previewLayer removeFromSuperlayer];
+    self.previewLayer = nil;
+    _standalonePreviewOwner = self;
     self.ownFibriChecker = [FibriChecker new];
     [self.ownFibriChecker startPreview];
     AVCaptureSession *session = self.ownFibriChecker.captureSession;
     if (!session) {
       RCTLogError(@"[RNCameraPreviewView] captureSession unavailable in standalone mode");
       self.ownFibriChecker = nil;
+      if (_standalonePreviewOwner == self) _standalonePreviewOwner = nil;
       return;
     }
-    _standalonePreviewActive = YES;
     [self attachPreviewLayerToSession:session];
   }
 }
@@ -89,7 +101,7 @@ static BOOL _standalonePreviewActive = NO;
   [self.layer addSublayer:self.previewLayer];
 }
 
-- (void)teardownPreviewLayer {
+- (void)invalidatePreview {
   if (self.previewLayer) {
     [self.previewLayer removeFromSuperlayer];
     self.previewLayer = nil;
@@ -97,7 +109,7 @@ static BOOL _standalonePreviewActive = NO;
   if (self.ownFibriChecker) {
     [self.ownFibriChecker stop];
     self.ownFibriChecker = nil;
-    _standalonePreviewActive = NO;
+    if (_standalonePreviewOwner == self) _standalonePreviewOwner = nil;
   }
 }
 
@@ -106,13 +118,21 @@ static BOOL _standalonePreviewActive = NO;
 @implementation RNCameraPreviewViewManager
 
 + (BOOL)isStandalonePreviewActive {
-  return _standalonePreviewActive;
+  return _standalonePreviewOwner != nil;
 }
 
+#ifndef RCT_NEW_ARCH_ENABLED
 RCT_EXPORT_MODULE(FibriCheckCameraPreview)
+#endif
 
 - (UIView *)view {
   return [[RNCameraPreviewUIView alloc] init];
+}
+
+- (UIView<RNCameraPreviewLifecycle> *)fabricView {
+  RNCameraPreviewUIView *view = [[RNCameraPreviewUIView alloc] init];
+  view.fabricManaged = YES;
+  return view;
 }
 
 @end
