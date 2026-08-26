@@ -18,12 +18,17 @@ This folder contains a fully functioning sample application that uses the FibriC
 ## Requirements 
 Running this application requires Xcode and/or Android Studio. Review the [React Native guide](https://reactnative.dev/docs/environment-setup?guide=native) to setup your environment.
 
+This example targets React Native 0.79.x and supports both the legacy and New Architecture
+renderers. The SDK supports RN 0.73+ and is explicitly tested through RN 0.87.0; see the
+[compatibility fixtures](../compatibility-examples/README.md). The minimum device versions are iOS
+13.4 and Android 7.0 (API level 24).
+
 ## Run the example 
 
 From the `example` folder, execute the following steps: 
 * `yarn install` - make sure that your GitHub tokens are configured correctly to access packages hosted on GitHub Registry
-* For android: `npm run android`
-* For ios: `npm run ios`
+* For Android: `yarn android`
+* For iOS: `yarn ios`
 
 ## Local development with yalc
 
@@ -60,6 +65,14 @@ After changing SDK source files, republish from the SDK root:
 yalc publish
 ```
 
+Then refresh the example dependency:
+
+```sh
+cd example
+yalc update @fibricheck/react-native-camera-sdk
+yarn install
+```
+
 iOS only — rebuild pods if native files changed:
 ```sh
 cd ios && pod install && cd ..
@@ -67,7 +80,7 @@ cd ios && pod install && cd ..
 
 ### Restoring the published package
 
-When you're done with local development, remove the yalc link and restore the npm version:
+When you're done with local development, remove the Yalc link and restore the registry version:
 
 ```sh
 cd example
@@ -81,6 +94,5 @@ You can use the `npx react-native doctor` command to see if there are any errors
 
 If you are failing to build and run the application, one or more of following actions might resolve the situation: 
 
-* Clean your gradle build folder: `rm -rf ~/.gradle`
+* Clean the example's Gradle build outputs: `cd android && ./gradlew clean`
 * Clean all caches using `npx react-native clean`
-

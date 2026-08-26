@@ -206,6 +206,7 @@ const App = () => {
             {hasCameraPermission && isFibriViewVisisble && (
               <RNFibriCheckView
                 ref={fibriViewRef}
+                autoStart={false}
                 style={styles.fibricontainer}
                 graphBackgroundColor={'#0073ff'}
                 flashEnabled={true}

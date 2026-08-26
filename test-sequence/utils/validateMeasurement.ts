@@ -26,24 +26,19 @@ export function validateMeasurement(data: CameraData, config: SensorConfig): str
   if (!data.technicalDetails) return 'technicalDetails is missing';
   if (Platform.OS === 'android') {
     if (!data.technicalDetails.camera_hardware_level) return 'technicalDetails.camera_hardware_level is missing';
-    if (!data.technicalDetails.camera_hdr) return 'technicalDetails.camera_hdr is missing';
     if (!data.technicalDetails.camera_resolution) return 'technicalDetails.camera_resolution is missing';
   }
 
-  const settings = data.camera_settings as Record<string, unknown> | undefined;
-  if (!settings) return 'camera_settings is missing';
-  if (!settings.exposure_mode) return 'camera_settings.exposure_mode is missing';
-  if (!settings.hdr_profile) return 'camera_settings.hdr_profile is missing';
-  if (!settings.hdr_mode) return 'camera_settings.hdr_mode is missing';
-
-  if (Platform.OS === 'android') {
-    const hwLevel = data.technicalDetails.camera_hardware_level as string;
-    const isAdvancedCamera2 = hwLevel !== 'camera2 - legacy' && hwLevel !== 'camera2 - limited';
-    if (isAdvancedCamera2) {
-      if (!settings.focus_mode) return 'camera_settings.focus_mode is missing';
-      if (settings.focus == null) return 'camera_settings.focus is missing';
-      if (!settings.white_balance) return 'camera_settings.white_balance is missing';
-    }
+  // android-camera-sdk is pinned to v1.0.2 (see android/build.gradle) until upstream issues found
+  // in v1.1.x are fixed. That version reports neither technicalDetails.camera_hdr nor camera_settings
+  // (exposure_mode, hdr_profile, hdr_mode, focus_mode, focus, white_balance) at all, so none of it can
+  // be validated on Android for now. iOS already has the full feature set.
+  if (Platform.OS === 'ios') {
+    const settings = data.camera_settings as Record<string, unknown> | undefined;
+    if (!settings) return 'camera_settings is missing';
+    if (!settings.exposure_mode) return 'camera_settings.exposure_mode is missing';
+    if (!settings.hdr_profile) return 'camera_settings.hdr_profile is missing';
+    if (!settings.hdr_mode) return 'camera_settings.hdr_mode is missing';
   }
 
   return null;

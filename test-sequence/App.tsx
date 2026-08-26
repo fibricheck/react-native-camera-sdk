@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 import React, { useCallback, useEffect, useReducer, useRef, useState } from 'react';
-import { AppState, AppStateStatus, Platform, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { AppState, AppStateStatus, Platform, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { request, PERMISSIONS } from 'react-native-permissions';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 import { RNFibriCheckView, RNCameraPreviewView } from '@fibricheck/react-native-camera-sdk';
 import type { CameraData } from '@fibricheck/react-native-camera-sdk';
@@ -16,6 +16,7 @@ import { CameraSettingsModal } from './components/CameraSettingsModal';
 import { StepRow } from './components/StepRow';
 import { ControlButton } from './components/ControlButton';
 import { validateMeasurement } from './utils/validateMeasurement';
+import { cameraSdkExpiryTime } from './utils/cameraSdkExpiryTime';
 
 const scrollPadding = 20;
 
@@ -155,7 +156,7 @@ export default function App() {
   const gyroEnabled = true;
   const gravEnabled = true;
   const rotationEnabled = true;
-  const sampleTime = 10;
+  const sampleTime = 35;
   const sensorConfig = { accEnabled, gyroEnabled, gravEnabled, rotationEnabled };
 
   const { fingerDetectionExpiryTime, pulseDetectionExpiryTime } = (() => {
@@ -177,6 +178,8 @@ export default function App() {
       pulseDetectionExpiryTime: 30, // 30 seconds — pulse detection can take a while
     };
   })();
+  const nativeFingerDetectionExpiryTime = cameraSdkExpiryTime(fingerDetectionExpiryTime, Platform.OS);
+  const nativePulseDetectionExpiryTime = cameraSdkExpiryTime(pulseDetectionExpiryTime, Platform.OS);
 
   // Event handlers
   const onFingerDetected = useCallback(() => {
@@ -397,8 +400,9 @@ export default function App() {
   const showSkip = isRunning && currentStepIndex === STEP.pulse;
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={styles.root}>
+    <SafeAreaProvider style={styles.root}>
+      <StatusBar barStyle="dark-content" />
+      <SafeAreaView style={styles.root} edges={['top', 'right', 'bottom', 'left']}>
         <LabelInfoBanner />
 
         {hasCameraPermission && isCameraVisible && (
@@ -415,8 +419,8 @@ export default function App() {
                 gyroEnabled={gyroEnabled}
                 gravEnabled={gravEnabled}
                 rotationEnabled={rotationEnabled}
-                fingerDetectionExpiryTime={fingerDetectionExpiryTime}
-                pulseDetectionExpiryTime={pulseDetectionExpiryTime}
+                fingerDetectionExpiryTime={nativeFingerDetectionExpiryTime}
+                pulseDetectionExpiryTime={nativePulseDetectionExpiryTime}
                 onFingerDetected={onFingerDetected}
                 onFingerRemoved={onFingerRemoved}
                 onCalibrationReady={onCalibrationReady}
@@ -433,9 +437,12 @@ export default function App() {
                 onMeasurementError={onMeasurementError}
               />
             </View>
-            <View style={styles.cameraOverlay}>
-              <RNCameraPreviewView style={styles.cameraView} />
-            </View>
+            {/* Android preview is disabled while android-camera-sdk is pinned to v1.0.2. */}
+            {Platform.OS === 'ios' && (
+              <View style={styles.cameraOverlay}>
+                <RNCameraPreviewView style={styles.cameraView} />
+              </View>
+            )}
           </>
         )}
 

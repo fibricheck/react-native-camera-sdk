@@ -28,7 +28,6 @@ const measurementData: CameraData = {
   grav: { x: sensorArray, y: sensorArray, z: sensorArray },
   rotation: { x: sensorArray, y: sensorArray, z: sensorArray },
   technicalDetails: {
-    camera_hdr: 'off',
     camera_hardware_level: 'camera2 - full',
     camera_resolution: '176x144',
   } as unknown as CameraData['technicalDetails'],
@@ -36,20 +35,8 @@ const measurementData: CameraData = {
     exposure_mode: 'auto',
     hdr_profile: 'none',
     hdr_mode: 'off',
-    focus_mode: 'auto',
-    focus: 0.5,
-    white_balance: 'auto',
   } as unknown as CameraData['camera_settings'],
 } as unknown as CameraData;
-
-const specificAndroidMeasurementData: CameraData = {
-  ...measurementData,
-  technicalDetails: {
-    camera_hdr: 'off',
-    camera_hardware_level: 'camera2 - full',
-    camera_resolution: '176x144',
-  } as unknown as CameraData['technicalDetails'],
-};
 
 const setPlatform = (os: 'ios' | 'android') => {
   Object.defineProperty(Platform, 'OS', { get: () => os });
@@ -59,13 +46,14 @@ describe('validateMeasurement', () => {
   beforeEach(() => setPlatform('ios'));
 
   describe('required fields', () => {
-    it('returns null for valid measurement data', () => {
+    it('returns null for valid measurement data on iOS', () => {
       expect(validateMeasurement(measurementData, allSensors)).toBeNull();
     });
 
-    it('returns null for specific Android measurement data', () => {
+    it('returns null for valid measurement data on Android (no camera_settings/camera_hdr reported by android-camera-sdk v1.0.2)', () => {
       setPlatform('android');
-      expect(validateMeasurement(specificAndroidMeasurementData, allSensors)).toBeNull();
+      const data = { ...measurementData, camera_settings: undefined };
+      expect(validateMeasurement(data as unknown as CameraData, allSensors)).toBeNull();
     });
 
     it('returns an error when heartrate is missing', () => {
@@ -136,38 +124,40 @@ describe('validateMeasurement', () => {
     it('returns an error on Android when camera_hardware_level is missing', () => {
       setPlatform('android');
       const data = {
-        ...specificAndroidMeasurementData,
-        technicalDetails: { camera_hdr: 'off', camera_resolution: '176x144' } as unknown as CameraData['technicalDetails'],
+        ...measurementData,
+        camera_settings: undefined,
+        technicalDetails: { camera_resolution: '176x144' } as unknown as CameraData['technicalDetails'],
       };
       expect(validateMeasurement(data as unknown as CameraData, noSensors)).toMatch(/camera_hardware_level/);
-    });
-
-    it('returns an error on Android when camera_hdr is missing', () => {
-      setPlatform('android');
-      const data = {
-        ...specificAndroidMeasurementData,
-        technicalDetails: {
-          camera_hardware_level: 'camera2 - full',
-          camera_resolution: '176x144',
-        } as unknown as CameraData['technicalDetails'],
-      };
-      expect(validateMeasurement(data as unknown as CameraData, noSensors)).toMatch(/camera_hdr/);
     });
 
     it('returns an error on Android when camera_resolution is missing', () => {
       setPlatform('android');
       const data = {
-        ...specificAndroidMeasurementData,
-        technicalDetails: {
-          camera_hardware_level: 'camera2 - full',
-          camera_hdr: 'off',
-        } as unknown as CameraData['technicalDetails'],
+        ...measurementData,
+        camera_settings: undefined,
+        technicalDetails: { camera_hardware_level: 'camera2 - full' } as unknown as CameraData['technicalDetails'],
       };
       expect(validateMeasurement(data as unknown as CameraData, noSensors)).toMatch(/camera_resolution/);
     });
+
+    // android-camera-sdk is pinned to v1.0.2 (see android/build.gradle), which does not report
+    // technicalDetails.camera_hdr or camera_settings at all, so nothing to validate there on Android.
+    it('does not require camera_hdr or camera_settings on Android', () => {
+      setPlatform('android');
+      const data = {
+        ...measurementData,
+        camera_settings: undefined,
+        technicalDetails: {
+          camera_hardware_level: 'camera2 - full',
+          camera_resolution: '176x144',
+        } as unknown as CameraData['technicalDetails'],
+      };
+      expect(validateMeasurement(data as unknown as CameraData, noSensors)).toBeNull();
+    });
   });
 
-  describe('camera settings', () => {
+  describe('camera settings (iOS only)', () => {
     it('returns an error when camera_settings is missing', () => {
       const data = { ...measurementData, camera_settings: undefined };
       expect(validateMeasurement(data as unknown as CameraData, noSensors)).toMatch(/camera_settings/);
@@ -186,78 +176,6 @@ describe('validateMeasurement', () => {
     it('returns an error when hdr_mode is missing', () => {
       const data = { ...measurementData, camera_settings: { exposure_mode: 'auto', hdr_profile: 'none' } };
       expect(validateMeasurement(data as unknown as CameraData, noSensors)).toMatch(/hdr_mode/);
-    });
-  });
-
-  describe('Android advanced camera settings', () => {
-    const advancedSettings = {
-      exposure_mode: 'auto',
-      hdr_profile: 'none',
-      hdr_mode: 'off',
-      focus_mode: 'auto',
-      focus: 0.5,
-      white_balance: 'auto',
-    };
-
-    const legacyLevels = ['camera2 - legacy', 'camera2 - limited'];
-    const advancedLevels = ['camera2 - full', 'camera2 - level3'];
-
-    beforeEach(() => setPlatform('android'));
-
-    it.each(advancedLevels)('requires focus_mode on %s hardware', hwLevel => {
-      const data = {
-        ...specificAndroidMeasurementData,
-        technicalDetails: {
-          camera_hdr: 'off',
-          camera_hardware_level: hwLevel,
-          camera_resolution: '176x144',
-        } as unknown as CameraData['technicalDetails'],
-        camera_settings: { ...advancedSettings, focus_mode: undefined } as unknown as CameraData['camera_settings'],
-      };
-      expect(validateMeasurement(data as unknown as CameraData, noSensors)).toMatch(/focus_mode/);
-    });
-
-    it.each(advancedLevels)('requires focus on %s hardware', hwLevel => {
-      const data = {
-        ...specificAndroidMeasurementData,
-        technicalDetails: {
-          camera_hdr: 'off',
-          camera_hardware_level: hwLevel,
-          camera_resolution: '176x144',
-        } as unknown as CameraData['technicalDetails'],
-        camera_settings: { ...advancedSettings, focus: null } as unknown as CameraData['camera_settings'],
-      };
-      expect(validateMeasurement(data as unknown as CameraData, noSensors)).toMatch(/focus/);
-    });
-
-    it.each(advancedLevels)('requires white_balance on %s hardware', hwLevel => {
-      const data = {
-        ...specificAndroidMeasurementData,
-        technicalDetails: {
-          camera_hdr: 'off',
-          camera_hardware_level: hwLevel,
-          camera_resolution: '176x144',
-        } as unknown as CameraData['technicalDetails'],
-        camera_settings: { ...advancedSettings, white_balance: undefined } as unknown as CameraData['camera_settings'],
-      };
-      expect(validateMeasurement(data as unknown as CameraData, noSensors)).toMatch(/white_balance/);
-    });
-
-    it.each(legacyLevels)('does not require focus/white_balance on %s hardware', hwLevel => {
-      const data = {
-        ...specificAndroidMeasurementData,
-        technicalDetails: {
-          camera_hdr: 'off',
-          camera_hardware_level: hwLevel,
-          camera_resolution: '176x144',
-        } as unknown as CameraData['technicalDetails'],
-        camera_settings: {
-          exposure_mode: 'auto',
-          hdr_profile: 'none',
-          hdr_mode: 'off',
-        } as unknown as CameraData['camera_settings'],
-      };
-      expect(validateMeasurement(data as unknown as CameraData, noSensors)).toBeNull();
     });
   });
 });

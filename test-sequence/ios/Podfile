@@ -67,5 +67,15 @@ target 'RnCameraSdkTestSequence' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+
+    # fmt (pulled in transitively by RN 0.79.7) fails to compile as C++20 under
+    # newer Xcode/Clang (consteval error) - pin it to C++17.
+    installer.pods_project.targets.each do |target|
+      if target.name == 'fmt'
+        target.build_configurations.each do |config|
+          config.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = 'c++17'
+        end
+      end
+    end
   end
 end

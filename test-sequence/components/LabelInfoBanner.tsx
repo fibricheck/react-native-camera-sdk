@@ -19,6 +19,12 @@ export function LabelInfoBanner() {
       <Text style={[styles.small, styles.link]} onPress={() => Linking.openURL(label.ifu)}>
         {label.ifu}
       </Text>
+      {Platform.OS === 'android' && (
+        <Text style={styles.notice}>
+          android-camera-sdk v1.0.2: reduced feature set vs. iOS (no exposure/HDR/focus/white balance reporting, no
+          camera preview)
+        </Text>
+      )}
     </View>
   );
 }
@@ -56,5 +62,12 @@ const styles = StyleSheet.create({
   },
   link: {
     color: colors.link,
+  },
+  notice: {
+    fontSize: 9,
+    fontWeight: '600',
+    color: colors.secondary,
+    fontFamily: monospace,
+    marginTop: 4,
   },
 });
