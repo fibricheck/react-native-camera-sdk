@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.1] - 2026-08-26
+
+### Changed
+- Update compatibility examples and test-sequence app ([c0f6bd4](https://github.com/fibricheck/react-native-camera-sdk/commit/c0f6bd476fee3d1adb653016347313e5a3d01c43))
+- Make SDK compatible with new RN architecture, revert Android camera SDK to 1.0.2 ([87f26de](https://github.com/fibricheck/react-native-camera-sdk/commit/87f26dee96f67004a005cffae36a044716839698))
+
 ## [1.4.0] - 2026-05-28
 
 ### Added
