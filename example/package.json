@@ -18,7 +18,7 @@
     "@extrahorizon/javascript-sdk": "^8.8.0",
     "@fibricheck/react-native-camera-sdk": "^1.4.0-snapshot.9423cd7",
     "react": "^18.3.1",
-    "react-native": "0.76.3",
+    "react-native": "0.84.0",
     "react-native-permissions": "^5.2.0",
     "react-native-safe-area-context": "^4.14.0"
   },
